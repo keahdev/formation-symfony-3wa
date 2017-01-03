@@ -1,0 +1,111 @@
+<h1>page produits</h1>
+
+{{ dump(produits) }}
+
+<h2>1- Les produits</h2>
+
+<table style="width: 450px;">
+
+    <thead style="background-color: #5eb5e0">
+    <tr>
+        <th>Titre</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for produit in produits %}
+        <tr>
+            <td>{{ produit.title }}</td>
+            <td>{{ produit.description }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+
+</table>
+
+
+<h2>3- premier produit</h2>
+
+{% for produit in produits %}
+       {% if loop.index ==1 %}
+          ceci est le premier produit  {{ produit.title }}
+       {% endif %}
+
+{% endfor %}
+
+
+<h2>5- Ordre inverser</h2>
+
+{% for produit in produits|reverse%}
+
+        {{ produit.title }}<br>
+
+    </tr>
+{% endfor %}
+
+
+
+<h2>8- Le nombre de produit est {{ produits|length}}</h2>
+
+
+
+
+<h2>Afficher le produit 2 et 3</h2>
+
+{% for produit in produits %}
+    {% if loop.index ==2 %}
+        produit N°2  {{ produit.title }} <br>
+    {% endif %}
+    {% if loop.index ==2 %}
+        produit N°3  {{ produit.title }}
+    {% endif %}
+
+{% endfor %}
+
+
+<h2>Les titre en majuscul</h2>
+
+{% for produit in produits %}
+
+{{ produit.title|upper }}<br>
+{% endfor %}
+
+<h2>Total</h2>
+{% for produit in produits %}
+
+
+{% endfor %}
+
+
+
+
+<h2>Nom et prenom</h2>
+
+nom: {{ nom }}<br>
+prenom: {{ prenom }}<br>
+
+<h2>Cocaténation</h2>
+
+{{ nom~' '~prenom }}
+
+<h2>Les produits impairs</h2>
+
+{% for produit in produits %}
+    {% if loop.index is odd %}
+        {{ produit.title }} <br>
+    {% endif %}
+
+{% endfor %}
+
+
+<h2>Title vide</h2>
+{% for produit in produits %}
+    {% if produit.title !=''  %}
+        {{ produit.title }} <br>
+    {% endif %}
+
+{% endfor %}
+
+
+
+
