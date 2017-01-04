@@ -9,7 +9,7 @@ class ProductsController extends Controller
 {
 
     /**
-     * @Route("admin/produits" ,name="produitspage")
+     * @Route("/produits" ,name="produitspage")
      */
     public function produitsAction()
     {
@@ -56,7 +56,7 @@ class ProductsController extends Controller
       //Methode pour recuprer  un seul produit
 
     /**
-     * @Route("/admin/produit/{id}", name="produitpage",requirements={"id":"\d+"})
+     * @Route("/produit/{id}", name="produitpage",requirements={"id":"\d+"})
      */
     public function showproduitAction($id)
     {

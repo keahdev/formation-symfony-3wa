@@ -8,7 +8,7 @@
 
 
 {% block titleContent %}
-    All Category
+     {{ categories|length }} Catégorie(s)
     <small>Control panel</small>
 {% endblock %}
 
@@ -20,6 +20,8 @@
 
 {% block content %}
     {% include ':Partials:Search.html.twig' %}
+
+
     <div class="box-body">
         <table id="example2" class="table table-bordered table-hover">
             <thead>
@@ -27,8 +29,8 @@
                 <th>Id</th>
                 <th>Title</th>
                 <th>Description(s)</th>
+                <th>Nb Caract </th>
                 <th>Date</th>
-                <th>Prix</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -38,11 +40,13 @@
                 <tr>
                     <td>{{ categorie.id }}</td>
                     <td>{{ categorie.title }}</td>
-                    <td>{{ categorie.description }}</td>
+                    <td>{{ categorie.description|raw|nl2br}}</td>
+                    <td>{{ categorie.description|striptags|length}}</td>
                     <td>{{ categorie.date_created|date("m/d/Y") }}</td>
-                    <td>{{ categorie.active }}</td>
+                    <td>{% if categorie.active %} {{ 'active' }}{% else %} {{ 'non active' }}{% endif %}</td>
+
                     <td>
-                        <a href="#" class="btn btn-primary">Voir</a>
+                        <a href="{{ path('categoriepage',{'id':categorie.id}) }}" class="btn btn-primary">Voir</a>
                         <button class="btn btn-success">Editer</button>
                         <button class="btn btn-danger">Supprimer</button>
                     </td>
