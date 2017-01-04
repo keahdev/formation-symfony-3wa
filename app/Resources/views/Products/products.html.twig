@@ -1,0 +1,79 @@
+{% extends '::layaut.html.twig' %}
+
+{% block stylesheet %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="{{ asset('plugins/datatables/dataTables.bootstrap.css') }}">
+{% endblock %}
+
+
+{% block titleContent %}
+    All Products
+    <small>Control panel</small>
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+
+    <li class="active">All Products</li>
+{% endblock %}
+
+{% block content %}
+    {% include ':Partials:Search.html.twig' %}
+    <div class="box-body">
+        <table id="example2" class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description(s)</th>
+                <th>Date</th>
+                <th>Prix</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for product in products %}
+
+                <tr>
+                    <td>{{ product.id }}</td>
+                    <td>{{ product.title }}</td>
+                    <td>{{ product.description }}</td>
+                    <td>{{ product.date_created|date("m/d/Y") }}</td>
+                    <td>{{ product.prix }}</td>
+                    <td>
+                        <button class="btn btn-info">Voir</button>
+                        <button class="btn btn-success">Editer</button>
+                        <button class="btn btn-danger">Supprimer</button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>Rendering engine</th>
+                <th>Browser</th>
+                <th>Platform(s)</th>
+                <th>Engine version</th>
+                <th>CSS grade</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    {% include ':Partials:pagination.html.twig' with {'product': products|length } only  %}
+
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+    <script>
+        $(function () {
+            $("#example1").DataTable();
+        });
+    </script>
+{% endblock %}
