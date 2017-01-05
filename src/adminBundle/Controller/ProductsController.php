@@ -104,6 +104,12 @@ class ProductsController extends Controller
             throw  $this->createNotFoundException('Oups produit non trouvé !!');
         }
 
+        $prixmin=0;
+
+
+
+
+
         return $this->render(':Products:showproduct.html.twig',['product'=>$tableau]);
     }
 

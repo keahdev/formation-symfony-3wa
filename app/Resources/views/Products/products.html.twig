@@ -33,21 +33,36 @@
             </tr>
             </thead>
             <tbody>
-            {% for product in products %}
 
+            {% set total=0 %}
+            {% set prixmin=-1 %}
+
+            {% for product in products %}
                 <tr>
                     <td>{{ product.id }}</td>
                     <td>{{ product.title }}</td>
                     <td>{{ product.description }}</td>
                     <td>{{ product.date_created|date("m/d/Y") }}</td>
                     <td>{{ product.prix }}</td>
+
                     <td>
                         <a href="{{ path('produitpage',{'id':product.id}) }}" class="btn btn-primary">Voir</a>
                         <button class="btn btn-success">Editer</button>
                         <button class="btn btn-danger">Supprimer</button>
                     </td>
                 </tr>
+
+
+                 {% if prixmin > product.prix or prixmin == -1 %}
+
+                      {% set prixmin = product.prix %}
+                 {% endif %}
+
+                {% set total= total+ product.prix / products|length %}
             {% endfor %}
+
+            <td colspan="4">Le prix  moins cher est : {{ prixmin }} €</td>
+            <td style="background-color:#bdbdbd;font-weight: bold">{{ total }} </td>
             </tbody>
             <tfoot>
             <tr>
