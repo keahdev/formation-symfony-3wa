@@ -4,6 +4,7 @@ namespace adminBundle\Controller;
 
 use adminBundle\Entity\produit;
 use adminBundle\Form\produitType;
+use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,36 +17,9 @@ class ProductsController extends Controller
      */
     public function produitsAction()
     {
-        $products = [
-            [
-                "id" => 1,
-                "title" => "Mon premier produit",
-                "description" => "lorem ipsum",
-                "date_created" => new \DateTime('now'),
-                "prix" => 10
-            ],
-            [
-                "id" => 2,
-                "title" => "Mon deuxième produit",
-                "description" => "lorem ipsum",
-                "date_created" => new \DateTime('now'),
-                "prix" => 20
-            ],
-            [
-                "id" => 3,
-                "title" => "Mon troisième produit",
-                "description" => "lorem ipsum",
-                "date_created" => new \DateTime('now'),
-                "prix" => 30
-            ],
-            [
-                "id" => 4,
-                "title" => "",
-                "description" => "lorem ipsum",
-                "date_created" => new \DateTime('now'),
-                "prix" => 410
-            ],
-        ];
+        $em=$this->getDoctrine()->getManager();
+        $products=$em->getRepository('adminBundle:produit')->findAll();
+        //die(dump($products));
 
         return $this->render(':Products:products.html.twig',['products'=>$products]);
     }
@@ -83,32 +57,9 @@ class ProductsController extends Controller
             return $this->redirectToRoute('produitcree');
         }
 
-
         return $this->render('Products/creat.html.twig',['formproduit'=>$formproduit->createView()]);
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -119,54 +70,48 @@ class ProductsController extends Controller
      */
     public function showproduitAction($id)
     {
-        $products = [
-            [
-                "id" => 1,
-                "title" => "Mon premier produit",
-                "description" => "lorem ipsum",
-                "date_created" => new \DateTime('now'),
-                "prix" => 10
-            ],
-            [
-                "id" => 2,
-                "title" => "Mon deuxième produit",
-                "description" => "lorem ipsum",
-                "date_created" => new \DateTime('now'),
-                "prix" => 20
-            ],
-            [
-                "id" => 3,
-                "title" => "Mon troisième produit",
-                "description" => "lorem ipsum",
-                "date_created" => new \DateTime('now'),
-                "prix" => 30
-            ],
-            [
-                "id" => 4,
-                "title" => "",
-                "description" => "lorem ipsum",
-                "date_created" => new \DateTime('now'),
-                "prix" => 410
-            ],
-        ];
-
-        $tableau=[];
-
-        foreach ( $products as $product){
-            if($product['id']==$id){
-                $tableau=$product;
-                break;
-            }
+        $em=$this->getDoctrine()->getManager();
+        $product=$em->getRepository('adminBundle:produit')->find($id);
+        if (!$product){
+            throw  New EntityNotFoundException();
         }
 
-        if (empty($tableau)){
-            throw  $this->createNotFoundException('Oups produit non trouvé !!');
-        }
-
-        $prixmin=0;
-
-
-        return $this->render(':Products:showproduct.html.twig',['product'=>$tableau]);
+        return $this->render(':Products:showproduct.html.twig',['product'=>$product]);
     }
+
+
+
+    //Methode pour modifier un produit
+
+    /**
+     * @Route("/produit/edit/{id}", name="produitedit",requirements={"id":"\d+"})
+     */
+    public function editproduitAction(Request $request,$id)
+    {
+
+        $em=$this->getDoctrine()->getManager();
+        $product=$em->getRepository('adminBundle:produit')->find($id);
+
+        $formproduit = $this->createForm(produitType::class, $product);
+        $formproduit->handleRequest($request);
+
+
+        if ($formproduit->isSubmitted() && $formproduit->isValid()) {
+
+            $em=$this->getDoctrine()->getManager();
+            $em->flush();
+
+            $this->addFlash('success', 'Produit modifié');
+
+            return $this->redirectToRoute('produitspage');
+        }
+
+
+        return $this->render('Products/edition.html.twig',['formproduit'=>$formproduit->createView()]);
+    }
+
+
+
+
 
 }

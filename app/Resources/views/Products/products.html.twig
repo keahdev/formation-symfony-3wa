@@ -27,42 +27,29 @@
                 <th>Id</th>
                 <th>Title</th>
                 <th>Description(s)</th>
-                <th>Date</th>
                 <th>Prix</th>
+                <th>Quantité</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
+                {% for product in products %}
+                    <tr>
+                        <td>{{ product.id }}</td>
+                        <td>{{ product.title }}</td>
+                        <td>{{ product.description }}</td>
+                        <td>{{ product.price}}</td>
+                        <td>{{ product.quantity }}</td>
 
-            {% set total=0 %}
-            {% set prixmin=-1 %}
+                        <td>
+                            <a href="{{ path('produitpage',{'id':product.id}) }}" class="btn btn-primary">Voir</a>
+                            <a href="{{ path('produitedit',{'id':product.id}) }}" class="btn btn-primary">Editer</a>
+                            <button class="btn btn-danger">Supprimer</button>
+                        </td>
+                    </tr>
 
-            {% for product in products %}
-                <tr>
-                    <td>{{ product.id }}</td>
-                    <td>{{ product.title }}</td>
-                    <td>{{ product.description }}</td>
-                    <td>{{ product.date_created|date("m/d/Y") }}</td>
-                    <td>{{ product.prix }}</td>
+               {% endfor %}
 
-                    <td>
-                        <a href="{{ path('produitpage',{'id':product.id}) }}" class="btn btn-primary">Voir</a>
-                        <button class="btn btn-success">Editer</button>
-                        <button class="btn btn-danger">Supprimer</button>
-                    </td>
-                </tr>
-
-
-                 {% if prixmin > product.prix or prixmin == -1 %}
-
-                      {% set prixmin = product.prix %}
-                 {% endif %}
-
-                {% set total= total+ product.prix / products|length %}
-            {% endfor %}
-
-            <td colspan="4">Le prix  moins cher est : {{ prixmin }} €</td>
-            <td style="background-color:#bdbdbd;font-weight: bold">{{ total }} </td>
             </tbody>
             <tfoot>
             <tr>

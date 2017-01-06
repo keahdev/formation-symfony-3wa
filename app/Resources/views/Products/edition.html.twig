@@ -1,21 +1,21 @@
 {% extends 'layaut.html.twig' %}
 
 {% block titleContent %}
-    Création d'un nouveau produit
+    Editer un  produit
     <small>Control panel</small>
 {% endblock %}
 
 {% block breadcrumb %}
     {{ parent() }}
 
-    <li class="active"> Creation produit</li>
+    <li class="active"> Edition d'un produit</li>
 {% endblock %}
 
 
 {% block content %}
 
 
-{{ form_start(formproduit) }}
+    {{ form_start(formproduit) }}
 
     <div class="form-group">
         {{ form_errors(formproduit.title) }}
@@ -44,10 +44,7 @@
 
 
 
-
-
-
-    <button class="btn btn-primary">Créer</button>
+    <button class="btn btn-primary">Editer</button>
 
     {{ form_end(formproduit) }}
 

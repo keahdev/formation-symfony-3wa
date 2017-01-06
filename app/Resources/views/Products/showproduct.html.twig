@@ -25,8 +25,8 @@
                 <th>Id</th>
                 <th>Title</th>
                 <th>Description(s)</th>
-                <th>Date</th>
-                <th>Prix</th>
+                <th>Price</th>
+                <th>Quantité</th>
             </tr>
             </thead>
             <tbody>
@@ -34,10 +34,10 @@
                     <td>{{ product.id }}</td>
                     <td>{{ product.title }}</td>
                     <td>{{ product.description }}</td>
-                    <td>{{ product.date_created|date("m/d/Y") }}</td>
-                    <td>{{ product.prix }}</td>
+                    <td>{{ product.price}}</td>
+                    <td>{{ product.quantity }}</td>
                     <td>
-                        <button class="btn btn-success">Editer</button>
+                        <a href="{{ path('produitedit',{'id':product.id}) }}" class="btn btn-primary">Editer</a>
                         <button class="btn btn-danger">Supprimer</button>
                     </td>
                 </tr>
