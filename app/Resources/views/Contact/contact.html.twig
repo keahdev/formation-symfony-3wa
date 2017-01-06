@@ -12,7 +12,17 @@
 
 
 {% block content %}
-    {{ form_start(formContact) }}
+
+    {# Affichage du message de success	#}
+
+    {% for flash_message in app.session.flashBag.get('success') %}
+        <div class="alert alert-success">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+
+
+    {{ form_start(formContact,{attr:{novalidate:"novalidate"}} ) }}
 
     <div class="form-group">
         {# affiche les erreurs du champ firstname #}
