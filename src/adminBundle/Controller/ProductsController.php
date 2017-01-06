@@ -2,8 +2,11 @@
 
 namespace adminBundle\Controller;
 
+use adminBundle\Entity\produit;
+use adminBundle\Form\produitType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 class ProductsController extends Controller
 {
@@ -44,16 +47,72 @@ class ProductsController extends Controller
             ],
         ];
 
-
-
-
         return $this->render(':Products:products.html.twig',['products'=>$products]);
     }
 
 
 
 
-      //Methode pour recuprer  un seul produit
+
+
+
+    /**
+     * Creattion d'un nouveau produit
+     */
+
+    /**
+     * @Route("produit/cree", name="produitcree")
+     */
+    public function creatAction(Request $request){
+
+
+        $produit = new produit();
+
+        $formproduit = $this->createForm(produitType::class, $produit);
+        $formproduit->handleRequest($request);
+
+
+        if ($formproduit->isSubmitted() && $formproduit->isValid()) {
+
+            $em=$this->getDoctrine()->getManager();
+            $em->persist($produit);
+            $em->flush();
+
+            $this->addFlash('success', 'Votre produit a bien été ajouté');
+
+            return $this->redirectToRoute('produitcree');
+        }
+
+
+        return $this->render('Products/creat.html.twig',['formproduit'=>$formproduit->createView()]);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //Methode pour recuprer  un seul produit
 
     /**
      * @Route("/produit/{id}", name="produitpage",requirements={"id":"\d+"})
@@ -105,9 +164,6 @@ class ProductsController extends Controller
         }
 
         $prixmin=0;
-
-
-
 
 
         return $this->render(':Products:showproduct.html.twig',['product'=>$tableau]);

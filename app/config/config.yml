@@ -39,6 +39,8 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    form_themes:
+      - "form/fields.html.twig"
 
 # Doctrine Configuration
 doctrine:
@@ -69,3 +71,4 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+    port:      "%mailer_port%"

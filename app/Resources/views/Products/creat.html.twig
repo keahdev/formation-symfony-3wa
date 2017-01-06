@@ -1,0 +1,55 @@
+{% extends 'layaut.html.twig' %}
+
+{% block titleContent %}
+    Title  Product
+    <small>Control panel</small>
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+
+    <li><a href="{{ path('produitspage') }}"> All products</a></li>
+    <li class="active"> Title Product</li>
+{% endblock %}
+
+
+{% block content %}
+
+
+{{ form_start(formproduit) }}
+
+    <div class="form-group">
+        {{ form_errors(formproduit.title) }}
+        {{ form_label(formproduit.title, "Titre") }}
+        {{ form_widget(formproduit.title, {attr: {placeholder: "Titre du produit", class: "form-control"} } ) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_errors(formproduit.description) }}
+        {{ form_label(formproduit.description, "Déscription") }}
+        {{ form_widget(formproduit.description, {attr: {placeholder: "Déscription du protuit", class: "form-control"} } ) }}
+    </div>
+
+
+    <div class="form-group">
+        {{ form_errors(formproduit.price) }}
+        {{ form_label(formproduit.price, "Prix") }}
+        {{ form_widget(formproduit.price, {attr: { class: "form-control"} } ) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_errors(formproduit.quantity) }}
+        {{ form_label(formproduit.quantity, "Quantité") }}
+        {{ form_widget(formproduit.quantity, {attr: { class: "form-control"} } ) }}
+    </div>
+
+
+
+
+
+
+    <button class="btn btn-primary">Créer</button>
+
+    {{ form_end(formproduit) }}
+
+{% endblock %}

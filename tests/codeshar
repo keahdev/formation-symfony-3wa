@@ -1,0 +1,883 @@
+/****************************************
+          jour 1
+****************************************/
+
+<?php
+/*
+
+$products = [
+  [
+      "id" => 1,
+      "title" => "Mon premier produit",
+      "description" => "lorem ipsum",
+      "date_created" => new \DateTime('now'),
+        "prix" => 10
+  ],
+  [
+      "id" => 2,
+      "title" => "Mon deuxième produit",
+      "description" => "lorem ipsum",
+      "date_created" => new \DateTime('now'),
+        "prix" => 20
+  ],
+  [
+      "id" => 3,
+      "title" => "Mon troisième produit",
+      "description" => "lorem ipsum",
+      "date_created" => new \DateTime('now'),
+        "prix" => 30
+  ],
+  [
+      "id" => 4,
+      "title" => "",
+      "description" => "lorem ipsum",
+      "date_created" => new \DateTime('now'),
+        "prix" => 410
+  ],
+];
+
+1- Afficher le titre et la description de tous les produits
+
+2- Afficher uniquement pour le premier produit la phrase suivante en plus : "Ceci est le premier produit" (ne pas utiliser id pour faire son test)
+{% for product in products %}
+       {% if loop.first %}<p>Ceci est le premier produit</p>{% endif %}
+  <p>{{ product.title }}</p>
+  <hr>
+{% endfor %}
+
+
+4- Afficher pour le produit ayant l'id 4 un titre par défaut
+{% for product in products %}
+  <p>{{ product.title|default('ce champ est inexistant') }}</p>
+{% endfor %}
+
+
+5- Parcourez de nouveau les produits mais dans l'ordre inverse
+{{ dump(products|reverse) }}
+{% for product in products|reverse %}
+  <p>{{ product.title }}</p>
+{% endfor %}
+
+6- Parcourez de nouveau les produits mais affichez uniquement le produit 2 et 3
+{% for product in products %}
+       {% if loop.first == false and loop.last == false %}
+      <p>{{ product.title }}</p>
+  {% endif %}
+{% endfor %}
+
+
+{% for product in products|slice(1, (products|lenght - 2)) %}
+      <p>{{ product.title }}</p>
+  {% endif %}
+{% endfor %}
+
+{% set total = 0 %}
+{% for product in products %}
+
+      {% set total = total + product.prix %}
+
+{% endfor %}
+
+Le total est : {{ total }}
+
+8- Utiliser un filter afin d afficher en majuscule le titre des produits
+9- Trouver la fonction twig permettant de compter de 0 à 10 avec un pas de 2 ;)
+  {% for i in range(0,10,2) %}
+        {{i}}
+      {% endfor %}
+
+
+10- Créer une variable avec votre prénom dans le controller. Créer une autre variable avec votre nom dans le controller.
+11- Afficher dans la vue votre prénom et votre nom en faisant une concaténation
+
+12- Afficher grâce à la catégorie test dans la documentation de twig, les produits impairs (ordre des produits dans le tableau)
+http://twig.sensiolabs.org/doc/tests/odd.html
+http://twig.sensiolabs.org/doc/tests/even.html
+
+13- Corriger le code ci-dessous sans toucher au controller afin d eviter une erreur en utilisant la catégorie test
+<p>{{ mischievous|default("") }}</p>
+
+{% if mischievous is defined %}
+       <p>{{ mischievous }}</p>
+{% endif %}
+
+14- Parcourez de nouveau les produits mais afficher uniquement les produits ayant un titre
+
+ */
+{% for product in products if product.title is not empty %}
+{{ product.title }}
+{% endfor %}
+
+
+
+/**************************************************
+ *                     our 2
+ **************************************************/
+
+{% block stylesheets %}
+{{ parent() }}
+
+<link rel="stylesheet" href="{{ asset('plugins/datatables/dataTables.bootstrap.css') }}">
+{% endblock %}
+
+
+{% block javascripts %}
+  {{ parent() }}
+
+  <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+  <script src="{{ asset('plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+  <script>
+$(function () {
+    $("#example1").DataTable();
+});
+  </script>
+{% endblock %}
+
+
+
+Affichage de tous les produits : /admin/produits
+Utilisation de ce design :
+
+
+	- https://almsaeedstudio.com/themes/AdminLTE/pages/tables/data.html
+  - https://almsaeedstudio.com/themes/AdminLTE/pages/UI/buttons.html
+
+
+<?php
+
+namespace AdminBundle\Controller;
+
+class ProductController extends Controller {
+
+    // ATTENTION NE PAS OUBLIER LA ROUTE
+    public function productAction()
+    {
+        $products = [
+            [
+                "id" => 1,
+                "title" => "Mon premier produit",
+                "description" => "lorem ipsum",
+                "date_created" => new \DateTime('now'),
+                "prix" => 10
+            ],
+            [
+                "id" => 2,
+                "title" => "Mon deuxième produit",
+                "description" => "lorem ipsum",
+                "date_created" => new \DateTime('now'),
+                "prix" => 20
+            ],
+            [
+                "id" => 3,
+                "title" => "Mon troisième produit",
+                "description" => "lorem ipsum",
+                "date_created" => new \DateTime('now'),
+                "prix" => 30
+            ],
+            [
+                "id" => 4,
+                "title" => "",
+                "description" => "lorem ipsum",
+                "date_created" => new \DateTime('now'),
+                "prix" => 410
+            ],
+        ];
+
+        return ......
+
+}
+
+    /*
+    Utilisation de la documentation suivante afin d'effectuer une inclusion :
+    http://twig.sensiolabs.org/doc/tags/include.html
+
+
+    <div class="content-wrapper" style="min-height: 916px;">
+
+      <section class="content-header">
+          <h1>
+            {% block titleContent %}
+              Dashboard
+              <small>Control panel</small>
+            {% endblock %}
+          </h1>
+
+          <ol class="breadcrumb">
+            {% block breadcrumb %}
+              <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+
+            {% endblock %}
+          </ol>
+      </section>
+
+      <section class="content">
+               {% block content %}{% endblock %}
+      </section>
+
+
+    </div>
+
+
+
+
+
+    {% extends 'AppBundle::layout.html.twig' %}
+
+    {% block titleContent %}Liste des produits <small>(15)</small>{% endblock %}
+
+    {% block breadcrumb %}
+    {{ parent() }}
+    <li class="active">Dashboard</li>
+    {% endblock %}
+
+    {% block content %}
+        <h1>Hello</h1>
+    {% endblock%}
+
+
+
+    */
+<?php
+
+namespace AdminBundle\Controller;
+
+    use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
+class DefaultController extends Controller
+{
+    /**
+     * @Route("/admin")
+     */
+    public function indexAction()
+    {
+        return $this->render('AdminBundle:Default:index.html.twig',
+            [
+                'firstname' => 'Ludo'
+            ]);
+    }
+}
+
+/********************************/
+/*   touslesproduits.twig.html  */
+/********************************/
+[...]
+{% block footerScript %}
+  {{ parent() }}
+  <!-- DataTables -->
+  <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+  <script src="{{ asset('plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+  <script>
+$(function () {
+    $("#example1").DataTable(
+              {
+                "language": {
+        "lengthMenu": "Montrer _MENU_ enregistrement par page",
+                  "zeroRecords": "Nothing found - sorry",
+                  "info": "Montrer page _PAGE_ à _PAGES_",
+                  "infoEmpty": "Pas d'enregistrements pour cette recherche",
+                  "infoFiltered": "(filtered from _MAX_ total records)"
+                }
+              });
+    });
+  </script>
+{% endblock %}
+
+/********************************/
+/*     LAYOUT.HTML.TWIG					*/
+/********************************/
+
+{#
+    {% include 'AdminBundle:Partials:footer.html.twig' with
+							{
+                                'toto' : firstname,
+                                  'foo' : 'bar'
+							} only %}
+
+#}
+
+        MODIFICATION
+{% include 'AdminBundle:Partials:footer.html.twig' only %}
+/********************************/
+/*     footer.HTML.TWIG					*/
+/********************************/
+<footer>
+    MODIFICATION : SUPPRIMER LA VARIABLE CI-DESSOUS
+	{{ toto }}
+</footer>
+
+
+
+    /***************************************************************************************************************
+     *                                             jour 3
+     *****************************************************************************************************/
+
+    License PHPStorm
+ 1) Création d'un compte chez Jetbrains (éditeur de PHPStorm) : https://www.jetbrains.com/
+ 2) Aller sur le lien suivant : https://account.jetbrains.com/a/dopgu8p0
+ 3) Rentrer l'id/pass de son compte jetbrains dans phpstorm
+
+
+ http://www.cbs.dtu.dk/courses/27610/regular-expressions-cheat-sheet-v2.pdf
+
+<?php
+
+namespace AdminBundle\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
+/**
+ * @Route("/produits")
+ */
+class ProductController extends Controller
+{
+    /**
+     * @Route("/{id}", name="show_product", requirements={"id" = "\d+"})
+     */
+    public function showAction($id)
+    {
+        die(dump($id));
+        $products = [
+            [
+                "id" => 1,
+                "title" => "Mon premier produit",
+                "description" => "lorem ipsum",
+                "date_created" => new \DateTime('now'),
+                "prix" => 10
+            ],
+            [
+                "id" => 2,
+                "title" => "Mon deuxième produit",
+                "description" => "lorem ipsum",
+                "date_created" => new \DateTime('now'),
+                "prix" => 20
+            ],
+            [
+                "id" => 3,
+                "title" => "Mon troisième produit",
+                "description" => "lorem ipsum",
+                "date_created" => new \DateTime('now'),
+                "prix" => 30
+            ],
+            [
+                "id" => 4,
+                "title" => "",
+                "description" => "lorem ipsum",
+                "date_created" => new \DateTime('now'),
+                "prix" => 410
+            ],
+        ];
+
+        $leBonProduit = [];
+        foreach(..) {
+        ...
+    }
+
+        if (empty($leBonProduit)) {
+            throw $this->createNotFoundException("Le produit n'existe pas");
+        }
+
+        // TROUVER LE MOYEN D'ENVOYER UNIQUEMENT LE PRODUIT AYANT LE BON ID ($id doit correspondre à un id existant dans $products)
+        return $this->render('Product:show.html.twig');
+    }
+}
+
+
+- Création d'une route permettant de voir un film
+ - Utilisation des prefix
+ - Créer la route suivante  /admin/catégories  permettant d'afficher les catégories suivantes sous forme de tableau (identique aux produits) :
+ $categories = [
+     1 => [
+         "id" => 1,
+         "title" => "Homme",
+         "description" => "lorem ipsum \n suite du contenu",
+         "date_created" => new \DateTime('now'),
+         "active" => true
+     ],
+     2 => [
+         "id" => 2,
+         "title" => "Femme",
+         "description" => "<strong>lorem</strong> ipsum",
+         "date_created" => new \DateTime('-10 Days'),
+         "active" => true
+     ],
+     3 => [
+         "id" => 3,
+         "title" => "Enfant",
+         "description" => "lorem ipsum",
+         "date_created" => new \DateTime('-1 Days'),
+         "active" => false
+     ],
+ ];
+
+- Afficher "active" ou "non active" en fonction de la propriété active : {% if %}
+- Afficher le nombre de caractère de la description : |striptags|length
+- Trouver un moyen d’interpréter le strong contenu dans la description de la catégorie femme : |raw
+- Conserver le saut de ligne pour la catégorie homme : |nl2br
+
+  Bonus :
+- Afficher le nombre de catégories
+- Afficher les catégories ordonnées par date
+- Couper la description à 50 caractères. Il faudra ajouter un peu de contenu ;)
+- Afficher sur la page /admin/produits la moyenne des prix
+- Afficher sur la page /admin/produits un signe distinctif sur le produit le moins cher
+- Afficher sous forme de graphique le prix des produits :
+      - https://almsaeedstudio.com/themes/AdminLTE/pages/charts/chartjs.html
+      - https://almsaeedstudio.com/themes/AdminLTE/pages/charts/morris.html
+
+/*************************************************************************************************************
+ *                                                     jour 4
+ *
+ ***************************************************************************************************** /
+<script>
+$(document).ready(function(){
+$('.datepicker').datepicker({ dateFormat: 'dd-mm-yy' });
+});
+</script>
+
+/************************/
+/*   parameters.yml.dist */
+/************************/
+parameters:
+    database_host:     127.0.0.1
+    database_port:     ~
+database_name:     symfony
+    database_user:     root
+    database_password: ~
+    # You should uncomment this if you want use pdo_sqlite
+    # database_path: "%kernel.root_dir%/data.db3"
+
+mailer_transport:  smtp
+    mailer_host:       127.0.0.1
+    mailer_user:       ~
+mailer_password:   ~
+
+    # Rajouter le mailer_port
+mailer_port: ~
+
+    # A secret key that's used to generate certain security-related tokens
+secret:            ThisTokenIsNotSoSecretChangeIt
+
+    # CLE API Facebook
+    key_FB: null
+
+
+/********************/
+/*   parameters.yml */
+/********************/
+parameters:
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: symfony
+    database_user: root
+    database_password: null
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    mailer_port: 2525
+    secret: xdgfhkljdsfgh5454dfg564d2f5g7dwfsgdwfsgklhwjqsdf
+
+/*****************/
+/*   config.yml  */
+/*****************/
+swiftmailer:
+    transport: "%mailer_transport%"
+    host:      "%mailer_host%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
+    spool:     { type: memory }
+		port:      "%mailer_port%"
+
+https://symfony.com/doc/current/reference/forms/types.html
+<?php
+
+namespace AppBundle\Controller;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\HttpFoundation\Request;
+
+class DefaultController extends Controller
+{
+    /**
+     * @Route("/contact", name="contact")
+     */
+    public function contactAction(Request $request)
+    {
+        // Création du formulaire et ajoute de champ avec la méthode add()
+        $formContact = $this->createFormBuilder()
+            ->add('firstname', TextType::class)
+            ->add('lastname', TextType::class)
+            ->add('email', EmailType::class)
+            ->add('content', TextareaType::class)
+
+            // La	clé years permet de définir un tableau d'années
+            // range créer un tableau : http://php.net/manual/fr/function.range.php
+            // date('Y') donne l'année en cours. Ici 2017
+            // date('Y') - 10 est l'équivalent de 2017 - 10 = 2007
+            ->add('date', DateType::class,
+                [
+                    'years' => range( date('Y')-10, date('Y')+10 )
+                ])
+
+
+            ->getForm();
+
+        // Je lie l'objet $request avec le formulaire.
+        // Cela me permet de remplir le formulaire avec les informations tapées par l'utilisateur
+        $formContact->handleRequest($request);
+
+        // Je vérifie que le formulaire est bien soumis et qu'il est valide
+        if ($formContact->isSubmitted() && $formContact->isValid()) {
+            // Dump de $_POST
+            //dump($request->request->all());
+
+            // Dump de $_GET
+            //dump($request->query->all());
+
+            // Récupérer les informations du formulaire
+            //dump($formContact->getData());
+
+            // Récupérer une valeur précisément du formulaire
+            //dump($formContact->get('firstname')->getData());
+
+            // La technique à utiliser est d'utiliser une variable ex: $data et de manipuler cette variable
+            $data = $formContact->getData();
+
+            // Envoie du mail
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Formulaire de contact')
+                ->setFrom($data['email'])
+                ->setTo('contact@monsupersite.com')
+                ->setBody(
+                    $this->renderView('emails/formulaire-contact.html.twig'),
+                    'text/html'
+                )
+                ->addPart(
+                    $this->renderView('emails/formulaire-contact.txt.twig'),
+                    'text/plain'
+                )
+            ;
+            $this->get('mailer')->send($message);
+
+            // Affichage d'un message de success
+            $this->addFlash('success', 'Votre email a bien été envoyé');
+
+            // Redirection : Préciser le nom de la route dans la méthode 'redirectToRoute'
+            return $this->redirectToRoute('contact');
+        }
+
+
+        return $this->render('default/contact.html.twig', ["formContact" => $formContact->createView()]);
+    }
+}
+
+
+/**********************/
+/* contact.html.twig  */
+/**********************/
+    {% extends 'layout.html.twig' %}
+
+    {% block content %}
+
+    {# Affichage du message de success	#}
+        {{ dump(app.session) }}
+        {% for flash_message in app.session.flashBag.get('success') %}
+        <div class="alert alert-success">
+          {{ flash_message }}
+      </div>
+    {% endfor %}
+
+	{{ form_start(formContact) }}
+
+			<div class="form-group">
+      	{# affiche les erreurs du champ firstname #}
+            {{ form_errors(formContact.firstname) }}
+
+            {# affiche la balise label du champ firtsname #}
+                {{ form_label(formContact.firstname) }}
+
+                {# affiche la balise input de type text du champ firtsname #}
+                    {{ form_widget(formContact.firstname,
+                       {
+                         attr: {
+                        class: 'form-control'
+                         }
+                       })
+         }}
+                    </div>
+
+      <div class="form-group">
+      	{{ form_errors(formContact.lastname) }}
+
+        {{ form_label(formContact.lastname, "Votre nom", {label_attr: {class: "le-nom-de-votre-class"} } ) }}
+
+        {{ form_widget(formContact.lastname, {attr: {placeholder: "Votre nom", class: "form-control"} } ) }}
+      </div>
+
+      <div class="form-group">
+      	{{ form_errors(formContact.email) }}
+
+
+        {{ form_label(formContact.email, null) }}
+
+				{{ form_widget(formContact.email,
+                        {
+                          attr: {
+                    placeholder: 'email',
+                            class: "form-control"
+                          },
+                          id: "votre-super-id"
+                        })
+        }}
+      </div>
+
+      <div class="form-group">
+      	{{ form_errors(formContact.content) }}
+      	{{ form_label(formContact.content) }}
+				{{ form_widget(formContact.content) }}
+      </div>
+
+			<button>Envoyer</button>
+
+	{{ form_end(formContact) }}
+
+{% endblock %}
+
+
+
+
+- Créer la page suivante /admin/feedback permettant de faire un retour à la team (technique/marketing/etc.)
+                - Voici les informations du formulaire :
+          - page : url de la page concernée
+                - bug / statut : Select permettant de choisir entre "technique", "design", "marketing", "autre"
+                - firstname
+                - lastname
+                - email
+                - date du bug. Cette date doit afficher la date du jour et la date sur 10 ans avant et 10 ans après
+                - content
+
+Bonne chance !
+
+                BONUS:
+  - Faire en sorte que le message soit : Merci firstname, votre feedback a bien été pris en compte. Firstname doit être remplacé par
+    la valeur entrée dans le formulaire
+
+                - Mettre en place le datepicker :
+    https://almsaeedstudio.com/themes/AdminLTE/pages/forms/advanced.html
+    http://symfony.com/doc/current/reference/forms/types/date.html#rendering-a-single-html5-textbox
+
+  - Sachant qu il est possible de récupérer les informations contenus dans parameters.yml directement dans le controller :
+    Créer une valeur permettant de stocker l email de l administrateur. Ex: contact@monsupersite.com
+    Celle-ci sera utilisé pour recevoir les emails : ->setTo()
+
+                - Si dans l url il y a le paramètre suivant : ?admin=true&prenom=toto
+    Mettre en copie le mail suivant : admin@admin.com
+                (Aide : addCc('admin@admin.com'))
+    Et ajouter dans le corps du mail le message suivant : toto est en copie (toto étant dynamique)
+
+  - Mettre en place ce bundle pour le formulaire de contact : https://github.com/Gregwar/CaptchaBundle
+
+On ajoutera ensemble des restrictions sur le formulaire
+
+
+
+
+        /*******************************************************************************************************
+                                                   * jour 5
+         *****************************************************************************************************/
+
+
+pour surcharger un template 3 possibilité:
+documenttation : https://symfony.com/doc/current/form/form_customization.html
+
+1 cas le faire dans un fichier particulier la ou y a le formulaire par exemple:( methode déconseillé) car lle s'applique juste pour ce fichier la , pour tout les fichier il faut faire la methode "2 cas"
+{% block content %}
+
+{% form_theme   formContact   _self %}
+
+{%- block form_label -%}
+    <strong>Modification de l'affichage d'un label</strong>
+{%- endblock form_label -%}
+
+
+2 cas faire une manip dans le fichier config  et crée un fichier pour le lien vers dans config comme ceci:
+
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+    form_themes:
+				- 'form/fields.html.twig'
+
+3 cas  faire un lier vers un fichier pour chercher le theme dans la page , presque comme le 1 cas sauf que ici les balise changer sont externisé
+
+{% form_theme    formContact   'form/fields.html.twig' %}
+{%- block form_label -%}
+    <strong>Modification de l'affichage d'un label</strong>
+{%- endblock form_label -%}
+
+****** fin de la modification du theme *****
+
+
+                Formulaire de contact
+                - Tous les champs sont obligatoires
+                - firstname doit faire minimum 2 caractères
+                - content doit faire maximum 150 caractères
+                - Email doit être un email valide
+
+
+Formulaire de feedback
+                - Tous les champs sont obligatoires
+                - Vérifier que la page est une url valide
+                - Vérifier que le choix du bug est un choix valide
+                - Email doit être un email valide
+                - La date doit être valide
+                - content doit faire minimum 10 caractères et maximum 150 caractères
+
+BONUS:
+- vérifier que le contenu ne contienne pas de gros mots (liste de mots que vous choisissez. Ex: zut, mince, mer**, breton, vendéen)
+
+https://symfony.com/doc/current/reference/constraints.html
+<?php
+
+namespace AppBundle\Controller;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints as Assert;
+
+class DefaultController extends Controller
+{
+    /**
+     * @Route("/contact", name="contact")
+     */
+    public function contactAction(Request $request)
+    {
+        $formContact = $this->createFormBuilder()
+            ->add('firstname', TextType::class)
+            ->add('lastname', TextType::class)
+            ->add('email', EmailType::class, [
+                'constraints' =>
+                    [
+                        new Assert\NotBlank(['message' => 'Veuillez rentrer un email']),
+                        new Assert\Email([
+                            'message' => 'Votre email {{ value }} est faux'
+                        ])
+                    ]
+            ])
+            ->add('content', TextareaType::class)
+            ->getForm();
+
+        $formContact->handleRequest($request);
+
+        if ($formContact->isSubmitted() && $formContact->isValid()) {
+
+            $data = $formContact->getData();
+
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Formulaire de contact')
+                ->setFrom($data['email'])
+                ->setTo('contact@monsupersite.com')
+                ->setBody(
+                    $this->renderView('emails/formulaire-contact.html.twig'),
+                    'text/html'
+                )
+                ->addPart(
+                    $this->renderView('emails/formulaire-contact.txt.twig'),
+                    'text/plain'
+                )
+            ;
+            $this->get('mailer')->send($message);
+
+            $this->addFlash('success', 'Votre email a bien été envoyé');
+
+            return $this->redirectToRoute('contact');
+        }
+
+        return $this->render('default/contact.html.twig', ["formContact" => $formContact->createView()]);
+    }
+}
+
+
+
+/**********************/
+/* contact.html.twig  */
+/**********************/
+    {% extends 'layout.html.twig' %}
+
+    {% block content %}
+
+    {# Affichage du message de success	#}
+        {{ dump(app.session) }}
+        {% for flash_message in app.session.flashBag.get('success') %}
+        <div class="alert alert-success">
+          {{ flash_message }}
+      </div>
+    {% endfor %}
+
+    {{ form_start(formContact, {attr: {class:"toto", novalidate:"novalidate"}} ) }}
+
+			<div class="form-group">
+      	{# affiche les erreurs du champ firstname #}
+            {{ form_errors(formContact.firstname) }}
+
+            {# affiche la balise label du champ firtsname #}
+                {{ form_label(formContact.firstname) }}
+
+                {# affiche la balise input de type text du champ firtsname #}
+                    {{ form_widget(formContact.firstname,
+                       {
+                         attr: {
+                        class: 'form-control'
+                         }
+                       })
+         }}
+                    </div>
+
+      <div class="form-group">
+      	{{ form_errors(formContact.lastname) }}
+
+        {{ form_label(formContact.lastname, "Votre nom", {label_attr: {class: "le-nom-de-votre-class"} } ) }}
+
+        {{ form_widget(formContact.lastname, {attr: {placeholder: "Votre nom", class: "form-control"} } ) }}
+      </div>
+
+      <div class="form-group">
+      	{{ form_errors(formContact.email) }}
+
+
+        {{ form_label(formContact.email, null) }}
+
+				{{ form_widget(formContact.email,
+                        {
+                          attr: {
+                    placeholder: 'email',
+                            class: "form-control"
+                          },
+                          id: "votre-super-id"
+                        })
+        }}
+      </div>
+
+      <div class="form-group">
+      	{{ form_errors(formContact.content) }}
+      	{{ form_label(formContact.content) }}
+				{{ form_widget(formContact.content) }}
+      </div>
+
+			<button>Envoyer</button>
+
+	{{ form_end(formContact) }}
+
+{% endblock %}
+
+
