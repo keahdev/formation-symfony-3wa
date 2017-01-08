@@ -12,76 +12,81 @@
 
 
 {% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <!-- general form elements -->
+            {# Affichage du message de success	#}
+            {% for flash_message in app.session.flashBag.get('success') %}
+                <div class="alert alert-success">
+                    {{ flash_message }}
+                </div>
+            {% endfor %}
 
-    {# Affichage du message de success	#}
+            {{ form_start(formContact,{attr:{novalidate:"novalidate"}} ) }}
+                <div class="well box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Contactez-nous</h3>
+                    </div>
+                    <!-- /.box-header -->
 
-    {% for flash_message in app.session.flashBag.get('success') %}
-        <div class="alert alert-success">
-            {{ flash_message }}
-        </div>
-    {% endfor %}
+                    <div class="form-group">
+                        {# affiche les erreurs du champ firstname #}
+                        {{ form_errors(formContact.firstname) }}
 
+                        {# affiche la balise label du champ firtsname #}
+                        {{ form_label(formContact.firstname,"Prénom") }}
 
-    {{ form_start(formContact,{attr:{novalidate:"novalidate"}} ) }}
+                        {# affiche la balise input de type text du champ firtsname #}
+                        {{ form_widget(formContact.firstname,
+                        {
+                            attr: {
+                            class: 'form-control',
+                            placeholder: "Votre prénom"
+                        }
+                        }) }}
+                    </div>
 
-    <div class="form-group">
-        {# affiche les erreurs du champ firstname #}
-        {{ form_errors(formContact.firstname) }}
+                    <div class="form-group">
+                        {{ form_errors(formContact.lastname) }}
 
-        {# affiche la balise label du champ firtsname #}
-        {{ form_label(formContact.firstname,"Prénom") }}
+                        {{ form_label(formContact.lastname, "Nom", {label_attr: {class: "le-nom-de-votre-class"} } ) }}
 
-        {# affiche la balise input de type text du champ firtsname #}
-        {{ form_widget(formContact.firstname,
-        {
-            attr: {
-            class: 'form-control',
-            placeholder: "Votre prénom"
-        }
-        })
-        }}
-    </div>
+                        {{ form_widget(formContact.lastname, {attr: {placeholder: "Votre nom", class: "form-control"} } ) }}
+                    </div>
 
-    <div class="form-group">
-        {{ form_errors(formContact.lastname) }}
-
-        {{ form_label(formContact.lastname, "Nom", {label_attr: {class: "le-nom-de-votre-class"} } ) }}
-
-        {{ form_widget(formContact.lastname, {attr: {placeholder: "Votre nom", class: "form-control"} } ) }}
-    </div>
-
-    <div class="form-group">
-        {{ form_errors(formContact.email) }}
+                    <div class="form-group">
+                        {{ form_errors(formContact.email) }}
 
 
-        {{ form_label(formContact.email, null) }}
+                        {{ form_label(formContact.email, null) }}
 
-        {{ form_widget(formContact.email,
-        {
-            attr: {
-            placeholder: 'Votre email',
-            class: "form-control"
-        },
-            id: "votre-super-id"
-        })
-        }}
-    </div>
+                        {{ form_widget(formContact.email,
+                        {
+                            attr: {
+                            placeholder: 'Votre email',
+                            class: "form-control"
+                        },
+                            id: "votre-super-id"
+                        }) }}
+                    </div>
 
-    <div class="form-group">
-        {{ form_errors(formContact.content) }}
+                    <div class="form-group">
+                        {{ form_errors(formContact.content) }}
 
-        {{ form_label(formContact.content,"Message") }}
+                        {{ form_label(formContact.content,"Message") }}
 
-        {{ form_widget(formContact.content,
-        {
-            attr:{
-            class:"form-control"
-        },
+                        {{ form_widget(formContact.content,
+                        {
+                            attr:{
+                            class:"form-control"
+                        },
 
-        }) }}
-    </div>
+                        }) }}
+                    </div>
+                </div><!-- box box-primary  -->
+                <button>Envoyer</button>
+            {{ form_end(formContact) }}
 
-    <button>Envoyer</button>
-
-    {{ form_end(formContact) }}
+        </div><!-- col-md-12 -->
+    </div><!-- row -->
 {% endblock %}

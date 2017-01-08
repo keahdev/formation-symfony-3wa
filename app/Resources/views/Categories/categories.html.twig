@@ -19,9 +19,15 @@
 {% endblock %}
 
 {% block content %}
-    {% include ':Partials:Search.html.twig' %}
 
-
+<div class="row">
+    <div class="col-xs-12">
+        {% include ':Partials:Search.html.twig' %}
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Hover Data Table</h3>
+            </div>
+            <!-- /.box-header -->
     <div class="box-body">
         <table id="example2" class="table table-bordered table-hover">
             <thead>
@@ -47,23 +53,27 @@
 
                     <td>
                         <a href="{{ path('categoriepage',{'id':categorie.id}) }}" class="btn btn-primary">Voir</a>
-                        <button class="btn btn-success">Editer</button>
-                        <button class="btn btn-danger">Supprimer</button>
+                        <button class="btn btn-success">Edit</button>
+                        <button class="btn btn-danger">Supp</button>
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
             <tfoot>
             <tr>
-                <th>Rendering engine</th>
-                <th>Browser</th>
-                <th>Platform(s)</th>
-                <th>Engine version</th>
-                <th>CSS grade</th>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description(s)</th>
+                <th>Nb Caract </th>
+                <th>Date</th>
+                <th>Actions</th>
             </tr>
             </tfoot>
         </table>
     </div>
+            </div><!-- box -->
+        </div><!-- col-xs-12 -->
+    </div><!-- row -->
 
     {% include ':Partials:pagination.html.twig' %}
 
