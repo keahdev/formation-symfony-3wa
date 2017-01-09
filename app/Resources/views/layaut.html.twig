@@ -12,7 +12,7 @@
             <!-- Sidebar user panel -->
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                    <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
                     <p>Alexander Pierce</p>
@@ -42,8 +42,8 @@
                     </a>
                     <ul class="treeview-menu">
                         <li class="active"><a href="{{ path('home') }}"><i class="fa fa-circle-o"></i> Home</a></li>
-                        <li class=""><a href="{{ path('produitspage') }}"><i class="fa fa-circle-o"></i> All Products</a></li>
-                        <li class=""><a href="{{ path('categoriespage') }}"><i class="fa fa-circle-o"></i> All Gategory</a></li>
+                        <li class=""><a href="{{ path('produitspage') }}"><i class="fa fa-circle-o"></i> Produits</a></li>
+                        <li class=""><a href="{{ path('categoriespage') }}"><i class="fa fa-circle-o"></i> Categories</a></li>
                         <li class=""><a href="{{ path('contactpage') }}"><i class="fa fa-circle-o"></i> Contact</a></li>
 
                     </ul>

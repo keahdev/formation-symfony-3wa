@@ -76,10 +76,19 @@
             <!-- AdminLTE for demo purposes -->
             <script src="{{ asset('dist/js/demo.js')}}"></script>
             <script>
-                $(document).ready(function(){
-                    $('.datepicker').datepicker();
+                $(function () {
+                    $("#example1").DataTable();
+                    $('#example2').DataTable({
+                        "paging": true,
+                        "lengthChange": false,
+                        "searching": false,
+                        "ordering": true,
+                        "info": true,
+                        "autoWidth": false
+                    });
 
-                })
+                    $('.datepicker').datepicker();
+                });
             </script>
 
 

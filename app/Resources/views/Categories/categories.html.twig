@@ -10,6 +10,7 @@
 {% block titleContent %}
      {{ categories|length }} Catégorie(s)
     <small>Control panel</small>
+    <a href="{{ path('categoriecree') }}" class="btn btn-adn">New categorie</a>
 {% endblock %}
 
 {% block breadcrumb %}
@@ -19,9 +20,15 @@
 {% endblock %}
 
 {% block content %}
-    {% include ':Partials:Search.html.twig' %}
 
-
+<div class="row">
+    <div class="col-xs-12">
+        {% include ':Partials:Search.html.twig' %}
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Hover Data Table</h3>
+            </div>
+            <!-- /.box-header -->
     <div class="box-body">
         <table id="example2" class="table table-bordered table-hover">
             <thead>
@@ -29,8 +36,7 @@
                 <th>Id</th>
                 <th>Title</th>
                 <th>Description(s)</th>
-                <th>Nb Caract </th>
-                <th>Date</th>
+                <th>Position</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -40,30 +46,36 @@
                 <tr>
                     <td>{{ categorie.id }}</td>
                     <td>{{ categorie.title }}</td>
-                    <td>{{ categorie.description|raw|nl2br}}</td>
-                    <td>{{ categorie.description|striptags|length}}</td>
-                    <td>{{ categorie.date_created|date("m/d/Y") }}</td>
-                    <td>{% if categorie.active %} {{ 'active' }}{% else %} {{ 'non active' }}{% endif %}</td>
+                    <td>{{ categorie.description}}</td>
+                    <td>{{ categorie.position}}</td>
 
                     <td>
-                        <a href="{{ path('categoriepage',{'id':categorie.id}) }}" class="btn btn-primary">Voir</a>
-                        <button class="btn btn-success">Editer</button>
-                        <button class="btn btn-danger">Supprimer</button>
+                        <a href="{{ path('categoriepage',{'id':categorie.id}) }}"
+                           class="btn btn-primary">Voir</a>
+
+                        <a href="{{ path('categoriedit',{'id':categorie.id}) }}"
+                           class="btn btn-warning">Editer</a>
+
+                        <a href="{{ path('categoriesupp',{'id':categorie.id}) }}"
+                           class="btn btn-danger">Supprimer</a>
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
             <tfoot>
             <tr>
-                <th>Rendering engine</th>
-                <th>Browser</th>
-                <th>Platform(s)</th>
-                <th>Engine version</th>
-                <th>CSS grade</th>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description(s)</th>
+                <th>Position</th>
+                <th>Actions</th>
             </tr>
             </tfoot>
         </table>
     </div>
+            </div><!-- box -->
+        </div><!-- col-xs-12 -->
+    </div><!-- row -->
 
     {% include ':Partials:pagination.html.twig' %}
 

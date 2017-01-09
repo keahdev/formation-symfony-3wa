@@ -1,1 +1,19 @@
-<h1> Ma page error 404 Not Found !!!!</h1>
+{% extends 'layaut.html.twig' %}
+
+{% block titleContent %}
+    404 Error Page
+    <small>Not Found</small>
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+
+    <li class="active">404 Error Page</li>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <img src="http://cloud.shelfworthy.com/static/project/svg/404.cda3231a0049.svg">
+        </div>
+    </div>
+{% endblock %}

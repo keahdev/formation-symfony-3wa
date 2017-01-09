@@ -25,8 +25,8 @@
                 <th>Id</th>
                 <th>Title</th>
                 <th>Description(s)</th>
-                <th>Date</th>
-                <th>Prix</th>
+                <th>Position</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -34,10 +34,10 @@
                 <td>{{ categorie.id }}</td>
                 <td>{{ categorie.title }}</td>
                 <td>{{ categorie.description }}</td>
-                <td>{{ categorie.date_created|date("m/d/Y") }}</td>
-                <td>{{ categorie.active }}</td>
+                <td>{{ categorie.position }}</td>
                 <td>
-                    <button class="btn btn-success">Editer</button>
+                    <a href="{{ path('categoriedit',{'id':categorie.id}) }}"
+                       class="btn btn-warning">Editer</a>
                     <button class="btn btn-danger">Supprimer</button>
                 </td>
             </tr>

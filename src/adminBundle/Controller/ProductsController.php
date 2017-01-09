@@ -26,25 +26,14 @@ class ProductsController extends Controller
 
 
 
-
-
-
-
-    /**
-     * Creattion d'un nouveau produit
-     */
-
     /**
      * @Route("produit/cree", name="produitcree")
      */
     public function creatAction(Request $request){
-
-
         $produit = new produit();
 
         $formproduit = $this->createForm(produitType::class, $produit);
         $formproduit->handleRequest($request);
-
 
         if ($formproduit->isSubmitted() && $formproduit->isValid()) {
 
@@ -54,16 +43,12 @@ class ProductsController extends Controller
 
             $this->addFlash('success', 'Votre produit a bien été ajouté');
 
-            return $this->redirectToRoute('produitcree');
+            return $this->redirectToRoute('produitspage');
         }
-
         return $this->render('Products/creat.html.twig',['formproduit'=>$formproduit->createView()]);
-
     }
 
 
-
-    //Methode pour recuprer  un seul produit
 
     /**
      * @Route("/produit/{id}", name="produitpage",requirements={"id":"\d+"})
@@ -75,26 +60,22 @@ class ProductsController extends Controller
         if (!$product){
             throw  New EntityNotFoundException();
         }
-
         return $this->render(':Products:showproduct.html.twig',['product'=>$product]);
     }
 
-
-
-    //Methode pour modifier un produit
 
     /**
      * @Route("/produit/edit/{id}", name="produitedit",requirements={"id":"\d+"})
      */
     public function editproduitAction(Request $request,$id)
     {
-
         $em=$this->getDoctrine()->getManager();
-        $product=$em->getRepository('adminBundle:produit')->find($id);
-
-        $formproduit = $this->createForm(produitType::class, $product);
+        $produit=$em->getRepository('adminBundle:produit')->find($id);
+        if(!$produit){
+            throw $this->createNotFoundException();
+        }
+        $formproduit = $this->createForm(produitType::class, $produit);
         $formproduit->handleRequest($request);
-
 
         if ($formproduit->isSubmitted() && $formproduit->isValid()) {
 
@@ -105,13 +86,30 @@ class ProductsController extends Controller
 
             return $this->redirectToRoute('produitspage');
         }
-
-
-        return $this->render('Products/edition.html.twig',['formproduit'=>$formproduit->createView()]);
+        return $this->render('Products/edition.html.twig',['formproduit'=>$formproduit->createView(),'produit'=>$produit]);
     }
 
 
+    /**
+     * @Route("/produit/supp/{id}", name="produitedit",requirements={"id":"\d+"})
+     */
+
+    public function suppproduitAction(Request $request,$id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $produit = $em->getRepository('adminBundle:produit')->find($id);
+        if (!$produit) {
+            throw $this->createNotFoundException();
+        }
 
 
+        $em->remove($produit);
+        $em->flush();
 
+        $this->addFlash('success', 'Votre produit a été supprimé');
+
+        // Redirection sur la page qui liste tous les produits
+        return $this->redirectToRoute('produitspage');
+
+    }
 }
