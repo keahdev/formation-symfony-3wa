@@ -1,0 +1,198 @@
+
+
+
+
+
+        /*******************************************************************************************************
+                                                   * jour 5
+         *****************************************************************************************************/
+
+
+pour surcharger un template 3 possibilité:
+documenttation : https://symfony.com/doc/current/form/form_customization.html
+
+1 cas le faire dans un fichier particulier la ou y a le formulaire par exemple:( methode déconseillé) car lle s'applique juste pour ce fichier la , pour tout les fichier il faut faire la methode "2 cas"
+{% block content %}
+
+{% form_theme   formContact   _self %}
+
+{%- block form_label -%}
+    <strong>Modification de l'affichage d'un label</strong>
+{%- endblock form_label -%}
+
+
+2 cas faire une manip dans le fichier config  et crée un fichier pour le lien vers dans config comme ceci:
+
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+    form_themes:
+				- 'form/fields.html.twig'
+
+3 cas  faire un lier vers un fichier pour chercher le theme dans la page , presque comme le 1 cas sauf que ici les balise changer sont externisé
+
+{% form_theme    formContact   'form/fields.html.twig' %}
+{%- block form_label -%}
+    <strong>Modification de l'affichage d'un label</strong>
+{%- endblock form_label -%}
+
+****** fin de la modification du theme *****
+
+
+                Formulaire de contact
+                - Tous les champs sont obligatoires
+                - firstname doit faire minimum 2 caractères
+                - content doit faire maximum 150 caractères
+                - Email doit être un email valide
+
+
+Formulaire de feedback
+                - Tous les champs sont obligatoires
+                - Vérifier que la page est une url valide
+                - Vérifier que le choix du bug est un choix valide
+                - Email doit être un email valide
+                - La date doit être valide
+                - content doit faire minimum 10 caractères et maximum 150 caractères
+
+BONUS:
+- vérifier que le contenu ne contienne pas de gros mots (liste de mots que vous choisissez. Ex: zut, mince, mer**, breton, vendéen)
+
+https://symfony.com/doc/current/reference/constraints.html
+<?php
+
+namespace AppBundle\Controller;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints as Assert;
+
+class DefaultController extends Controller
+{
+    /**
+     * @Route("/contact", name="contact")
+     */
+    public function contactAction(Request $request)
+    {
+        $formContact = $this->createFormBuilder()
+            ->add('firstname', TextType::class)
+            ->add('lastname', TextType::class)
+            ->add('email', EmailType::class, [
+                'constraints' =>
+                    [
+                        new Assert\NotBlank(['message' => 'Veuillez rentrer un email']),
+                        new Assert\Email([
+                            'message' => 'Votre email {{ value }} est faux'
+                        ])
+                    ]
+            ])
+            ->add('content', TextareaType::class)
+            ->getForm();
+
+        $formContact->handleRequest($request);
+
+        if ($formContact->isSubmitted() && $formContact->isValid()) {
+
+            $data = $formContact->getData();
+
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Formulaire de contact')
+                ->setFrom($data['email'])
+                ->setTo('contact@monsupersite.com')
+                ->setBody(
+                    $this->renderView('emails/formulaire-contact.html.twig'),
+                    'text/html'
+                )
+                ->addPart(
+                    $this->renderView('emails/formulaire-contact.txt.twig'),
+                    'text/plain'
+                )
+            ;
+            $this->get('mailer')->send($message);
+
+            $this->addFlash('success', 'Votre email a bien été envoyé');
+
+            return $this->redirectToRoute('contact');
+        }
+
+        return $this->render('default/contact.html.twig', ["formContact" => $formContact->createView()]);
+    }
+}
+
+
+
+/**********************/
+/* contact.html.twig  */
+/**********************/
+    {% extends 'layout.html.twig' %}
+
+    {% block content %}
+
+    {# Affichage du message de success	#}
+        {{ dump(app.session) }}
+        {% for flash_message in app.session.flashBag.get('success') %}
+        <div class="alert alert-success">
+          {{ flash_message }}
+      </div>
+    {% endfor %}
+
+    {{ form_start(formContact, {attr: {class:"toto", novalidate:"novalidate"}} ) }}
+
+			<div class="form-group">
+      	{# affiche les erreurs du champ firstname #}
+            {{ form_errors(formContact.firstname) }}
+
+            {# affiche la balise label du champ firtsname #}
+                {{ form_label(formContact.firstname) }}
+
+                {# affiche la balise input de type text du champ firtsname #}
+                    {{ form_widget(formContact.firstname,
+                       {
+                         attr: {
+                        class: 'form-control'
+                         }
+                       })
+         }}
+                    </div>
+
+      <div class="form-group">
+      	{{ form_errors(formContact.lastname) }}
+
+        {{ form_label(formContact.lastname, "Votre nom", {label_attr: {class: "le-nom-de-votre-class"} } ) }}
+
+        {{ form_widget(formContact.lastname, {attr: {placeholder: "Votre nom", class: "form-control"} } ) }}
+      </div>
+
+      <div class="form-group">
+      	{{ form_errors(formContact.email) }}
+
+
+        {{ form_label(formContact.email, null) }}
+
+				{{ form_widget(formContact.email,
+                        {
+                          attr: {
+                    placeholder: 'email',
+                            class: "form-control"
+                          },
+                          id: "votre-super-id"
+                        })
+        }}
+      </div>
+
+      <div class="form-group">
+      	{{ form_errors(formContact.content) }}
+      	{{ form_label(formContact.content) }}
+				{{ form_widget(formContact.content) }}
+      </div>
+
+			<button>Envoyer</button>
+
+	{{ form_end(formContact) }}
+
+{% endblock %}
+
+

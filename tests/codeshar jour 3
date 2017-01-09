@@ -1,0 +1,118 @@
+
+    /***************************************************************************************************************
+     *                                             jour 3
+     *****************************************************************************************************/
+
+    License PHPStorm
+ 1) Création d'un compte chez Jetbrains (éditeur de PHPStorm) : https://www.jetbrains.com/
+ 2) Aller sur le lien suivant : https://account.jetbrains.com/a/dopgu8p0
+ 3) Rentrer l'id/pass de son compte jetbrains dans phpstorm
+
+
+ http://www.cbs.dtu.dk/courses/27610/regular-expressions-cheat-sheet-v2.pdf
+
+<?php
+
+namespace AdminBundle\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
+/**
+ * @Route("/produits")
+ */
+class ProductController extends Controller
+{
+    /**
+     * @Route("/{id}", name="show_product", requirements={"id" = "\d+"})
+     */
+    public function showAction($id)
+    {
+        die(dump($id));
+        $products = [
+            [
+                "id" => 1,
+                "title" => "Mon premier produit",
+                "description" => "lorem ipsum",
+                "date_created" => new \DateTime('now'),
+                "prix" => 10
+            ],
+            [
+                "id" => 2,
+                "title" => "Mon deuxième produit",
+                "description" => "lorem ipsum",
+                "date_created" => new \DateTime('now'),
+                "prix" => 20
+            ],
+            [
+                "id" => 3,
+                "title" => "Mon troisième produit",
+                "description" => "lorem ipsum",
+                "date_created" => new \DateTime('now'),
+                "prix" => 30
+            ],
+            [
+                "id" => 4,
+                "title" => "",
+                "description" => "lorem ipsum",
+                "date_created" => new \DateTime('now'),
+                "prix" => 410
+            ],
+        ];
+
+        $leBonProduit = [];
+        foreach(..) {
+        ...
+    }
+
+        if (empty($leBonProduit)) {
+            throw $this->createNotFoundException("Le produit n'existe pas");
+        }
+
+        // TROUVER LE MOYEN D'ENVOYER UNIQUEMENT LE PRODUIT AYANT LE BON ID ($id doit correspondre à un id existant dans $products)
+        return $this->render('Product:show.html.twig');
+    }
+}
+
+
+- Création d'une route permettant de voir un film
+ - Utilisation des prefix
+ - Créer la route suivante  /admin/catégories  permettant d'afficher les catégories suivantes sous forme de tableau (identique aux produits) :
+ $categories = [
+     1 => [
+         "id" => 1,
+         "title" => "Homme",
+         "description" => "lorem ipsum \n suite du contenu",
+         "date_created" => new \DateTime('now'),
+         "active" => true
+     ],
+     2 => [
+         "id" => 2,
+         "title" => "Femme",
+         "description" => "<strong>lorem</strong> ipsum",
+         "date_created" => new \DateTime('-10 Days'),
+         "active" => true
+     ],
+     3 => [
+         "id" => 3,
+         "title" => "Enfant",
+         "description" => "lorem ipsum",
+         "date_created" => new \DateTime('-1 Days'),
+         "active" => false
+     ],
+ ];
+
+- Afficher "active" ou "non active" en fonction de la propriété active : {% if %}
+- Afficher le nombre de caractère de la description : |striptags|length
+- Trouver un moyen d’interpréter le strong contenu dans la description de la catégorie femme : |raw
+- Conserver le saut de ligne pour la catégorie homme : |nl2br
+
+  Bonus :
+- Afficher le nombre de catégories
+- Afficher les catégories ordonnées par date
+- Couper la description à 50 caractères. Il faudra ajouter un peu de contenu ;)
+- Afficher sur la page /admin/produits la moyenne des prix
+- Afficher sur la page /admin/produits un signe distinctif sur le produit le moins cher
+- Afficher sous forme de graphique le prix des produits :
+      - https://almsaeedstudio.com/themes/AdminLTE/pages/charts/chartjs.html
+      - https://almsaeedstudio.com/themes/AdminLTE/pages/charts/morris.html

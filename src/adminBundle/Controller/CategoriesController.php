@@ -7,6 +7,7 @@ use adminBundle\Form\CategorieType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class CategoriesController extends Controller
 {
@@ -50,18 +51,21 @@ class CategoriesController extends Controller
 
 
 
+
     /**
      * @Route("categorie/{id}", name="categoriepage", requirements={"id":"\d+"})
+     * @ParamConverter("categorie", class="adminBundle:Categorie")
+     * Le param converter transforme la variable $id en object ($categorie) de la class Categorie
      */
 
-    public function showcategoriAction($id){
+    public function showcategoriAction($categorie){
 
-        $em=$this->getDoctrine()->getManager();
+       /* $em=$this->getDoctrine()->getManager();
         $categorie=$em->getRepository('adminBundle:Categorie')->find($id);
 
         if (empty($categorie)){
             throw $this->createNotFoundException();
-        }
+        }*/
 
         return $this->render(':Categories:showcategorie.html.twig',['categorie'=>$categorie]);
 

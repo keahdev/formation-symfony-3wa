@@ -17,40 +17,49 @@
 
 {% block content %}
 
-    {% include ':Partials:Search.html.twig' %}
-    <div class="box-body">
-        <table id="example2" class="table table-bordered table-hover">
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Description(s)</th>
-                <th>Position</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>{{ categorie.id }}</td>
-                <td>{{ categorie.title }}</td>
-                <td>{{ categorie.description }}</td>
-                <td>{{ categorie.position }}</td>
-                <td>
-                    <a href="{{ path('categoriedit',{'id':categorie.id}) }}"
-                       class="btn btn-warning">Editer</a>
-                    <button class="btn btn-danger">Supprimer</button>
-                </td>
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-                <th>Rendering engine</th>
-                <th>Browser</th>
-                <th>Platform(s)</th>
-                <th>Engine version</th>
-                <th>CSS grade</th>
-            </tr>
-            </tfoot>
-        </table>
-    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Hover Data Table</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Title</th>
+                            <th>Description(s)</th>
+                            <th>Position</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{{ categorie.id }}</td>
+                            <td>{{ categorie.title }}</td>
+                            <td>{{ categorie.description }}</td>
+                            <td>{{ categorie.position }}</td>
+                            <td>
+                                <a href="{{ path('categoriedit',{'id':categorie.id}) }}"
+                                   class="btn btn-warning">Editer</a>
+                                <button class="btn btn-danger">Supprimer</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>Rendering engine</th>
+                            <th>Browser</th>
+                            <th>Platform(s)</th>
+                            <th>Engine version</th>
+                            <th>CSS grade</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div><!-- box-->
+        </div><!--col-xl-12 -->
+    </div><!--row -->
 {% endblock %}

@@ -7,7 +7,9 @@ use adminBundle\Form\produitType;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+
 
 class ProductsController extends Controller
 {
@@ -91,7 +93,7 @@ class ProductsController extends Controller
 
 
     /**
-     * @Route("/produit/supp/{id}", name="produitedit",requirements={"id":"\d+"})
+     * @Route("/produit/supp/{id}", name="produitsupp",requirements={"id":"\d+"})
      */
 
     public function suppproduitAction(Request $request,$id)
@@ -102,9 +104,18 @@ class ProductsController extends Controller
             throw $this->createNotFoundException();
         }
 
-
         $em->remove($produit);
         $em->flush();
+
+
+        /** pour gerer la supp avec ajax */
+
+        $message_success="Produit bien été supprimé";
+
+        if ($request->isXmlHttpRequest()) {
+           return new JsonResponse(['message'=>$message_success]);
+        }
+
 
         $this->addFlash('success', 'Votre produit a été supprimé');
 
