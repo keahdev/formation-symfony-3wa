@@ -13,132 +13,115 @@
 
 {% block content %}
 
+    <div class="row">
+        <div class="col-md-12">
 
+            {{ form_start(form,{attr:{'novalidate':'novalidate'}}) }}
+            <div class="well box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Contactez-nous</h3>
+                </div>
+                <!-- /.box-header -->
 
-    {{ form_start(form,{attr:{'novalidate':'novalidate'}}) }}
+                <div class="form-group">
+                    {{ form_errors(form.page) }}
+                    {{ form_label(form.page,"Page URL") }}
+                    {{ form_widget(form.page,
+                    {
+                        attr: {
+                        class: 'form-control',
+                        placeholder: "Votre URL"
+                    }
+                    }) }}
+                </div>
 
-    <div class="form-group">
-        {{ form_errors(form.page) }}
+                <div class="form-group">
+                    {{ form_errors(form.bug) }}
+                    {{ form_label(form.bug,"Le bug constaté") }}
+                    {{ form_widget(form.bug, {attr: {class: "form-control"} } ) }}
+                </div>
 
-        {{ form_label(form.page,"Page URL") }}
+                <div class="form-group">
+                    {{ form_errors(form.firstname) }}
+                    {{ form_label(form.firstname,"Prénom") }}
+                    {{ form_widget(form.firstname,
+                    {
+                        attr: {
+                        class: 'form-control',
+                        placeholder: "Votre prénom"
+                    }
+                    }) }}
+                </div>
 
-        {{ form_widget(form.page,
-        {
-            attr: {
-            class: 'form-control',
-            placeholder: "Votre URL"
-        }
-        }) }}
-    </div>
+                <div class="form-group">
+                    {{ form_errors(form.lastname) }}
+                    {{ form_label(form.lastname,"Nom") }}
+                    {{ form_widget(form.lastname,
+                    {
+                        attr: {
+                        class: 'form-control',
+                        placeholder: "Votre Nom"
+                    }
+                    }) }}
+                </div>
 
-    <div class="form-group">
-        {{ form_errors(form.bug) }}
+                <div class="form-group">
+                    {{ form_errors(form.email) }}
+                    {{ form_label(form.email, null) }}
+                    {{ form_widget(form.email,
+                    {
+                        attr: {
+                        placeholder: 'Votre email',
+                        class: "form-control"
+                    }}) }}
+                </div>
 
-        {{ form_label(form.bug) }}
+                <div class="form-group">
 
-        {{ form_widget(form.bug, {attr: {class: "form-control"} } ) }}
-    </div>
+                    {{ form_errors(form.date) }}
+                    {{ form_label(form.date) }}
+                    {{ form_widget(form.date) }}
+                </div>
 
-    <div class="form-group">
-
-        {{ form_errors(form.firstname) }}
-
-        {{ form_label(form.firstname,"Prénom") }}
-
-        {{ form_widget(form.firstname,
-        {
-            attr: {
-            class: 'form-control',
-            placeholder: "Votre prénom"
-        }
-        })
-        }}
-    </div>
-
-    <div class="form-group">
-
-        {{ form_errors(form.lastname) }}
-
-        {{ form_label(form.lastname,"Nom") }}
-
-        {{ form_widget(form.lastname,
-        {
-            attr: {
-            class: 'form-control',
-            placeholder: "Votre Nom"
-        }
-        })
-        }}
-    </div>
-
-
-    <div class="form-group">
-        {{ form_errors(form.email) }}
-
-        {{ form_label(form.email, null) }}
-
-        {{ form_widget(form.email,
-        {
-            attr: {
-            placeholder: 'Votre email',
-            class: "form-control"
-        }})
-        }}
-    </div>
-
-
-    <div class="form-group">
-
-        {{ form_errors(form.date) }}
-
-        {{ form_label(form.date) }}
-
-        {{ form_widget(form.date)}}
-    </div>
-
-    <div class="form-group">
-        {{ form_errors(form.content) }}
-
-        {{ form_label(form.content,"Message") }}
-
-        {{ form_widget(form.content,
-        {
-            attr:{
-            class:"form-control"
-        },
-
-        }) }}
-    </div>
-
-
-    <button>Envoyer</button>
-
-    {{ form_end(form) }}
+                <div class="form-group">
+                    {{ form_errors(form.content) }}
+                    {{ form_label(form.content,"Message") }}
+                    {{ form_widget(form.content,
+                    {
+                        attr:{
+                        class:"form-control"
+                    },
+                    }) }}
+                </div>
+            </div><!-- box box-primary  -->
+            <button class="btn btn-primary">Envoyer</button>
+            {{ form_end(form) }}
+        </div><!-- col-md-12 -->
+    </div><!-- row -->
 
 
 
 
 
-
- {#
-    A faire pour ce formulaire le finir a la maison et ajouter un captcha et un datepicker avec js
-
+    {#
+       A faire pour ce formulaire le finir a la maison et ajouter un captcha et un datepicker avec js
 
 
-    Formulaire de feedback
-    - Tous les champs sont obligatoires
-    - Vérifier que la page est une url valide
-    - Vérifier que le choix du bug est un choix valide
-    - Email doit être un email valide
-    - La date doit être valide
-    - content doit faire minimum 10 caractères et maximum 150 caractères
 
-    BONUS:
-    - vérifier que le contenu ne contienne pas de gros mots
+       Formulaire de feedback
+       - Tous les champs sont obligatoires
+       - Vérifier que la page est une url valide
+       - Vérifier que le choix du bug est un choix valide
+       - Email doit être un email valide
+       - La date doit être valide
+       - content doit faire minimum 10 caractères et maximum 150 caractères
 
-    https://symfony.com/doc/current/reference/constraints.html
+       BONUS:
+       - vérifier que le contenu ne contienne pas de gros mots
 
-    #}
+       https://symfony.com/doc/current/reference/constraints.html
+
+       #}
 {% endblock %}
 
 

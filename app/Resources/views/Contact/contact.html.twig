@@ -30,13 +30,9 @@
                     <!-- /.box-header -->
 
                     <div class="form-group">
-                        {# affiche les erreurs du champ firstname #}
+
                         {{ form_errors(formContact.firstname) }}
-
-                        {# affiche la balise label du champ firtsname #}
                         {{ form_label(formContact.firstname,"Prénom") }}
-
-                        {# affiche la balise input de type text du champ firtsname #}
                         {{ form_widget(formContact.firstname,
                         {
                             attr: {
@@ -48,18 +44,13 @@
 
                     <div class="form-group">
                         {{ form_errors(formContact.lastname) }}
-
                         {{ form_label(formContact.lastname, "Nom", {label_attr: {class: "le-nom-de-votre-class"} } ) }}
-
                         {{ form_widget(formContact.lastname, {attr: {placeholder: "Votre nom", class: "form-control"} } ) }}
                     </div>
 
                     <div class="form-group">
                         {{ form_errors(formContact.email) }}
-
-
                         {{ form_label(formContact.email, null) }}
-
                         {{ form_widget(formContact.email,
                         {
                             attr: {
@@ -72,19 +63,16 @@
 
                     <div class="form-group">
                         {{ form_errors(formContact.content) }}
-
                         {{ form_label(formContact.content,"Message") }}
-
                         {{ form_widget(formContact.content,
                         {
                             attr:{
                             class:"form-control"
                         },
-
                         }) }}
                     </div>
                 </div><!-- box box-primary  -->
-                <button>Envoyer</button>
+                <button class="btn btn-primary">Envoyer</button>
             {{ form_end(formContact) }}
 
         </div><!-- col-md-12 -->
