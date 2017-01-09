@@ -1,0 +1,122 @@
+http://www.doctrine-project.org/api/orm/2.5/class-Doctrine.ORM.EntityRepository.
+htmlhttp://www.doctrine-project.org/api/orm/2.5/class-Doctrine.ORM.EntityRepository.html
+
+https://symfony.com/doc/current/reference/constraints/NotBlank.html
+
+Validation des entités
+Entity Product
+- Toutes les propriétés sont obligatoires
+- Title : doit contenu minimum 5 caractères et maximum 100 caractères
+- Description : doit contenir maximum 300 caractères
+- Price : doit être supérieur à 0
+
+Entity Category
+- Toutes les propriétés sont obligatoires
+- Title : doit contenir minimum 2 caractères
+- Description : doit contenir maximum 300 caractères
+- Si la position est égale à 0 alors le titre doit être "Par défaut". Indice: Regarder du côté de la constrainte "Callback"
+
+<?php
+
+
+class ProductController extends Controller
+{
+    /**
+     * @Route("/produits/editer/{id}", name="product_edit")
+     */
+    public function editAction($id, Request $request)
+
+      $em = $this->getDoctrine()->getManager();
+      $product = $em->getRepository('AdminBundle:Product')->find($id);
+
+      // Vérification si le produit est bien en BDD
+      if (!$product) {
+      	throw $this->createNotFoundException("Le produit n'existe pas");
+      }
+
+      // Création du formulaire ProductType permettant de créer un produit
+      // Je lie le formulaire à mon objet $product
+      $formProduct = $this->createForm(ProductType::class, $product);
+
+      // Je lie la requête ($_POST) à mon formulaire donc à mon objet $product
+      $formProduct->handleRequest($request);
+
+      // Je valide mon formulaire
+      if ($formProduct->isSubmitted() && $formProduct->isValid()) {
+
+        	// La ligne ci-dessous n'est pas obligatoire car doctrine est au courant de l'existance de $product
+        	// $em->persist($product);
+        	$em->flush();
+
+        	$this->addFlash('success', 'Votre produit a été mis à jour');
+
+        	return $this->redirectToRoute('product_show', ['id' => $id]);
+      }
+
+      return $this->render('product/edit.html.twig', ['formProduct' => $formProduct->createView()]);
+    }
+
+  	/**
+     * @Route("/produits/supprimer/{id}", name="product_remove")
+     */
+    public function removeAction($id)
+    {
+      $em = $this->getDoctrine()->getManager();
+      $product = $em->getRepository('AdminBundle:Product')->find($id);
+
+      // Vérification si le produit est bien en BDD
+      if (!$product) {
+      	throw $this->createNotFoundException("Le produit n'existe pas");
+      }
+
+      $em->remove($product);
+      $em->flush();
+
+      $this->addFlash('success', 'Votre produit a été supprimé');
+
+      // Redirection sur la page qui liste tous les produits
+      return $this->redirectToRoute('produits');
+    }
+}
+
+
+
+
+/****************/
+/* Category.php */
+/****************/
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
+class Category {
+
+  private $title;
+
+  private $position;
+
+  /**
+   * @Assert\Callback
+   */
+  public function validate(ExecutionContextInterface $context, $payload)
+    {
+    	//die(dump($this->getPosition()));
+
+      if ($this->getPosition() == 0 && $this->getTitle() != "Par défaut") {
+        	$context->buildViolation('La position "0" est réservé à la catégorie "par défaut"')
+                // atPath permet d'attacher l'erreur à une propriété
+            		//->atPath('position') ici on l'affiche sur le champ position, pour l'afficger dans le formulaire il ajouter
+            		                       {{ form_errors(monform)}} au formulaire dans le twig
+                ->addViolation();
+      }
+    }
+
+}
+
+
+
+/***************************/
+/* CategoryController.php  */
+/**************************/
+class CategoryController extends Controller {
+
+
+}
