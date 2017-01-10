@@ -1,0 +1,284 @@
+// Afficher les produits dont la quantité est inférieur à 5
+// Afficher le nombre de produit dont la quantité est à 0
+// Afficher le nombre de catégorie
+// Afficher le nombre de catégorie actif
+// Afficher le nombre de catégorie actif et inactif
+// Afficher le total des produits
+// Afficher la quantité total des produits
+// Afficher le produit le plus cher et le produit le moins cher
+// Afficher le produit le plus cher et ayant la quantité la plus élevée
+// Afficher les catégories dont la position est supérieur à 2
+// Afficher le produit ayant la marque "toto" (remplacer toto par une marque existante dans votre BDD afin de tester)
+
+<?php
+namespace adminBundle\Repository;
+
+class ProductRepository extends \Doctrine\ORM\EntityRepository
+{
+    public function myFindAll() {
+      	// Creation d'une requête DQL
+      	// findAll() maison
+      //première solution :
+      	$query = $this->getEntityManager()
+          					->createQuery('
+                    			SELECT prod
+                          FROM AdminBundle:Product prod
+                    ');
+      //die(dump($query->getResult()));
+
+      // Création d'une requête grâce au builder
+      // seconde solution : findAll() maison
+      $query = $this->getEntityManager()->createQueryBuilder()
+        						->select("prod")
+        						->from("AdminBundle:Product", "prod")
+        						->getQuery();
+
+      //die(dump($query->getResult()));
+
+      return $query->getResult();
+    }
+
+    public function myFind($id) {
+
+       	// Creation d'une requête DQL
+      	// find() maison
+      	$query = $this->getEntityManager()
+          					->createQuery('
+                    			SELECT prod
+                          FROM AdminBundle:Product prod
+                          WHERE prod.id = :identifiant
+                    ')
+          					->setParameter('identifiant', $id);
+
+      die(dump($query->getOneOrNullResult()));
+
+      /* Plusieurs paramètres
+      ->setParameters([
+      		'identifiant' => $id,
+          'autre_variable' => $autre
+      ])
+      */
+
+      //die(dump($query->getResult()));
+
+      // Création d'une requête grâce au builder
+      // findAll() maison
+      $query = $this->getEntityManager()->createQueryBuilder()
+        						->select("prod")
+        						->from("AdminBundle:Product", "prod")
+        						->getQuery();
+
+      //die(dump($query->getResult()));
+
+      return $query->getResult();
+    }
+}
+
+
+
+class DefaultController extends Controller {
+
+  public function indexAction() {
+  		$em = $this->getDoctrine()->getManager();
+    	$tousLesProduits = $em->getRepository('AdminBundle:Product')->myFindAll();
+
+  }
+
+}
+
+
+
+
+class Product
+{
+
+  	/**
+    * @ORM\ManyToOne(targetEntity="Brand")
+    * @ORM\JoinColumn(name="id_brand", referencedColumnName="id", nullable=false)
+    */
+		private $marque;
+
+}
+
+<?php
+
+namespace AdminBundle\DataFixtures\ORM;
+
+use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+use AdminBundle\Entity\Product;
+
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+
+class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
+{
+    public function load(ObjectManager $manager)
+    {
+        $product = new Product();
+        $product->setTitle('un nouveau titre')
+          				->setDescription('lorem ipsum')
+          				->setPrice(rand(1,1000))
+          				->setQuantity(rand(1,100))
+          				->setBrand($this->getReference('nouvelle-marque'));
+
+      	$brand = $this->getReference('nouvelle-marque');
+      	//die(dump($brand));
+      	$product->setBrand($brand);
+
+        $manager->persist($product);
+        $manager->flush();
+    }
+
+  	public function getOrder()
+    {
+        // Permet de choisir l'ordre d'execution des fixtures
+        return 3;
+    }
+
+}
+
+
+
+∕∕ pour utiliser un tableau des marques aléatoirement
+    public function load(ObjectManager $manager)
+    {
+        $arrayBrand = [];
+        for ($i = 0; $i <= 5; $i++) {
+            $arrayBrand[] = $this->getReference('marque'.$i);
+
+        }
+
+  			//die(dump($arrayBrand));
+
+        for ($i = 0; $i <= 5; $i++) {
+            $product = new Product();
+
+            $product->setTitle('produit ' . $i)
+                    ->setDescription('Description du produit ' . $i)
+                    ->setPrice(3.5 + $i)
+                    ->setQuantity(6 + $i);
+//            $brand = $this->getReference('nouvelle-marque');
+            //$brand = $this->getReference('marque'.$i);
+            $brand = $arrayBrand[array_rand($arrayBrand, 1)];
+            //die(dump($brand));
+            $product->setBrand($brand);
+
+            $manager->persist($product);
+            $manager->flush();
+        }
+    }
+
+
+
+
+
+namespace AdminBundle\DataFixtures\ORM;
+
+use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+use AdminBundle\Entity\Product;
+
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+
+class LoadBrandData extends AbstractFixture implements OrderedFixtureInterface
+{
+    public function load(ObjectManager $manager)
+    {
+        $brand = new Brand();
+        $brand->setTitle('un nouveau titre');
+
+        $manager->persist($brand);
+        $manager->flush();
+      // création d'une variable afin de pouvoir relier un produit à une id brand existante
+      	$this->addReference('nouvelle-marque', $brand);
+    }
+
+  	public function getOrder()
+    {
+        // Permet de choisir l'ordre d'execution des fixtures
+        return 2;
+    }
+
+}
+
+// php bin/console doctrine:fixtures:load     (Supprimer entièrement les informations de la BDD)
+// php bin/console doctrine:fixtures:load --append      (Ajoute à la base de données existante)
+
+http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html
+
+/********************/
+/* layout.html.twig */
+/********************/
+
+{{ render(controller("AdminBundle:Categorie:renderCategorie")) }}
+
+
+
+<?php
+
+class CategorieController extends Controller {
+
+		public function renderCategorieAction() {
+    		$em = $this->getDoctrine()->getManager();
+        $categories = $em->getRepository('AdminBundle:Category')->findAll();
+        die(dump($categories));
+
+        return $this->render('Category/renderCategories.html.twig', ['categories' => $categories]);
+    }
+
+}
+
+/******************************/
+/* renderCategories.html.twig */
+/******************************/
+{% for cat in categories %}
+	<li>{{ cat.title }}</li>
+{% endfor %}
+
+
+
+/******************************/
+/*      Category.php          */
+/******************************/
+class Category {
+
+		private $id;
+
+    private $title;
+
+    private $description;
+
+
+    /**
+    * @ORM\Column(name="active", type="boolean")
+    */
+    private $active;
+
+    public function getId() {
+
+    }
+
+
+}
+
+
+   public function indexAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        // pour récupérer l'info qu'on a dans l'URL (ici sort, ASC)
+        $sort = $request->query->get("sort", "ASC");
+
+        // test au cas où l'on n'a pas ASC ou DESC pour sort
+        if (!in_array($sort, ['ASC', 'DESC'])) $sort = 'ASC';
+
+
+
+       $brands = $em->getRepository('AdminBundle:Brand')->findBy([], ["title"=>$sort]);
+
+        return $this->render('brand/index.html.twig', array(
+            'brands' => $brands,
+        ));
+    }

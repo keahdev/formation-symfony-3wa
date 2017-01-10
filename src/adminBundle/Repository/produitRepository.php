@@ -10,4 +10,57 @@ namespace adminBundle\Repository;
  */
 class produitRepository extends \Doctrine\ORM\EntityRepository
 {
+
+
+    public function getAllproduit()
+    {
+        // Creation d'une requête DQL
+        // findAll() maison
+
+        $qb = $this->createQueryBuilder('p');
+        $produit = $qb->getQuery()->getResult();
+        die((dump($produit)));
+    }
+
+
+    // Afficher les produits dont la quantité est inférieur à 5
+    public function quantsupcinq()
+    {
+        $qb = $this->createQueryBuilder('p');
+        $qb->where('p.quantity > 5');
+        $produit = $qb->getQuery()->getResult();
+        die((dump($produit)));
+
+    }
+
+
+    // Afficher le nombre de produit dont la quantité est à 0
+    public function quantegalzero()
+    {
+        $qb = $this->createQueryBuilder('p');
+        $qb->where('p.quantity = 0');
+        $produit = $qb->getQuery()->getResult();
+        die((dump($produit)));
+
+    }
+
+    // Afficher le total des produits
+    public function countpro()
+    {
+        $qb= $this->createQueryBuilder('p');
+        $produit = count($qb->getQuery()->getResult());
+        die((dump($produit)));
+    }
+
+    //Afficher la quantité total des produits
+    public function somquanti()
+    {
+        //$qb = $this->createQueryBuilder('p');
+        //$produit = ($qb->getQuery()->getResult());
+        //die((dump($produit)));
+    }
+
+
+
+
 }

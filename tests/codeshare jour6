@@ -1,5 +1,9 @@
-http://www.doctrine-project.org/api/orm/2.5/class-Doctrine.ORM.EntityRepository.
-htmlhttp://www.doctrine-project.org/api/orm/2.5/class-Doctrine.ORM.EntityRepository.html
+http://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/converters.html
+http://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/converters.html#doctrineconverter-options
+
+{{ dump(app.request.get('_route')) }}
+
+http://www.doctrine-project.org/api/orm/2.5/class-Doctrine.ORM.EntityRepository.htmlhttp://www.doctrine-project.org/api/orm/2.5/class-Doctrine.ORM.EntityRepository.html
 
 https://symfony.com/doc/current/reference/constraints/NotBlank.html
 
@@ -18,14 +22,19 @@ Entity Category
 
 <?php
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class ProductController extends Controller
-{
+{Product
     /**
-     * @Route("/produits/editer/{id}", name="product_edit")
+     * @Route("/produits/{id}", name="product_show")
+     * @ParamConverter("product", class="AdminBundle:Product")
+     * Le param converter transforme la variable $id en object ($product) de la class Product
      */
-    public function editAction($id, Request $request)
-
+    public function showAction(Product $product)
+		{
+  		die(dump($product));
+      /*
       $em = $this->getDoctrine()->getManager();
       $product = $em->getRepository('AdminBundle:Product')->find($id);
 
@@ -33,33 +42,16 @@ class ProductController extends Controller
       if (!$product) {
       	throw $this->createNotFoundException("Le produit n'existe pas");
       }
+      */
 
-      // Création du formulaire ProductType permettant de créer un produit
-      // Je lie le formulaire à mon objet $product
-      $formProduct = $this->createForm(ProductType::class, $product);
 
-      // Je lie la requête ($_POST) à mon formulaire donc à mon objet $product
-      $formProduct->handleRequest($request);
-
-      // Je valide mon formulaire
-      if ($formProduct->isSubmitted() && $formProduct->isValid()) {
-
-        	// La ligne ci-dessous n'est pas obligatoire car doctrine est au courant de l'existance de $product
-        	// $em->persist($product);
-        	$em->flush();
-
-        	$this->addFlash('success', 'Votre produit a été mis à jour');
-
-        	return $this->redirectToRoute('product_show', ['id' => $id]);
-      }
-
-      return $this->render('product/edit.html.twig', ['formProduct' => $formProduct->createView()]);
+      return $this->render('product/show.html.twig', ['product' => $product]);
     }
 
   	/**
      * @Route("/produits/supprimer/{id}", name="product_remove")
      */
-    public function removeAction($id)
+    public function removeAction($id, Request $request)
     {
       $em = $this->getDoctrine()->getManager();
       $product = $em->getRepository('AdminBundle:Product')->find($id);
@@ -72,7 +64,15 @@ class ProductController extends Controller
       $em->remove($product);
       $em->flush();
 
-      $this->addFlash('success', 'Votre produit a été supprimé');
+      $messageSuccess = 'Votre produit a été supprimé';
+
+
+      if ($request->isXmlHttpRequest()) {
+        	// use Symfony\Component\HttpFoundation\JsonResponse;
+      		return new JsonResponse(['message' => $messageSuccess]);
+      }
+
+      $this->addFlash('success', $messageSuccess);
 
       // Redirection sur la page qui liste tous les produits
       return $this->redirectToRoute('produits');
@@ -80,6 +80,56 @@ class ProductController extends Controller
 }
 
 
+/****************/
+/* script JS     */
+/****************/
+
+<a href="http://localhost/symfony/web/app_dev.php/admin/categorie/supprimer/1" class="btn btn-danger">Supprimer</a>
+
+<a href="http://localhost/symfony/web/app_dev.php/admin/categorie/supprimer/1">
+	<button class="btn btn-danger">Supprimer</button>
+</a>
+
+<script>
+
+  $(document).ready(function(){
+
+    $(".table").on('click', '.btn-danger', function(event){
+			//console.log($(this))
+      event.preventDefault();
+      if (confirm('Etes-vous sur ?')) {
+        var elementA = $(this);
+        var elementParentTable = elementA.closest('.table');
+        var linkUrl = elementA.parent().attr('href');
+      	// Requête Ajax
+        // http://api.jquery.com/jquery.ajax/
+        // The jqXHR Object => promise
+        $.ajax({
+          url : linkUrl,
+          method: "GET",
+        }).done(function(data){
+          elementA.closest('tr').fadeOut(700, function(){
+            //console.log($(this));
+            $(this).remove();
+
+            // Suppression des éventuels messages existants
+            $('.alert-success').remove();
+
+            // Ajout du message
+            var message = $('<p class="alert alert-danger">').append(data.message);
+            elementParentTable.before(message);
+            message.delay(3000).fadeOut()
+          })
+        });
+
+      }
+
+    });
+
+
+});
+
+</script>
 
 
 /****************/
@@ -103,8 +153,7 @@ class Category {
       if ($this->getPosition() == 0 && $this->getTitle() != "Par défaut") {
         	$context->buildViolation('La position "0" est réservé à la catégorie "par défaut"')
                 // atPath permet d'attacher l'erreur à une propriété
-            		//->atPath('position') ici on l'affiche sur le champ position, pour l'afficger dans le formulaire il ajouter
-            		                       {{ form_errors(monform)}} au formulaire dans le twig
+            		//->atPath('position')
                 ->addViolation();
       }
     }

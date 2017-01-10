@@ -2,6 +2,7 @@
 
 namespace adminBundle\Controller;
 
+use adminBundle\Entity\produit;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -20,6 +21,10 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
+
+     $em=$this->getDoctrine()->getManager();
+        $resultat= $em->getRepository('adminBundle:Categorie')->posisupdeux();
+
 
         return $this->render(':Default:index.html.twig');
     }

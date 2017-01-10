@@ -10,4 +10,45 @@ namespace adminBundle\Repository;
  */
 class CategorieRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    // Afficher le nombre de catégorie
+    public function countcat()
+    {
+        $qd = $this->createQueryBuilder('c');
+        $categorie = count($qd->getQuery()->getResult());
+        die((dump($categorie)));
+    }
+
+
+    //le nombre de catégorie actif
+    public function  catactif(){
+
+        $qd=$this->createQueryBuilder('c');
+         $qd->where('c.active = 1');
+        $categorie=$qd->getQuery()->getResult();
+        die(dump($categorie));
+    }
+
+
+    // Afficher le nombre de catégorie actif et inactif
+    public function  catactifandinac(){
+
+        $qd=$this->createQueryBuilder('c');
+        $qd->where('c.active = 1')
+            ->andWhere('c.active = 0');
+        $categorie=count($qd->getQuery()->getResult());
+        die(dump($categorie));
+    }
+
+    // Afficher les catégories dont la position est supérieur à 2
+    public function posisupdeux(){
+
+        $qb=$this->createQueryBuilder('c');
+           $qb->where('c.position >2');
+        $categorie=$qb->getQuery()->getResult();
+
+        die(dump($categorie));
+    }
+
+
 }

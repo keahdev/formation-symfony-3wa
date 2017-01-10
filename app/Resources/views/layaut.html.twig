@@ -41,7 +41,7 @@
             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li class="{% if app.request.get('_route') == "/" %} active  {% endif %}">
+                            <li class="{% if app.request.get('_route') == "home" %} active  {% endif %}">
                                 <a href="{{ path('home') }}"><i class="fa fa-circle-o"></i> Home</a></li>
 
                             <li class="{% if app.request.get('_route') == "produitspage" %} active  {% endif %}">
@@ -58,6 +58,10 @@
 
                             <li class="{% if app.request.get('_route') == "feedbackpage" %} active  {% endif %}">
                                 <a href="{{ path('feedbackpage') }}"><i class="fa fa-circle-o"></i> Feedback</a>
+                            </li>
+
+                            <li class="{% if app.request.get('_route') == "brand_index" %} active  {% endif %}">
+                                <a href="{{ path('brand_index') }}"><i class="fa fa-circle-o"></i> Brand</a>
                             </li>
 
                         </ul>
