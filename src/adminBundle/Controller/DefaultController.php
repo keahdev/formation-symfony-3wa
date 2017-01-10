@@ -25,8 +25,11 @@ class DefaultController extends Controller
     }
 
 
+
     /**
-     * @Route ("feedback")
+     * @Route ("feedback", name="feedbackpage")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function feedbackAction(Request $request)
     {

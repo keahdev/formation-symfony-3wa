@@ -2,8 +2,12 @@
 
 namespace adminBundle\Controller;
 
+use adminBundle\Entity\Categorie;
+use adminBundle\Form\CategorieType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class CategoriesController extends Controller
 {
@@ -11,84 +15,115 @@ class CategoriesController extends Controller
      * @Route("categories",name="categoriespage")
      */
 
-    public function indexAction()
+    public function categoriesAction()
     {
 
-        $categories = [
-            1 => [
-                "id" => 1,
-                "title" => "Homme",
-                "description" => "lorem ipsum \n suite du contenu",
-                "date_created" => new \DateTime('now'),
-                "active" => true
-            ],
-            2 => [
-                "id" => 2,
-                "title" => "Femme",
-                "description" => "<strong>lorem</strong> ipsum",
-                "date_created" => new \DateTime('-10 Days'),
-                "active" => true
-            ],
-            3 => [
-                "id" => 3,
-                "title" => "Enfant",
-                "description" => "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores at.",
-                "date_created" => new \DateTime('-1 Days'),
-                "active" => false
-            ],
-        ];
+       $em=$this->getDoctrine()->getManager();
 
+        $categories=$em->getRepository('adminBundle:Categorie')->findAll();
 
         return $this->render(':Categories:categories.html.twig',['categories'=>$categories]);
     }
 
 
+
+    /**
+     * @Route("categorie/cree", name="categoriecree")
+     */
+    public function creatAction(Request$request){
+        $categorie = new Categorie();
+
+        $formcategorie = $this->createForm(CategorieType::class, $categorie);
+        $formcategorie->handleRequest($request);
+
+        if ($formcategorie->isSubmitted() && $formcategorie->isValid()) {
+
+            $em=$this->getDoctrine()->getManager();
+            $em->persist($categorie);
+            $em->flush();
+
+            $this->addFlash('success', 'Votre catégorie a bien été ajoutée');
+
+            return $this->redirectToRoute('categoriespage');
+        }
+        return $this->render('Categories/creat.html.twig',['formcategorie'=>$formcategorie->createView()]);
+    }
+
+
+
+
     /**
      * @Route("categorie/{id}", name="categoriepage", requirements={"id":"\d+"})
+     * @ParamConverter("categorie", class="adminBundle:Categorie")
+     * Le param converter transforme la variable $id en object ($categorie) de la class Categorie
      */
 
-    public function showcategoriAction($id){
+    public function showcategoriAction($categorie){
 
-        $categories = [
-            1 => [
-                "id" => 1,
-                "title" => "Homme",
-                "description" => "lorem ipsum \n suite du contenu",
-                "date_created" => new \DateTime('now'),
-                "active" => true
-            ],
-            2 => [
-                "id" => 2,
-                "title" => "Femme",
-                "description" => "<strong>lorem</strong> ipsum",
-                "date_created" => new \DateTime('-10 Days'),
-                "active" => true
-            ],
-            3 => [
-                "id" => 3,
-                "title" => "Enfant",
-                "description" => "lorem ipsum",
-                "date_created" => new \DateTime('-1 Days'),
-                "active" => false
-            ],
-        ];
+       /* $em=$this->getDoctrine()->getManager();
+        $categorie=$em->getRepository('adminBundle:Categorie')->find($id);
 
-        $tableau=[];
+        if (empty($categorie)){
+            throw $this->createNotFoundException();
+        }*/
 
-        foreach ($categories as $categorie){
-            if ($categorie['id'] == $id){
-                $tableau=$categorie;
-                break;
-            }
-        }
-
-        if (empty($tableau)){
-            throw $this->createNotFoundException('Oups categorie non trouvée !');
-        }
-
-
-        return $this->render(':Categories:showcategorie.html.twig',['categorie'=>$tableau]);
-
+        return $this->render(':Categories:showcategorie.html.twig',['categorie'=>$categorie]);
 
     }
+
+
+
+    /**
+     * @Route("/categoriet/edit/{id}", name="categoriedit",requirements={"id":"\d+"})
+     */
+    public function editproduitAction(Request $request,$id)
+    {
+        $em=$this->getDoctrine()->getManager();
+        $categorie=$em->getRepository('adminBundle:Categorie')->find($id);
+
+        if(!$categorie){
+            throw $this->createNotFoundException();
+        }
+
+        $formcategorie = $this->createForm(CategorieType::class, $categorie);
+        $formcategorie->handleRequest($request);
+
+        if ($formcategorie->isSubmitted() && $formcategorie->isValid()) {
+
+            $em=$this->getDoctrine()->getManager();
+            $em->flush();
+
+            $this->addFlash('success', 'Catégorie modifiée');
+
+            return $this->redirectToRoute('categoriespage');
+        }
+        return $this->render('Categories/edition.html.twig',['formcategorie'=>$formcategorie->createView(),'categorie'=>$categorie]);
+    }
+
+    /**
+     * @Route("/categorie/supp/{id}", name="categoriesupp",requirements={"id":"\d+"})
+     */
+
+    public function suppproduitAction(Request $request,$id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $categorie = $em->getRepository('adminBundle:Categorie')->find($id);
+        if (!$categorie) {
+            throw $this->createNotFoundException();
+        }
+
+
+        $em->remove($categorie);
+        $em->flush();
+
+        $this->addFlash('success', 'Votre catégorie a été supprimée');
+
+        // Redirection sur la page toute les catégorie
+        return $this->redirectToRoute('categoriespage');
+
+    }
+
+
+
+
 }

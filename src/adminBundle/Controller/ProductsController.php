@@ -7,7 +7,9 @@ use adminBundle\Form\produitType;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+
 
 class ProductsController extends Controller
 {
@@ -43,10 +45,11 @@ class ProductsController extends Controller
 
             $this->addFlash('success', 'Votre produit a bien été ajouté');
 
-            return $this->redirectToRoute('produitcree');
+            return $this->redirectToRoute('produitspage');
         }
         return $this->render('Products/creat.html.twig',['formproduit'=>$formproduit->createView()]);
     }
+
 
 
     /**
@@ -86,5 +89,38 @@ class ProductsController extends Controller
             return $this->redirectToRoute('produitspage');
         }
         return $this->render('Products/edition.html.twig',['formproduit'=>$formproduit->createView(),'produit'=>$produit]);
+    }
+
+
+    /**
+     * @Route("/produit/supp/{id}", name="produitsupp",requirements={"id":"\d+"})
+     */
+
+    public function suppproduitAction(Request $request,$id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $produit = $em->getRepository('adminBundle:produit')->find($id);
+        if (!$produit) {
+            throw $this->createNotFoundException();
+        }
+
+        $em->remove($produit);
+        $em->flush();
+
+
+        /** pour gerer la supp avec ajax */
+
+        $message_success="Produit bien été supprimé";
+
+        if ($request->isXmlHttpRequest()) {
+           return new JsonResponse(['message'=>$message_success]);
+        }
+
+
+        $this->addFlash('success', 'Votre produit a été supprimé');
+
+        // Redirection sur la page qui liste tous les produits
+        return $this->redirectToRoute('produitspage');
+
     }
 }

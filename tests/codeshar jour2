@@ -1,0 +1,196 @@
+
+/**************************************************
+ *                     our 2
+ **************************************************/
+
+{% block stylesheets %}
+{{ parent() }}
+
+<link rel="stylesheet" href="{{ asset('plugins/datatables/dataTables.bootstrap.css') }}">
+{% endblock %}
+
+
+{% block javascripts %}
+  {{ parent() }}
+
+  <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+  <script src="{{ asset('plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+  <script>
+$(function () {
+    $("#example1").DataTable();
+});
+  </script>
+{% endblock %}
+
+
+
+Affichage de tous les produits : /admin/produits
+Utilisation de ce design :
+
+
+	- https://almsaeedstudio.com/themes/AdminLTE/pages/tables/data.html
+  - https://almsaeedstudio.com/themes/AdminLTE/pages/UI/buttons.html
+
+
+<?php
+
+namespace AdminBundle\Controller;
+
+class ProductController extends Controller {
+
+    // ATTENTION NE PAS OUBLIER LA ROUTE
+    public function productAction()
+    {
+        $products = [
+            [
+                "id" => 1,
+                "title" => "Mon premier produit",
+                "description" => "lorem ipsum",
+                "date_created" => new \DateTime('now'),
+                "prix" => 10
+            ],
+            [
+                "id" => 2,
+                "title" => "Mon deuxième produit",
+                "description" => "lorem ipsum",
+                "date_created" => new \DateTime('now'),
+                "prix" => 20
+            ],
+            [
+                "id" => 3,
+                "title" => "Mon troisième produit",
+                "description" => "lorem ipsum",
+                "date_created" => new \DateTime('now'),
+                "prix" => 30
+            ],
+            [
+                "id" => 4,
+                "title" => "",
+                "description" => "lorem ipsum",
+                "date_created" => new \DateTime('now'),
+                "prix" => 410
+            ],
+        ];
+
+        return ......
+
+}
+
+    /*
+    Utilisation de la documentation suivante afin d'effectuer une inclusion :
+    http://twig.sensiolabs.org/doc/tags/include.html
+
+
+    <div class="content-wrapper" style="min-height: 916px;">
+
+      <section class="content-header">
+          <h1>
+            {% block titleContent %}
+              Dashboard
+              <small>Control panel</small>
+            {% endblock %}
+          </h1>
+
+          <ol class="breadcrumb">
+            {% block breadcrumb %}
+              <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+
+            {% endblock %}
+          </ol>
+      </section>
+
+      <section class="content">
+               {% block content %}{% endblock %}
+      </section>
+
+
+    </div>
+
+
+
+
+
+    {% extends 'AppBundle::layout.html.twig' %}
+
+    {% block titleContent %}Liste des produits <small>(15)</small>{% endblock %}
+
+    {% block breadcrumb %}
+    {{ parent() }}
+    <li class="active">Dashboard</li>
+    {% endblock %}
+
+    {% block content %}
+        <h1>Hello</h1>
+    {% endblock%}
+
+
+
+    */
+<?php
+
+namespace AdminBundle\Controller;
+
+    use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
+class DefaultController extends Controller
+{
+    /**
+     * @Route("/admin")
+     */
+    public function indexAction()
+    {
+        return $this->render('AdminBundle:Default:index.html.twig',
+            [
+                'firstname' => 'Ludo'
+            ]);
+    }
+}
+
+/********************************/
+/*   touslesproduits.twig.html  */
+/********************************/
+[...]
+{% block footerScript %}
+  {{ parent() }}
+  <!-- DataTables -->
+  <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+  <script src="{{ asset('plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+  <script>
+$(function () {
+    $("#example1").DataTable(
+              {
+                "language": {
+        "lengthMenu": "Montrer _MENU_ enregistrement par page",
+                  "zeroRecords": "Nothing found - sorry",
+                  "info": "Montrer page _PAGE_ à _PAGES_",
+                  "infoEmpty": "Pas d'enregistrements pour cette recherche",
+                  "infoFiltered": "(filtered from _MAX_ total records)"
+                }
+              });
+    });
+  </script>
+{% endblock %}
+
+/********************************/
+/*     LAYOUT.HTML.TWIG					*/
+/********************************/
+
+{#
+    {% include 'AdminBundle:Partials:footer.html.twig' with
+							{
+                                'toto' : firstname,
+                                  'foo' : 'bar'
+							} only %}
+
+#}
+
+        MODIFICATION
+{% include 'AdminBundle:Partials:footer.html.twig' only %}
+/********************************/
+/*     footer.HTML.TWIG					*/
+/********************************/
+<footer>
+    MODIFICATION : SUPPRIMER LA VARIABLE CI-DESSOUS
+	{{ toto }}
+</footer>

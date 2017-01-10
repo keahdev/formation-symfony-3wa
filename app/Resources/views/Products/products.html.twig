@@ -21,6 +21,12 @@
 {% block content %}
         <div class="row">
             <div class="col-xs-12">
+                {# Affichage du message de success	#}
+                {% for flash_message in app.session.flashBag.get('success') %}
+                    <div class="alert alert-success">
+                        {{ flash_message }}
+                    </div>
+                {% endfor %}
                 {% include ':Partials:Search.html.twig' %}
                 <div class="box">
                     <div class="box-header">
@@ -53,7 +59,8 @@
                                            class="btn btn-primary">Voir</a>
                                         <a href="{{ path('produitedit',{'id':product.id}) }}"
                                            class="btn btn-warning">Editer</a>
-                                        <button class="btn btn-danger">Supprimer</button>
+                                        <a href="{{ path('produitsupp',{'id':product.id}) }}"
+                                           class="btn btn-danger">Supprimer</a>
                                     </td>
                                 </tr>
 

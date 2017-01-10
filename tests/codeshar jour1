@@ -1,0 +1,109 @@
+/****************************************
+          jour 1
+****************************************/
+
+<?php
+/*
+
+$products = [
+  [
+      "id" => 1,
+      "title" => "Mon premier produit",
+      "description" => "lorem ipsum",
+      "date_created" => new \DateTime('now'),
+        "prix" => 10
+  ],
+  [
+      "id" => 2,
+      "title" => "Mon deuxième produit",
+      "description" => "lorem ipsum",
+      "date_created" => new \DateTime('now'),
+        "prix" => 20
+  ],
+  [
+      "id" => 3,
+      "title" => "Mon troisième produit",
+      "description" => "lorem ipsum",
+      "date_created" => new \DateTime('now'),
+        "prix" => 30
+  ],
+  [
+      "id" => 4,
+      "title" => "",
+      "description" => "lorem ipsum",
+      "date_created" => new \DateTime('now'),
+        "prix" => 410
+  ],
+];
+
+1- Afficher le titre et la description de tous les produits
+
+2- Afficher uniquement pour le premier produit la phrase suivante en plus : "Ceci est le premier produit" (ne pas utiliser id pour faire son test)
+{% for product in products %}
+       {% if loop.first %}<p>Ceci est le premier produit</p>{% endif %}
+  <p>{{ product.title }}</p>
+  <hr>
+{% endfor %}
+
+
+4- Afficher pour le produit ayant l'id 4 un titre par défaut
+{% for product in products %}
+  <p>{{ product.title|default('ce champ est inexistant') }}</p>
+{% endfor %}
+
+
+5- Parcourez de nouveau les produits mais dans l'ordre inverse
+{{ dump(products|reverse) }}
+{% for product in products|reverse %}
+  <p>{{ product.title }}</p>
+{% endfor %}
+
+6- Parcourez de nouveau les produits mais affichez uniquement le produit 2 et 3
+{% for product in products %}
+       {% if loop.first == false and loop.last == false %}
+      <p>{{ product.title }}</p>
+  {% endif %}
+{% endfor %}
+
+
+{% for product in products|slice(1, (products|lenght - 2)) %}
+      <p>{{ product.title }}</p>
+  {% endif %}
+{% endfor %}
+
+{% set total = 0 %}
+{% for product in products %}
+
+      {% set total = total + product.prix %}
+
+{% endfor %}
+
+Le total est : {{ total }}
+
+8- Utiliser un filter afin d afficher en majuscule le titre des produits
+9- Trouver la fonction twig permettant de compter de 0 à 10 avec un pas de 2 ;)
+  {% for i in range(0,10,2) %}
+        {{i}}
+      {% endfor %}
+
+
+10- Créer une variable avec votre prénom dans le controller. Créer une autre variable avec votre nom dans le controller.
+11- Afficher dans la vue votre prénom et votre nom en faisant une concaténation
+
+12- Afficher grâce à la catégorie test dans la documentation de twig, les produits impairs (ordre des produits dans le tableau)
+http://twig.sensiolabs.org/doc/tests/odd.html
+http://twig.sensiolabs.org/doc/tests/even.html
+
+13- Corriger le code ci-dessous sans toucher au controller afin d eviter une erreur en utilisant la catégorie test
+<p>{{ mischievous|default("") }}</p>
+
+{% if mischievous is defined %}
+       <p>{{ mischievous }}</p>
+{% endif %}
+
+14- Parcourez de nouveau les produits mais afficher uniquement les produits ayant un titre
+
+ */
+{% for product in products if product.title is not empty %}
+{{ product.title }}
+{% endfor %}

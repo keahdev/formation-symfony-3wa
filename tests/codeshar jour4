@@ -1,0 +1,259 @@
+
+/*************************************************************************************************************
+ *                                                     jour 4
+ *
+ ***************************************************************************************************** /
+<script>
+$(document).ready(function(){
+$('.datepicker').datepicker({ dateFormat: 'dd-mm-yy' });
+});
+</script>
+
+/************************/
+/*   parameters.yml.dist */
+/************************/
+parameters:
+    database_host:     127.0.0.1
+    database_port:     ~
+    database_name:     symfony
+    database_user:     root
+    database_password: ~
+    # You should uncomment this if you want use pdo_sqlite
+    # database_path: "%kernel.root_dir%/data.db3"
+
+mailer_transport:  smtp
+    mailer_host:       127.0.0.1
+    mailer_user:       ~
+mailer_password:   ~
+
+    # Rajouter le mailer_port
+mailer_port: ~
+
+    # A secret key that's used to generate certain security-related tokens
+secret:            ThisTokenIsNotSoSecretChangeIt
+
+    # CLE API Facebook
+    key_FB: null
+
+
+/********************/
+/*   parameters.yml */
+/********************/
+parameters:
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: symfony
+    database_user: root
+    database_password: null
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    mailer_port: 2525
+    secret: xdgfhkljdsfgh5454dfg564d2f5g7dwfsgdwfsgklhwjqsdf
+
+/*****************/
+/*   config.yml  */
+/*****************/
+swiftmailer:
+    transport: "%mailer_transport%"
+    host:      "%mailer_host%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
+    spool:     { type: memory }
+		port:      "%mailer_port%"
+
+https://symfony.com/doc/current/reference/forms/types.html
+<?php
+
+namespace AppBundle\Controller;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\HttpFoundation\Request;
+
+class DefaultController extends Controller
+{
+    /**
+     * @Route("/contact", name="contact")
+     */
+    public function contactAction(Request $request)
+    {
+        // Création du formulaire et ajoute de champ avec la méthode add()
+        $formContact = $this->createFormBuilder()
+            ->add('firstname', TextType::class)
+            ->add('lastname', TextType::class)
+            ->add('email', EmailType::class)
+            ->add('content', TextareaType::class)
+
+            // La	clé years permet de définir un tableau d'années
+            // range créer un tableau : http://php.net/manual/fr/function.range.php
+            // date('Y') donne l'année en cours. Ici 2017
+            // date('Y') - 10 est l'équivalent de 2017 - 10 = 2007
+            ->add('date', DateType::class,
+                [
+                    'years' => range( date('Y')-10, date('Y')+10 )
+                ])
+
+
+            ->getForm();
+
+        // Je lie l'objet $request avec le formulaire.
+        // Cela me permet de remplir le formulaire avec les informations tapées par l'utilisateur
+        $formContact->handleRequest($request);
+
+        // Je vérifie que le formulaire est bien soumis et qu'il est valide
+        if ($formContact->isSubmitted() && $formContact->isValid()) {
+            // Dump de $_POST
+            //dump($request->request->all());
+
+            // Dump de $_GET
+            //dump($request->query->all());
+
+            // Récupérer les informations du formulaire
+            //dump($formContact->getData());
+
+            // Récupérer une valeur précisément du formulaire
+            //dump($formContact->get('firstname')->getData());
+
+            // La technique à utiliser est d'utiliser une variable ex: $data et de manipuler cette variable
+            $data = $formContact->getData();
+
+            // Envoie du mail
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Formulaire de contact')
+                ->setFrom($data['email'])
+                ->setTo('contact@monsupersite.com')
+                ->setBody(
+                    $this->renderView('emails/formulaire-contact.html.twig'),
+                    'text/html'
+                )
+                ->addPart(
+                    $this->renderView('emails/formulaire-contact.txt.twig'),
+                    'text/plain'
+                )
+            ;
+            $this->get('mailer')->send($message);
+
+            // Affichage d'un message de success
+            $this->addFlash('success', 'Votre email a bien été envoyé');
+
+            // Redirection : Préciser le nom de la route dans la méthode 'redirectToRoute'
+            return $this->redirectToRoute('contact');
+        }
+
+
+        return $this->render('default/contact.html.twig', ["formContact" => $formContact->createView()]);
+    }
+}
+
+
+/**********************/
+/* contact.html.twig  */
+/**********************/
+    {% extends 'layout.html.twig' %}
+
+    {% block content %}
+
+    {# Affichage du message de success	#}
+        {{ dump(app.session) }}
+        {% for flash_message in app.session.flashBag.get('success') %}
+        <div class="alert alert-success">
+          {{ flash_message }}
+      </div>
+    {% endfor %}
+
+	{{ form_start(formContact) }}
+
+			<div class="form-group">
+      	{# affiche les erreurs du champ firstname #}
+            {{ form_errors(formContact.firstname) }}
+
+            {# affiche la balise label du champ firtsname #}
+                {{ form_label(formContact.firstname) }}
+
+                {# affiche la balise input de type text du champ firtsname #}
+                    {{ form_widget(formContact.firstname,
+                       {
+                         attr: {
+                        class: 'form-control'
+                         }
+                       })
+         }}
+                    </div>
+
+      <div class="form-group">
+      	{{ form_errors(formContact.lastname) }}
+
+        {{ form_label(formContact.lastname, "Votre nom", {label_attr: {class: "le-nom-de-votre-class"} } ) }}
+
+        {{ form_widget(formContact.lastname, {attr: {placeholder: "Votre nom", class: "form-control"} } ) }}
+      </div>
+
+      <div class="form-group">
+      	{{ form_errors(formContact.email) }}
+
+
+        {{ form_label(formContact.email, null) }}
+
+				{{ form_widget(formContact.email,
+                        {
+                          attr: {
+                    placeholder: 'email',
+                            class: "form-control"
+                          },
+                          id: "votre-super-id"
+                        })
+        }}
+      </div>
+
+      <div class="form-group">
+      	{{ form_errors(formContact.content) }}
+      	{{ form_label(formContact.content) }}
+				{{ form_widget(formContact.content) }}
+      </div>
+
+			<button>Envoyer</button>
+
+	{{ form_end(formContact) }}
+
+{% endblock %}
+
+
+
+
+- Créer la page suivante /admin/feedback permettant de faire un retour à la team (technique/marketing/etc.)
+                - Voici les informations du formulaire :
+          - page : url de la page concernée
+                - bug / statut : Select permettant de choisir entre "technique", "design", "marketing", "autre"
+                - firstname
+                - lastname
+                - email
+                - date du bug. Cette date doit afficher la date du jour et la date sur 10 ans avant et 10 ans après
+                - content
+
+Bonne chance !
+
+                BONUS:
+  - Faire en sorte que le message soit : Merci firstname, votre feedback a bien été pris en compte. Firstname doit être remplacé par
+    la valeur entrée dans le formulaire
+
+                - Mettre en place le datepicker :
+    https://almsaeedstudio.com/themes/AdminLTE/pages/forms/advanced.html
+    http://symfony.com/doc/current/reference/forms/types/date.html#rendering-a-single-html5-textbox
+
+  - Sachant qu il est possible de récupérer les informations contenus dans parameters.yml directement dans le controller :
+    Créer une valeur permettant de stocker l email de l administrateur. Ex: contact@monsupersite.com
+    Celle-ci sera utilisé pour recevoir les emails : ->setTo()
+
+                - Si dans l url il y a le paramètre suivant : ?admin=true&prenom=toto
+    Mettre en copie le mail suivant : admin@admin.com
+                (Aide : addCc('admin@admin.com'))
+    Et ajouter dans le corps du mail le message suivant : toto est en copie (toto étant dynamique)
+
+  - Mettre en place ce bundle pour le formulaire de contact : https://github.com/Gregwar/CaptchaBundle
+
+On ajoutera ensemble des restrictions sur le formulaire

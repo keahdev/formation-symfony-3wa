@@ -10,6 +10,7 @@
 {% block titleContent %}
      {{ categories|length }} Catégorie(s)
     <small>Control panel</small>
+    <a href="{{ path('categoriecree') }}" class="btn btn-adn">New categorie</a>
 {% endblock %}
 
 {% block breadcrumb %}
@@ -22,6 +23,12 @@
 
 <div class="row">
     <div class="col-xs-12">
+        {# Affichage du message de success	#}
+        {% for flash_message in app.session.flashBag.get('success') %}
+            <div class="alert alert-success">
+                {{ flash_message }}
+            </div>
+        {% endfor %}
         {% include ':Partials:Search.html.twig' %}
         <div class="box">
             <div class="box-header">
@@ -35,8 +42,7 @@
                 <th>Id</th>
                 <th>Title</th>
                 <th>Description(s)</th>
-                <th>Nb Caract </th>
-                <th>Date</th>
+                <th>Position</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -46,15 +52,18 @@
                 <tr>
                     <td>{{ categorie.id }}</td>
                     <td>{{ categorie.title }}</td>
-                    <td>{{ categorie.description|raw|nl2br}}</td>
-                    <td>{{ categorie.description|striptags|length}}</td>
-                    <td>{{ categorie.date_created|date("m/d/Y") }}</td>
-                    <td>{% if categorie.active %} {{ 'active' }}{% else %} {{ 'non active' }}{% endif %}</td>
+                    <td>{{ categorie.description}}</td>
+                    <td>{{ categorie.position}}</td>
 
                     <td>
-                        <a href="{{ path('categoriepage',{'id':categorie.id}) }}" class="btn btn-primary">Voir</a>
-                        <button class="btn btn-success">Edit</button>
-                        <button class="btn btn-danger">Supp</button>
+                        <a href="{{ path('categoriepage',{'id':categorie.id}) }}"
+                           class="btn btn-primary">Voir</a>
+
+                        <a href="{{ path('categoriedit',{'id':categorie.id}) }}"
+                           class="btn btn-warning">Editer</a>
+
+                        <a href="{{ path('categoriesupp',{'id':categorie.id}) }}"
+                           class="btn btn-danger">Supprimer</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -64,8 +73,7 @@
                 <th>Id</th>
                 <th>Title</th>
                 <th>Description(s)</th>
-                <th>Nb Caract </th>
-                <th>Date</th>
+                <th>Position</th>
                 <th>Actions</th>
             </tr>
             </tfoot>
