@@ -1,6 +1,7 @@
 <?php
 
 namespace adminBundle\Repository;
+use adminBundle\Entity\produit;
 
 /**
  * produitRepository
@@ -17,38 +18,61 @@ class produitRepository extends \Doctrine\ORM\EntityRepository
         // Creation d'une requête DQL
         // findAll() maison
 
-        $qb = $this->createQueryBuilder('p');
+        $qb = $this->createQueryBuilder('p')
+        ->select('p.id');
+
         $produit = $qb->getQuery()->getResult();
         die((dump($produit)));
+
+
     }
+
+
+
 
 
     // Afficher les produits dont la quantité est inférieur à 5
     public function quantsupcinq()
     {
+        $num=38;
         $qb = $this->createQueryBuilder('p');
-        $qb->where('p.quantity > 5');
+        $qb->select('p.title,b.titre')
+            ->join('p.marque', 'b')
+            ->where('p.quantity > :num')
+        ->setParameter('num',$num);
         $produit = $qb->getQuery()->getResult();
         die((dump($produit)));
 
     }
+
+
+
+
+
+
+
+
+
+
 
 
     // Afficher le nombre de produit dont la quantité est à 0
     public function quantegalzero()
     {
         $qb = $this->createQueryBuilder('p');
-        $qb->where('p.quantity = 0');
+        $qb->select('COUNT(p)')
+          ->where('p.quantity = 0');
         $produit = $qb->getQuery()->getResult();
         die((dump($produit)));
 
     }
 
     // Afficher le total des produits
-    public function countpro()
+    public function sumprice()
     {
         $qb= $this->createQueryBuilder('p');
-        $produit = count($qb->getQuery()->getResult());
+           $qb->select('SUM(p.price)');
+        $produit = $qb->getQuery()->getSingleScalarResult();
         die((dump($produit)));
     }
 

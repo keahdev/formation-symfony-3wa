@@ -21,31 +21,34 @@ class CategorieRepository extends \Doctrine\ORM\EntityRepository
 
 
     //le nombre de catégorie actif
-    public function  catactif(){
-
-        $qd=$this->createQueryBuilder('c');
-         $qd->where('c.active = 1');
-        $categorie=$qd->getQuery()->getResult();
+    public function catactif()
+    {
+        $qd = $this->createQueryBuilder('c');
+            $qd->select('COUNT(c)')
+             ->where('c.active = 1');
+        $categorie = $qd->getQuery()->getResult();
         die(dump($categorie));
     }
 
 
     // Afficher le nombre de catégorie actif et inactif
-    public function  catactifandinac(){
+    public function catactifandinac()
+    {
 
-        $qd=$this->createQueryBuilder('c');
+        $qd = $this->createQueryBuilder('c');
         $qd->where('c.active = 1')
             ->andWhere('c.active = 0');
-        $categorie=count($qd->getQuery()->getResult());
+        $categorie = count($qd->getQuery()->getResult());
         die(dump($categorie));
     }
 
     // Afficher les catégories dont la position est supérieur à 2
-    public function posisupdeux(){
+    public function posisupdeux()
+    {
 
-        $qb=$this->createQueryBuilder('c');
-           $qb->where('c.position >2');
-        $categorie=$qb->getQuery()->getResult();
+        $qb = $this->createQueryBuilder('c');
+        $qb->where('c.position >2');
+        $categorie = $qb->getQuery()->getResult();
 
         die(dump($categorie));
     }

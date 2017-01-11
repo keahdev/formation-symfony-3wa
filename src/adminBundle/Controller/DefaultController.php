@@ -22,8 +22,9 @@ class DefaultController extends Controller
     public function indexAction()
     {
 
-     $em=$this->getDoctrine()->getManager();
-        $resultat= $em->getRepository('adminBundle:Categorie')->posisupdeux();
+   /*     $doctrine=$this->getDoctrine();
+        $rc=$doctrine->getRepository('adminBundle:produit')->quantsupcinq();
+        dump($rc); die();*/
 
 
         return $this->render(':Default:index.html.twig');
