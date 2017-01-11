@@ -25,6 +25,13 @@ class Categorie
 
 
     /**
+     * @ORM\ManyToMany(targetEntity="produit", mappedBy="categories")
+     * @Assert\NotBlank(message="Chmap ne doit pas être vide")
+     */
+    private $produits;
+
+
+    /**
      * @Assert\NotBlank(message="Champ ne doit pas être vide")
      * @Assert\Length(min = 2, minMessage="Titre doit contenir minimum 2 caractères")
      *
@@ -190,5 +197,46 @@ class Categorie
     public function getActive()
     {
         return $this->active;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->produits = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add produit
+     *
+     * @param \adminBundle\Entity\produit $produit
+     *
+     * @return Categorie
+     */
+    public function addProduit(\adminBundle\Entity\produit $produit)
+    {
+        $this->produits[] = $produit;
+
+        return $this;
+    }
+
+    /**
+     * Remove produit
+     *
+     * @param \adminBundle\Entity\produit $produit
+     */
+    public function removeProduit(\adminBundle\Entity\produit $produit)
+    {
+        $this->produits->removeElement($produit);
+    }
+
+    /**
+     * Get produits
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProduits()
+    {
+        return $this->produits;
     }
 }

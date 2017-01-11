@@ -41,7 +41,7 @@ class produitRepository extends \Doctrine\ORM\EntityRepository
             ->join('p.marque', 'b')// jointure avec la propriéte marque de l entité produit avec b comme alias
             ->where('p.quantity > :num')// quantité sup a un numero
             ->andWhere('p.title LIKE :titre')// titre egal a quel que chose
-            //->setParameter('num',$num);  cas ou y a un seul where; le parametre comme dans PDO
+            ->setParameter('num',$num);  cas ou y a un seul where; le parametre comme dans PDO
             ->setParameters([     // cas ou y a where et/ou plusisuers andwhere, c-a-d une ou pluiseurs conditions
                 'num' => $num,
                 'titre' => '% $titre %'

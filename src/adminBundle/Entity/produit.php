@@ -3,7 +3,9 @@
 namespace adminBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
 use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * produit
@@ -17,10 +19,17 @@ class produit
     /**
      * @ORM\ManyToOne (targetEntity="Brand")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="Chmap ne doit pas être vide")
      */
-
-
     private  $marque;
+
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Categorie",inversedBy="produits")
+     * @ORM\JoinTable(name="produit_Categorie")
+     *  @Assert\NotBlank(message="Chmap ne doit pas être vide")
+     */
+    private $categories;
 
 
     /**
@@ -199,5 +208,46 @@ class produit
     public function getMarque()
     {
         return $this->marque;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add category
+     *
+     * @param \adminBundle\Entity\Categorie $category
+     *
+     * @return produit
+     */
+    public function addCategory(\adminBundle\Entity\Categorie $category)
+    {
+        $this->categories[] = $category;
+
+        return $this;
+    }
+
+    /**
+     * Remove category
+     *
+     * @param \adminBundle\Entity\Categorie $category
+     */
+    public function removeCategory(\adminBundle\Entity\Categorie $category)
+    {
+        $this->categories->removeElement($category);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 }

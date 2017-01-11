@@ -3,6 +3,7 @@
 namespace adminBundle\Form;
 
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -17,13 +18,25 @@ class produitType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('title',TextType::class)
-                ->add('description',TextareaType::class)
-                ->add('price',IntegerType::class)
-                ->add('quantity',IntegerType::class)
-            ;
+        $builder->add('title', TextType::class)
+            ->add('description', TextareaType::class)
+            ->add('price', IntegerType::class)
+            ->add('quantity', IntegerType::class)
+            ->add('marque', EntityType::class, [
+                'class' => 'adminBundle\Entity\Brand',
+                'choice_label' => 'titre',// la propriété de l'entity brand a afficher ici le titre de la marque
+                'placeholder' => '',// le placeholder est vide pour que le select du form affiche un champs vide au debut, le placeholder ici rien avoir avec c                 celui du HTML
+                // 'expanded'=>true,//  si true donc ce n'est pas un bouton select mais un bouton radio (plusieurs champs)
+                // 'multiple'=>false // si true donc ce n'est pas un bouton select mais une case a coché (plusieurs ligne)
+            ])
+            ->add('categories', EntityType::class, [
+                'class' => 'adminBundle\Entity\Categorie',
+                'choice_label' => 'title',// on affiche le titre de la catégorie
+                'expanded' => true,
+                'multiple' => true
+            ]);
     }
-    
+
     /**
      * {@inheritdoc}
      */

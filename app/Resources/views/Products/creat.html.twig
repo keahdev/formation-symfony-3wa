@@ -45,6 +45,17 @@
                 {{ form_label(formproduit.quantity, "Quantité") }}
                 {{ form_widget(formproduit.quantity, {attr: { class: "form-control"} } ) }}
             </div>
+
+            <div class="form-group">
+                {{ form_errors(formproduit.marque) }}
+                {{ form_label(formproduit.marque, "Marque") }}
+                {{ form_widget(formproduit.marque, {attr: { class: "form-control"} } ) }}
+            </div>
+            <div class="form-group">
+                {{ form_errors(formproduit.categories) }}
+                {{ form_label(formproduit.categories, "Catégorie") }}
+                {{ form_widget(formproduit.categories, {attr: { class: "form-control"} } ) }}
+            </div>
         </div><!-- box box-primary  -->
 
         <button class="btn btn-primary">Créer</button>

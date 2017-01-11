@@ -3,7 +3,9 @@
 namespace adminBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
 use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * produit
@@ -17,10 +19,17 @@ class produit
     /**
      * @ORM\ManyToOne (targetEntity="Brand")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="Chmap ne doit pas être vide")
      */
-
-
     private  $marque;
+
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Categorie",inversedBy="produits")
+     * @ORM\JoinTable(name="produit_Categorie")
+     *  @Assert\NotBlank(message="Chmap ne doit pas être vide")
+     */
+    private $categories;
 
 
     /**
@@ -176,4 +185,28 @@ class produit
         return $this->quantity;
     }
 
+
+    /**
+     * Set marque
+     *
+     * @param \adminBundle\Entity\Brand $marque
+     *
+     * @return produit
+     */
+    public function setMarque(Brand $marque)
+    {
+        $this->marque = $marque;
+
+        return $this;
+    }
+
+    /**
+     * Get marque
+     *
+     * @return \adminBundle\Entity\Brand
+     */
+    public function getMarque()
+    {
+        return $this->marque;
+    }
 }
