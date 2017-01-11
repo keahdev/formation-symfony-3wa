@@ -1,6 +1,7 @@
 <?php
 
 namespace adminBundle\Repository;
+
 use adminBundle\Entity\produit;
 
 /**
@@ -19,41 +20,38 @@ class produitRepository extends \Doctrine\ORM\EntityRepository
         // findAll() maison
 
         $qb = $this->createQueryBuilder('p')
-        ->select('p.id');
+            ->select('p.id');
 
         $produit = $qb->getQuery()->getResult();
         die((dump($produit)));
 
 
     }
-
-
-
 
 
     // Afficher les produits dont la quantité est inférieur à 5
     public function quantsupcinq()
     {
-        $num=38;
+        $num = 38;
+        $titre = 'mon titre';
         $qb = $this->createQueryBuilder('p');
-        $qb->select('p.title,b.titre')
-            ->join('p.marque', 'b')
-            ->where('p.quantity > :num')
-        ->setParameter('num',$num);
+        $qb->select('COUNT(p.titre) titre')// utilisation d'un count avec un alias titre, on peut utiliser 'as titre' ou directment 'titre'
+        ->groupBy('p.marque');// grouper selon le titre de marque
+        /*$qb->select('p.title,b.titre')
+            ->join('p.marque', 'b')// jointure avec la propriéte marque de l entité produit avec b comme alias
+            ->where('p.quantity > :num')// quantité sup a un numero
+            ->andWhere('p.title LIKE :titre')// titre egal a quel que chose
+            //->setParameter('num',$num);  cas ou y a un seul where; le parametre comme dans PDO
+            ->setParameters([     // cas ou y a where et/ou plusisuers andwhere, c-a-d une ou pluiseurs conditions
+                'num' => $num,
+                'titre' => '% $titre %'
+            ])
+           ->orderBy('p.title', 'ASC');// ordre sur le titre avec ascendant
+        */
         $produit = $qb->getQuery()->getResult();
         die((dump($produit)));
 
     }
-
-
-
-
-
-
-
-
-
-
 
 
     // Afficher le nombre de produit dont la quantité est à 0
@@ -61,7 +59,7 @@ class produitRepository extends \Doctrine\ORM\EntityRepository
     {
         $qb = $this->createQueryBuilder('p');
         $qb->select('COUNT(p)')
-          ->where('p.quantity = 0');
+            ->where('p.quantity = 0');
         $produit = $qb->getQuery()->getResult();
         die((dump($produit)));
 
@@ -70,8 +68,8 @@ class produitRepository extends \Doctrine\ORM\EntityRepository
     // Afficher le total des produits
     public function sumprice()
     {
-        $qb= $this->createQueryBuilder('p');
-           $qb->select('SUM(p.price)');
+        $qb = $this->createQueryBuilder('p');
+        $qb->select('SUM(p.price)');
         $produit = $qb->getQuery()->getSingleScalarResult();
         die((dump($produit)));
     }
@@ -83,8 +81,6 @@ class produitRepository extends \Doctrine\ORM\EntityRepository
         //$produit = ($qb->getQuery()->getResult());
         //die((dump($produit)));
     }
-
-
 
 
 }
