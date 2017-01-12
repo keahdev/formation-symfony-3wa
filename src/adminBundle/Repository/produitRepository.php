@@ -34,9 +34,15 @@ class produitRepository extends \Doctrine\ORM\EntityRepository
     {
         $num = 38;
         $titre = 'mon titre';
-        $qb = $this->createQueryBuilder('p');
-        $qb->select('COUNT(p.titre) titre')// utilisation d'un count avec un alias titre, on peut utiliser 'as titre' ou directment 'titre'
-        ->groupBy('p.marque');// grouper selon le titre de marque
+        $qb = $this->createQueryBuilder('p')
+            ->addSelect('m.titre')
+            ->join('p.marque', 'm')
+        ;
+
+
+        /*$qb->select('COUNT(p.title) title')// utilisation d'un count avec un alias titre, on peut utiliser 'as titre' ou directment 'titre'
+        ->groupBy('p.marque');// grouper selon le titre de marque*/
+
         /*$qb->select('p.title,b.titre')
             ->join('p.marque', 'b')// jointure avec la propriéte marque de l entité produit avec b comme alias
             ->where('p.quantity > :num')// quantité sup a un numero

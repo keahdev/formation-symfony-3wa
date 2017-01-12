@@ -14,6 +14,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
+
+use Intervention\Image\ImageManager;
+
+
 class DefaultController extends Controller
 {
     /**
@@ -21,10 +25,26 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-
-   /*     $doctrine=$this->getDoctrine();
+/*
+        $doctrine=$this->getDoctrine();
         $rc=$doctrine->getRepository('adminBundle:produit')->quantsupcinq();
         dump($rc); die();*/
+
+
+/*
+       $dirname=dirname(dirname(dirname(__DIR__)));
+
+       dump($dirname.'/Web/images/error404.jpg');
+        die;
+
+        $manager=new ImageManager();
+         $image=$manager->make($dirname.'/Web/Images/error404.jpg')
+           ->response('jpg',90);
+
+        echo $image;
+
+*/
+
 
 
         return $this->render(':Default:index.html.twig');

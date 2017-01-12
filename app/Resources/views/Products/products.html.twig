@@ -39,11 +39,13 @@
                             <tr class="well">
                                 <th>Id</th>
                                 <th>Title</th>
-                                <th>Description(s)</th>
+                                {#<th>Description(s)</th>#}
                                 <th>Marque</th>
                                 <th>Categorie</th>
                                 <th>Prix</th>
                                 <th>Quantité</th>
+                                <th>Date creat</th>
+                                <th>Date Modif</th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
@@ -52,7 +54,7 @@
                                 <tr>
                                     <td>{{ product.id }}</td>
                                     <td>{{ product.title }}</td>
-                                    <td>{{ product.description }}</td>
+                                    {#<td>{{ product.description }}</td>#}
                                     <td>{{ product.marque.titre }}</td>
                                     <td>
                                         <ul>
@@ -63,6 +65,8 @@
                                     </td>
                                     <td>{{ product.price }}</td>
                                     <td>{{ product.quantity }}</td>
+                                    <td>{{ product.datecreation|date("m - d - Y") }}</td>
+                                    <td>{{ product.datemodification|date("m - d - Y") }}</td>
 
                                     <td>
                                         <a href="{{ path('produitpage',{'id':product.id}) }}"
@@ -81,11 +85,13 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Title</th>
-                                <th>Description(s)</th>
+                                {#<th>Description(s)</th>#}
                                 <th>Marque</th>
                                 <th>Categorie</th>
                                 <th>Prix</th>
                                 <th>Quantité</th>
+                                <th>Date creat</th>
+                                <th>Date Modif</th>
                                 <th>Actions</th>
                             </tr>
                             </tfoot>

@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="produit")
  * @ORM\Entity(repositoryClass="adminBundle\Repository\produitRepository")
+ * @ORM\EntityListeners({"adminBundle\Listener\ProduitListener"})
  */
 class produit
 {
@@ -77,6 +78,27 @@ class produit
      * @ORM\Column(name="quantity", type="integer")
      */
     private $quantity;
+
+
+
+    /**
+     * @ORM\Column(name="datecreation", type="datetime")
+     */
+    private $datecreation;// date de creation
+
+
+
+    /**
+     * @ORM\Column(name="datemodification", type="datetime")
+     */
+    private $datemodification; // date de modification
+
+
+
+    /**
+     * @ORM\Column(name="image", type="string")
+     */
+    private $image; 
 
 
     /**
@@ -249,5 +271,77 @@ class produit
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * Set datecreation
+     *
+     * @param \DateTime $datecreation
+     *
+     * @return produit
+     */
+    public function setDatecreation($datecreation)
+    {
+        $this->datecreation = $datecreation;
+
+        return $this;
+    }
+
+    /**
+     * Get datecreation
+     *
+     * @return \DateTime
+     */
+    public function getDatecreation()
+    {
+        return $this->datecreation;
+    }
+
+    /**
+     * Set datemodification
+     *
+     * @param \DateTime $datemodification
+     *
+     * @return produit
+     */
+    public function setDatemodification($datemodification)
+    {
+        $this->datemodification = $datemodification;
+
+        return $this;
+    }
+
+    /**
+     * Get datemodification
+     *
+     * @return \DateTime
+     */
+    public function getDatemodification()
+    {
+        return $this->datemodification;
+    }
+
+    /**
+     * Set image
+     *
+     * @param string $image
+     *
+     * @return produit
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 }

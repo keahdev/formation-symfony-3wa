@@ -19,19 +19,19 @@ class ProductsController extends Controller
      */
     public function produitsAction()
     {
-        $em=$this->getDoctrine()->getManager();
-        $products=$em->getRepository('adminBundle:produit')->findAll();
+        $em = $this->getDoctrine()->getManager();
+        $products = $em->getRepository('adminBundle:produit')->findAll();
         //die(dump($products));
 
-        return $this->render(':Products:products.html.twig',['products'=>$products]);
+        return $this->render(':Products:products.html.twig', ['products' => $products]);
     }
-
 
 
     /**
      * @Route("produit/cree", name="produitcree")
      */
-    public function creatAction(Request $request){
+    public function creatAction(Request $request)
+    {
         $produit = new produit();
 
         $formproduit = $this->createForm(produitType::class, $produit);
@@ -39,7 +39,17 @@ class ProductsController extends Controller
 
         if ($formproduit->isSubmitted() && $formproduit->isValid()) {
 
-            $em=$this->getDoctrine()->getManager();
+
+            /* Toute cette partie est dans l'ecouter ProduitListener
+            $image = $formproduit->getData()->getImage();// recuprer l'image
+            $uploadservice= $this->get('admin.service.upload.upload');// charger le service uploadservice
+            $filename=$uploadservice->upload($image);
+            $produit->setImage($filename);// enregistrer l'image avec rénomage dans la table produit*/
+
+
+
+            /**Enregistrement des données dans la table produit*/
+            $em = $this->getDoctrine()->getManager();
             $em->persist($produit);
             $em->flush();
 
@@ -47,8 +57,12 @@ class ProductsController extends Controller
 
             return $this->redirectToRoute('produitspage');
         }
-        return $this->render('Products/creat.html.twig',['formproduit'=>$formproduit->createView()]);
+        return $this->render('Products/creat.html.twig', ['formproduit' => $formproduit->createView()]);
     }
+
+
+
+
 
 
 
@@ -57,23 +71,23 @@ class ProductsController extends Controller
      */
     public function showproduitAction($id)
     {
-        $em=$this->getDoctrine()->getManager();
-        $product=$em->getRepository('adminBundle:produit')->find($id);
-        if (!$product){
+        $em = $this->getDoctrine()->getManager();
+        $product = $em->getRepository('adminBundle:produit')->find($id);
+        if (!$product) {
             throw  New EntityNotFoundException();
         }
-        return $this->render(':Products:showproduct.html.twig',['product'=>$product]);
+        return $this->render(':Products:showproduct.html.twig', ['product' => $product]);
     }
 
 
     /**
      * @Route("/produit/edit/{id}", name="produitedit",requirements={"id":"\d+"})
      */
-    public function editproduitAction(Request $request,$id)
+    public function editproduitAction(Request $request, $id)
     {
-        $em=$this->getDoctrine()->getManager();
-        $produit=$em->getRepository('adminBundle:produit')->find($id);
-        if(!$produit){
+        $em = $this->getDoctrine()->getManager();
+        $produit = $em->getRepository('adminBundle:produit')->find($id);
+        if (!$produit) {
             throw $this->createNotFoundException();
         }
         $formproduit = $this->createForm(produitType::class, $produit);
@@ -81,14 +95,14 @@ class ProductsController extends Controller
 
         if ($formproduit->isSubmitted() && $formproduit->isValid()) {
 
-            $em=$this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
             $em->flush();
 
             $this->addFlash('success', 'Produit modifié');
 
             return $this->redirectToRoute('produitspage');
         }
-        return $this->render('Products/edition.html.twig',['formproduit'=>$formproduit->createView(),'produit'=>$produit]);
+        return $this->render('Products/edition.html.twig', ['formproduit' => $formproduit->createView(), 'produit' => $produit]);
     }
 
 
@@ -96,7 +110,7 @@ class ProductsController extends Controller
      * @Route("/produit/supp/{id}", name="produitsupp",requirements={"id":"\d+"})
      */
 
-    public function suppproduitAction(Request $request,$id)
+    public function suppproduitAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
         $produit = $em->getRepository('adminBundle:produit')->find($id);
@@ -110,10 +124,10 @@ class ProductsController extends Controller
 
         /** pour gerer la supp avec ajax */
 
-        $message_success="Produit bien été supprimé";
+        $message_success = "Produit bien été supprimé";
 
         if ($request->isXmlHttpRequest()) {
-           return new JsonResponse(['message'=>$message_success]);
+            return new JsonResponse(['message' => $message_success]);
         }
 
 

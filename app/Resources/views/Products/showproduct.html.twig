@@ -32,6 +32,7 @@
                             <th>Description(s)</th>
                             <th>Price</th>
                             <th>Quantité</th>
+                            <th>Image</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -42,6 +43,7 @@
                             <td>{{ product.description }}</td>
                             <td>{{ product.price }}</td>
                             <td>{{ product.quantity }}</td>
+                            <td><img src="{{ asset('images/'~product.image) }}" alt=""> </td>
                             <td>
                                 <a href="{{ path('produitedit',{'id':product.id}) }}" class="btn btn-warning">Editer</a>
                                 <a href="{{ path('produitsupp',{'id':product.id}) }}"

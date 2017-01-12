@@ -47,6 +47,11 @@
                     {{ form_widget(formproduit.quantity, {attr: { class: "form-control"} } ) }}
                 </div>
                 <div class="form-group">
+                    {{ form_errors(formproduit.image) }}
+                    {{ form_label(formproduit.image, "Image") }}
+                    {{ form_widget(formproduit.image, {attr: { class: "form-control"} } ) }}
+                </div>
+                <div class="form-group">
                     {{ form_errors(formproduit.marque) }}
                     {{ form_label(formproduit.marque, "Marque") }}
                     {{ form_widget(formproduit.marque, {attr: { class: "form-control"} } ) }}
