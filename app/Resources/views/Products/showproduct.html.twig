@@ -43,7 +43,7 @@
                             <td>{{ product.description }}</td>
                             <td>{{ product.price }}</td>
                             <td>{{ product.quantity }}</td>
-                            <td><img src="{{ asset('images/'~product.image) }}" alt=""> </td>
+                            <td><img src="{{ asset('images/'~product.image) }}" alt="{{ product.image }}" width="150" height="150"> </td>
                             <td>
                                 <a href="{{ path('produitedit',{'id':product.id}) }}" class="btn btn-warning">Editer</a>
                                 <a href="{{ path('produitsupp',{'id':product.id}) }}"

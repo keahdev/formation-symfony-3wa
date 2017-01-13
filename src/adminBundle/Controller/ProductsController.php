@@ -21,10 +21,11 @@ class ProductsController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $products = $em->getRepository('adminBundle:produit')->findAll();
-        //die(dump($products));
+
 
         return $this->render(':Products:products.html.twig', ['products' => $products]);
     }
+
 
 
     /**
@@ -38,15 +39,6 @@ class ProductsController extends Controller
         $formproduit->handleRequest($request);
 
         if ($formproduit->isSubmitted() && $formproduit->isValid()) {
-
-
-            /* Toute cette partie est dans l'ecouter ProduitListener
-            $image = $formproduit->getData()->getImage();// recuprer l'image
-            $uploadservice= $this->get('admin.service.upload.upload');// charger le service uploadservice
-            $filename=$uploadservice->upload($image);
-            $produit->setImage($filename);// enregistrer l'image avec rénomage dans la table produit*/
-
-
 
             /**Enregistrement des données dans la table produit*/
             $em = $this->getDoctrine()->getManager();
@@ -87,11 +79,15 @@ class ProductsController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $produit = $em->getRepository('adminBundle:produit')->find($id);
+
+
         if (!$produit) {
             throw $this->createNotFoundException();
         }
         $formproduit = $this->createForm(produitType::class, $produit);
         $formproduit->handleRequest($request);
+
+
 
         if ($formproduit->isSubmitted() && $formproduit->isValid()) {
 
@@ -104,6 +100,7 @@ class ProductsController extends Controller
         }
         return $this->render('Products/edition.html.twig', ['formproduit' => $formproduit->createView(), 'produit' => $produit]);
     }
+
 
 
     /**

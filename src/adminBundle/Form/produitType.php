@@ -23,7 +23,9 @@ class produitType extends AbstractType
             ->add('description', TextareaType::class)
             ->add('price', IntegerType::class)
             ->add('quantity', IntegerType::class)
-            ->add('image',FileType::class)
+            ->add('image', FileType::class, [
+                'data_class' => null// s'il n'avait pas cette ligne il aura une erreur sur data_class 'The form's view data is expected to .....'
+            ])
             ->add('marque', EntityType::class, [
                 'class' => 'adminBundle\Entity\Brand',
                 'choice_label' => 'titre',// la propriété de l'entity brand a afficher ici le titre de la marque

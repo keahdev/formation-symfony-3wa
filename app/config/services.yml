@@ -11,14 +11,24 @@ services:
     admin.service.utiles.string:
         class: adminBundle\Service\Utiles\StringService
 
+    admin.service.utiles.unlik:
+        class: adminBundle\Service\Utiles\UnlikService
+        arguments: ['%upload_dir%']
+
     admin.service.upload.upload:
         class: adminBundle\Service\Upload\UploadService
         arguments: ['@admin.service.utiles.string','%upload_dir%']
 
     admin.listener.produitlistener:
         class: adminBundle\Listener\ProduitListener
-        arguments: ["@admin.service.upload.upload"]
+        arguments: ["@admin.service.upload.upload",'@admin.service.utiles.unlik']
         tags:
             - { name: doctrine.orm.entity_listener }
+
+    admin.twig.extention:
+        class: adminBundle\Twig\AppExtension
+        arguments: [ '@doctrine','@twig']
+        tags:
+            - { name: twig.extension}
 
 

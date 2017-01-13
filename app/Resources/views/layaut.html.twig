@@ -50,7 +50,10 @@
 
                             <li class="{% if app.request.get('_route') == "categoriespage" %} active  {% endif %}">
                                 <a href="{{ path('categoriespage') }}"><i class="fa fa-circle-o"></i>
-                                    Categories</a></li>
+                                    Categories</a>
+                             {{ ma_fonction()|raw }}
+
+                            </li>
 
                             <li class="{% if app.request.get('_route') == "contactpage" %} active  {% endif %}">
                                 <a href="{{ path('contactpage') }}"><i class="fa fa-circle-o"></i> Contact</a>
