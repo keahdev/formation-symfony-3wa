@@ -14,8 +14,8 @@ class CategorieRepository extends \Doctrine\ORM\EntityRepository
     // Afficher le nombre de catégorie
     public function countcat()
     {
-        $qd = $this->createQueryBuilder('c');
-        $categorie = count($qd->getQuery()->getResult());
+        $qb = $this->createQueryBuilder('c');
+        $categorie = count($qb->getQuery()->getResult());
         die((dump($categorie)));
     }
 
@@ -23,10 +23,10 @@ class CategorieRepository extends \Doctrine\ORM\EntityRepository
     //le nombre de catégorie actif
     public function catactif()
     {
-        $qd = $this->createQueryBuilder('c');
-            $qd->select('COUNT(c)')
-             ->where('c.active = 1');
-        $categorie = $qd->getQuery()->getResult();
+        $qb = $this->createQueryBuilder('c');
+        $qb->select('COUNT(c)')
+            ->where('c.active = 1');
+        $categorie = $qb->getQuery()->getResult();
         die(dump($categorie));
     }
 
@@ -35,10 +35,10 @@ class CategorieRepository extends \Doctrine\ORM\EntityRepository
     public function catactifandinac()
     {
 
-        $qd = $this->createQueryBuilder('c');
-        $qd->where('c.active = 1')
+        $qb = $this->createQueryBuilder('c');
+        $qb->where('c.active = 1')
             ->andWhere('c.active = 0');
-        $categorie = count($qd->getQuery()->getResult());
+        $categorie = count($qb->getQuery()->getResult());
         die(dump($categorie));
     }
 
@@ -53,5 +53,20 @@ class CategorieRepository extends \Doctrine\ORM\EntityRepository
         die(dump($categorie));
     }
 
+
+    // Return tout les produits  d'une categorie
+    public function getProduitByCategorie($id)
+    {
+        $qb = $this->createQueryBuilder('c');
+        $qb->select('p.id','p.title','p.description','p.price','p.image')
+            ->join('c.produits', 'p')
+            ->where('c.id = :id')
+            ->setParameter('id', $id);
+
+        $result = $qb->getQuery()->getArrayResult();
+
+        return $result;
+
+    }
 
 }

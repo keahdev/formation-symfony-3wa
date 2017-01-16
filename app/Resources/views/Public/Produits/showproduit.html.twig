@@ -1,0 +1,114 @@
+{% extends 'public.layout.html.twig' %}
+
+{% block content %}
+
+    {{ render( controller('AppBundle:Categories:renderCategories')) }}
+
+    <div class="col-md-9">
+
+        <div class="thumbnail">
+            <img class="img-responsive" src="{{ asset('images/'~produit.image) }}" alt="">
+            <div class="caption-full">
+                <h4 class="pull-right">{{ produit.price }} €</h4>
+                <h4><a href="#">{{ produit.title }}</a>
+                </h4>
+                <p>{{ produit.description }}</p>
+            </div>
+            <div class="ratings">
+                <p class="pull-right">3 reviews</p>
+                <p>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                    4.0 stars
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {{ form_start(form,{attr:{novalidate:"novalidate"}}) }}
+                <div class="well box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><strong> Ajouter un commentaire !</strong></h3>
+                    </div>
+                    <!-- /.box-header -->
+
+                    <div class="form-group">
+                        {{ form_errors(form.author) }}
+                        {{ form_label(form.author, "Pseudo") }}
+                        {{ form_widget(form.author, {attr: {placeholder: "Votre Pseudo", class: "form-control"} } ) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_errors(form.content) }}
+                        {{ form_label(form.content, "Message") }}
+                        {{ form_widget(form.content, {attr: {placeholder: "Votre message", class: "form-control"} } ) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_errors(form.score) }}
+                        {{ form_label(form.score, "Score") }}
+                        {{ form_widget(form.score, {attr: { class: "form-control"} } ) }}
+                    </div>
+
+                </div>
+
+            </div><!-- well box box-primary" -->
+            <button class="btn btn-primary">Poster</button>
+            {{ form_end(form) }}
+
+            <hr>
+            <br>
+
+
+            <div class="well">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star-empty"></span>
+                        Anonymous
+                        <span class="pull-right">10 days ago</span>
+                        <p>This product was great in terms of quality. I would definitely buy another!</p>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star-empty"></span>
+                        Anonymous
+                        <span class="pull-right">12 days ago</span>
+                        <p>I've alredy ordered another one!</p>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star-empty"></span>
+                        Anonymous
+                        <span class="pull-right">15 days ago</span>
+                        <p>I've seen some better than this, but not at this price. I definitely recommend this item.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div><!-- col-md-12 -->
+    </div><!-- row -->
+{% endblock %}

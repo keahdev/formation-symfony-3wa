@@ -39,9 +39,7 @@ $categories = $this->doctrine->getRepository('adminBundle:Categorie')->findAll()
 return $this->twig->render(':Categories:categories.liste.html.twig', [
     'categories' => $categories
 ]);
-
-
-
 }
+
 
 }

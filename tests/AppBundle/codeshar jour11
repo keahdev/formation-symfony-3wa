@@ -1,0 +1,94 @@
+/*
+https://startbootstrap.com/template-categories/ecommerce/
+http://francois-deleglise.fr/2012/06/limiter-la-longueur-dune-chaine-avec-twig-filtre-truncate/
+
+- Page d'accueil : /  (https://startbootstrap.com/template-overviews/shop-homepage/)
+   - Afficher les 6 derniers produits les plus chers par ordre décroissant de prix
+   - Afficher les catégories par ordre alphabétique sur TOUTES les pages
+   - Afficher dans le carousel les images (lien vers produit compris) les 3 produits ayant la quantité la plus élevée
+
+- Page d'un produit : /produit/id-du-produit  (https://startbootstrap.com/template-overviews/shop-item/)
+	 - Afficher les détails du produit
+
+- Page d'une catégorie : /categorie/id-de-la-categorie  (https://startbootstrap.com/template-overviews/heroic-features/)
+	 - Afficher tous les produits de la catégorie
+   - N'oubliez pas le lien vers le produit
+   - Créer une pagination. Afficher 4 produits par page. auCréer sa propre requête dans un repository afin de récupérer le nombre de
+     produit souhaité. Utilisation de setMaxResults() et setFirstResult()
+      - Indice :
+      		- Je souhaite avoir dans l'url l'information suivante : /categorie/id-de-la-categorie?page=2
+          - 2 étant le numéro de la page
+          - Afficher les produits suivant le tableau ci-dessous :
+          |--------------------------------------------|-----------|-----------|
+          |                    url                     |   page    |   offset  |
+          |--------------------------------------------|-----------|-----------|
+          | /categorie/id-de-la-categorie              |     1     |     0     |
+          | /categorie/id-de-la-categorie?page=0       |     1     |     0     |
+          | /categorie/id-de-la-categorie?page=1       |     1     |     0     |
+          | /categorie/id-de-la-categorie?page=2       |     2     |     4     |
+          | /categorie/id-de-la-categorie?page=3       |     3     |     8     |
+          | /categorie/id-de-la-categorie?page=4       |     4     |     12    |
+          |              ...                           |    ...    |    ...    |
+          |--------------------------------------------|-----------|-----------|
+  - Création de la pagination : http://www.w3schools.com/bootstrap/bootstrap_pagination.asp
+
+  - Bonus : Rajouter la possibilité de trier par prix (croissant/décroissant) tout en conservant la pagination
+
+- Créer une entité comment permettant de stocker les commentaires d'un produit
+	- L'entité comment devra avoir les champs suivantes : id, author, content, createAt, score
+  - Un produit peu avoir plusieurs commentaires alors qu'un commentaire peu avoir qu'un seul produit
+  - Voici les contraintes :
+  		- author : Ne doit pas être vide
+      - content : Ne doit pas être vide
+      - createAt : Pas besoin de contrainte. L'utilisateur ne choisit pas la date.
+      	Elle est automatiquement ajoutée lors de la création du commentaire
+      - score : valeur comprise entre 0 et 5
+  - Créer sur la page d'un produit, un formulaire de création de commentaire
+  - Afficher tous les commentaires de CE produit
+  - Afficher la note moyenne
+  - Afficher la note moyenne sur la page d'accueil
+  - Utiliser un des plugins pour les notes :
+  			- http://antenna.io/demo/jquery-bar-rating/examples/
+        - http://irfandurmus.com/projects/jquery-star-rating-plugin/
+*/
+
+
+/*******************/
+/*   controller    */
+/******************/
+/**
+* @Route("/categorie/{id}")
+*/
+public function indexAction(Categorie $categorie, Request $request) {
+    $em = $this->getDoctrine()->getManager();
+
+  	$page = $request->query->get('page', 1);
+  	if ($page <= 0) {
+      $page = 1;
+  	}
+
+  	$offset = ($page - 1) * 4
+
+  	$products = $em->getRepository('AdminBundle:Product')->myFindProductionSelonCategorie($categorie->getId(), $offset);
+
+
+  	return $this->render('............');
+}
+
+
+/*******************/
+/*   repository    */
+/******************/
+// Afficher les produits selon leur catégories
+public function myFindProductionSelonCategorie($categorie_id, $offset) {
+    $results = $this
+        ->createQueryBuilder('p')
+        ->join('p.categories', 'c')
+        ->where('c.id = :idCat')
+        ->setParameters(['idCat' => $categorie_id])
+      	->setFirstResult($offset)
+      	->setMaxResults(4)
+        ->getQuery()
+        ->getResult();
+    return $results;
+}

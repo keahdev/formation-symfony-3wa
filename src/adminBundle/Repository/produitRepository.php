@@ -14,6 +14,48 @@ class produitRepository extends \Doctrine\ORM\EntityRepository
 {
 
 
+    /**
+     * Partie page produits dans le Public
+     * Afficher les 6 derniers produits les plus chers par ordre décroissant de prix
+     * @return array
+     */
+    public function sixlastproduits()
+    {
+
+        $qb = $this->createQueryBuilder('p')
+            ->select('p')
+            ->orderBy('p.price', 'DESC')
+            ->setMaxResults(6);
+        return $qb->getQuery()->getResult();
+
+    }
+
+
+    public function getProduitsByPage($offset)
+    {
+        $qb = $this->createQueryBuilder('p');
+        $qb->select('p')
+            ->setFirstResult($offset)
+            ->setMaxResults(4);
+
+        $resultat = $qb->getQuery()->getResult();
+
+        return $resultat;
+    }
+
+
+
+
+
+
+
+
+
+    /**************************************************** *************************************************************/
+    /****************************************************  REQUTES DE TEST ********************************************/
+    /**************************************************** *************************************************************/
+
+
     public function getAllproduit()
     {
         // Creation d'une requête DQL
@@ -36,9 +78,7 @@ class produitRepository extends \Doctrine\ORM\EntityRepository
         $titre = 'mon titre';
         $qb = $this->createQueryBuilder('p')
             ->addSelect('m.titre')
-            ->join('p.marque', 'm')
-        ;
-
+            ->join('p.marque', 'm');
 
         /*$qb->select('COUNT(p.title) title')// utilisation d'un count avec un alias titre, on peut utiliser 'as titre' ou directment 'titre'
         ->groupBy('p.marque');// grouper selon le titre de marque*/

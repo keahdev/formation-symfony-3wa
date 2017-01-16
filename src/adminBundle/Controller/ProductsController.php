@@ -56,8 +56,6 @@ class ProductsController extends Controller
 
 
 
-
-
     /**
      * @Route("/produit/{id}", name="produitpage",requirements={"id":"\d+"})
      */

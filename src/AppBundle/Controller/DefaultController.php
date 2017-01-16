@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 class DefaultController extends Controller
 {
     /**
-     * @Route("/", name="homepage")
+     * @Route("/test", name="homepage")
      */
     public function indexAction(Request $request)
     {
@@ -37,7 +37,7 @@ class DefaultController extends Controller
 
 
     /**
-     * @Route("/produit", name="produit")
+     * @Route("/produit1", name="produit")
      */
     public function produitAction(Request $request)
     {

@@ -1,0 +1,62 @@
+{% extends 'public.layout.html.twig' %}
+
+{% block content %}
+
+    {# {{  render( controller('AppBundle:Categories:categories')) }}#}
+
+    <div class="col-md-12">
+
+    <div class="thumbnail">
+        <div class="caption-full">
+            <h4><a href="#">{{ categorie.title }}</a>
+            </h4>
+            <p>{{ categorie.description }}</p>
+        </div>
+        <div class="ratings">
+            <p class="pull-right">3 reviews</p>
+            <p>
+                <span class="glyphicon glyphicon-star"></span>
+                <span class="glyphicon glyphicon-star"></span>
+                <span class="glyphicon glyphicon-star"></span>
+                <span class="glyphicon glyphicon-star"></span>
+                <span class="glyphicon glyphicon-star-empty"></span>
+                4.0 stars
+            </p>
+        </div>
+    </div>
+
+    <div class="well">
+
+        <div class="text-right">
+            <a href="{{ path('app.produits') }}" class="btn btn-success">Voir Les produits</a>
+        </div>
+
+        {% for produit in produits %}
+            <hr>
+
+            <div class="row">
+                <div class="col-md-9">
+
+                    <h4><a href="{{ path('app.produit',{"id":produit.id}) }}">{{ produit.title }}</a></h4>
+                    <p>{{ produit.description }}</p>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star"></span>
+                    <span class="glyphicon glyphicon-star-empty"></span>
+
+                </div>
+                <div class="col-md-3 ">
+                    <img class="pull-right" src="{{ asset('images/'~produit.image) }}" width="70px" height="70px"
+                         alt="">
+                </div>
+            </div>
+
+            <hr>
+        {% endfor %}
+
+
+    </div>
+
+
+{% endblock %}

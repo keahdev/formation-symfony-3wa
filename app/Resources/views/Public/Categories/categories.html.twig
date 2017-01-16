@@ -1,7 +1,6 @@
 {% extends 'public.layout.html.twig' %}
 
 {% block content %}
-    {{ render( controller('AppBundle:Categories:renderCategories')) }}
 
     <div class="col-md-9">
 
@@ -72,11 +71,9 @@
             <a class="btn btn-primary" target="_blank"
                href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">View Tutorial</a>
         </div>
-    </div>
-    {#<a href="{{ path('app.produits'~'?page=1') }}">1</a>#}
 
+    </div>
 
     </div>
 
 {% endblock %}
-

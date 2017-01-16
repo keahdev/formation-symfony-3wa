@@ -1,22 +1,31 @@
 {% extends 'base.html.twig' %}
+
+  {% block stylesheet %}
+      {{ parent() }}
+      <!-- Style page homepage-->
+      <link rel="stylesheet" href="{{ asset('Public/css/shop-homepage.css') }}">
+      <link rel="stylesheet" href="{{ asset('Public/css/shop-item.css') }}">
+      <link rel="stylesheet" href="{{ asset('Public/css/heroic-features.css') }}">
+  {% endblock %}
+
 {% block title %}
-  Mon site
+    Mon site
 {% endblock %}
 
-{% block  body%}
+{% block  body %}
 
-{% include ':Public/Partials:main-navigation.html.twig' %}
-  <div class="container" style="padding-top: 70px">
-  <div class="row">
-  {% block content %}
+    {% include ':Public/Partials:main-navigation.html.twig' %}
+    <div class="container">
+        <div class="row">
+            {% block content %}
 
 
-  {% endblock %}
-  </div>
+            {% endblock %}
+        </div>
 
-  </div>
-  <!-- /.container -->
+    </div>
+    <!-- /.container -->
 
-  {% include ':Public/Partials:main-footer.html.twig' %}
+    {% include ':Public/Partials:main-footer.html.twig' %}
 
 {% endblock %}
