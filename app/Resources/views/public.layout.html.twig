@@ -1,18 +1,22 @@
-<!doctype html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{% block title %}{% endblock %}</title>
-    {% block stylesheets %}{% endblock %}
-</head>
-<body>
+{% extends 'base.html.twig' %}
+{% block title %}
+  Mon site
+{% endblock %}
 
-{% block body %}{% endblock %}
+{% block  body%}
 
-{% block javascript %} {% endblock %}
+{% include ':Public/Partials:main-navigation.html.twig' %}
+  <div class="container" style="padding-top: 70px">
+  <div class="row">
+  {% block content %}
 
-</body>
-</html>
+
+  {% endblock %}
+  </div>
+
+  </div>
+  <!-- /.container -->
+
+  {% include ':Public/Partials:main-footer.html.twig' %}
+
+{% endblock %}

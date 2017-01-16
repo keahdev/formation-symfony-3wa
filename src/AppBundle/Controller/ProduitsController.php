@@ -21,7 +21,7 @@ class ProduitsController extends Controller
 
     public function produitsAction(){
 
-        return $this->render('Public/produits.html.twig');
+        return $this->render('Public/Produits/produits.html.twig');
 
     }
 
