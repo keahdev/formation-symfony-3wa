@@ -32,7 +32,7 @@ class ProduitsController extends Controller
 
 
     /**
-     * @Route("/produits", name="app.produits")
+     * @Route("/produits/", name="app.produits")
      */
 
     public function produitsAction(Request $request){

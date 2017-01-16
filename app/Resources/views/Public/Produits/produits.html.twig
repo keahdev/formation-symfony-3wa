@@ -73,6 +73,14 @@
                href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">View Tutorial</a>
         </div>
     </div>
+
+    <ul>
+        {% for i in 1..nbPagination %}
+            <li><a href="{{ path('app.produits',{'page':i}) }}">{{ i }}</a></li>
+        {% endfor %}
+    </ul>
+
+    {{ dump(nbPagination) }}
     {#<a href="{{ path('app.produits'~'?page=1') }}">1</a>#}
 
 
