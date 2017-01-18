@@ -38,4 +38,10 @@ security:
             form_login:
                 login_path: security.login
                 check_path: security.login
+                default_target_path: home
+                csrf_token_generator: security.csrf.token_manager
+
+            logout:
+                path:   security.logout
+                target: /
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html

@@ -21,7 +21,16 @@
                     <a href="#">Services</a>
                 </li>
                 <li>
-                    <a href="#">Contact</a>
+
+                    {#ici  le test qui teste si la personne est pleinement connecter#}
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <a href="#" class="btn-xs btn-danger">Deconnecter</a>
+                    {% endif %}
+
+                    {#ici on test si le role de la personne est admin#}
+                    {#{% if is_granted('ROLE_ADMIN') %}
+                        <a href="#" class="btn-xs btn-info">Connecter</a>
+                    {% endif %}#}
                 </li>
             </ul>
         </div>

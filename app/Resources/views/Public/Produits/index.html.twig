@@ -2,6 +2,12 @@
 
 {% block content %}
 
+    {% for flash_message in app.session.flashBag.get('success') %}
+        <div class="alert alert-success">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+
     <!-- Jumbotron Header -->
     <header class="jumbotron hero-spacer">
         <h1>A Warm Welcome!</h1>
@@ -45,6 +51,7 @@
     </div>
     <!-- /.row -->
 
+    {{ dump(app.session) }}
 
 
 {% endblock %}
