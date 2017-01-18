@@ -31,12 +31,12 @@ class produitRepository extends \Doctrine\ORM\EntityRepository
     }
 
 
-    public function getProduitsByPage($offset)
+    public function getProduitsByPage($offset,$nbProductParPage)
     {
         $qb = $this->createQueryBuilder('p');
         $qb->select('p')
             ->setFirstResult($offset)
-            ->setMaxResults(4);
+            ->setMaxResults($nbProductParPage);
 
         $resultat = $qb->getQuery()->getResult();
 

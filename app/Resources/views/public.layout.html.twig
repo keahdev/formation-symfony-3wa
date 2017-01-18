@@ -2,10 +2,12 @@
 
   {% block stylesheet %}
       {{ parent() }}
-      <!-- Style page homepage-->
+
       <link rel="stylesheet" href="{{ asset('Public/css/shop-homepage.css') }}">
       <link rel="stylesheet" href="{{ asset('Public/css/shop-item.css') }}">
       <link rel="stylesheet" href="{{ asset('Public/css/heroic-features.css') }}">
+      <link rel="stylesheet" href="{{ asset('css/rating.css') }}">
+
   {% endblock %}
 
 {% block title %}
@@ -29,3 +31,7 @@
     {% include ':Public/Partials:main-footer.html.twig' %}
 
 {% endblock %}
+
+
+
+
