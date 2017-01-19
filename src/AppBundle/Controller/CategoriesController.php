@@ -11,6 +11,7 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class CategoriesController extends Controller
 {
@@ -38,13 +39,16 @@ class CategoriesController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
 
-    public function categorieAction($id)
+    public function categorieAction($id, Request $request)
     {
 
         $doctine = $this->getDoctrine();
         $categorie = $doctine->getRepository('adminBundle:Categorie')->find($id);// Recupre une catégorie
 
-        $produits = $doctine->getRepository('adminBundle:Categorie')->getProduitByCategorie($id);
+        $locale = $request->getLocale();// on recuprer la valeur locale c-a-d /fr ou /en
+        $locale = strtoupper($locale); // transformer en majuscule la variable locale car elle est en locale dans la table ex: titleFr, TitleEN
+
+        $produits = $doctine->getRepository('adminBundle:Categorie')->getProduitByCategorie($id, $locale);
 
         if (!$produits || !$categorie) {
             throw  $this->createNotFoundException();

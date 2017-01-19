@@ -1,0 +1,53 @@
+How to Login with a username *or* email (or crazier)
+
+
+https://knpuniversity.com/screencast/guard/login-form-customize-user
+
+
+
+https://packagist.org/packages/twig/extensions
+
+aller sur github.com/twigphp/Twig-extensions   en bas documentation et vous ets sur le site http://twig-extensions.readthedocs.io/en/latest/
+
+
+
+dans le fichier serive
+ twig.extension.intel:
+        class: Twig_Extensions_Extension_Intl
+        tags:
+            - { name: twig.extension }
+
+
+prefixer dans le routine
+admin:
+    resource: "@adminBundle/Controller/"
+    type:     annotation
+    prefix:   /{_locale}
+
+  ou le faire dans le controller des routes que on veut traduire au debut du controller
+       /**
+       * @Route("/{_locale}")
+       */
+
+
+  $locale = $request->getLocale();// on recuprer la valeur locale c-a-d /fr ou /en
+
+  le requete selon la variable locale
+
+
+    // Return tout les produits  d'une categorie
+    public function getProduitByCategorie($id, $locale)
+    {
+        $qb = $this->createQueryBuilder('c');
+        $qb->select('p.id',"p.title$locale title","p.description$locale AS description",'p.price','p.image')
+            ->join('c.produits', 'p')
+            ->where('c.id = :id')
+            ->setParameter('id', $id);
+
+        $result = $qb->getQuery()->getArrayResult();
+
+        return $result;
+
+    }
+
+}

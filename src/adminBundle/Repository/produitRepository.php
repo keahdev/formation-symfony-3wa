@@ -46,7 +46,22 @@ class produitRepository extends \Doctrine\ORM\EntityRepository
 
 
 
+/****************** Requete qui recupere les produit selon id et la langue *****/
 
+public function findProduitByLocale($id, $locale){
+
+    $locale=strtoupper($locale);
+
+    $produit=$this->createQueryBuilder('p')
+        ->select("p.title$locale", "p.description$locale")
+        ->where('p.id= :id')
+        ->setParameter('id',$id)
+        ->getQuery()
+        ->getOneOrNullResult();
+
+    return $produit;
+
+}
 
 
 

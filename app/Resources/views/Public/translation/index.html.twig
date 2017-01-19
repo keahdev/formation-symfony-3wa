@@ -1,0 +1,27 @@
+page traduction
+
+{{ 1000|localizednumber }} <br><br>
+{{ '19-01-2017'|localizeddate }}<br><br>
+{{ 2000|localizedcurrency('EUR') }}<br><br>
+
+{{ 'text.content'|trans }}<br><br>
+
+{{ 'text.placeholder'|trans({'%name%':'azerty'}) }}<br><br>
+
+{{ 'admin.homepage'|trans({},'admin') }}<br><br>
+
+{% set route=app.request.get('_route') %} {# renvois le nom de la route ici app.translation#}
+{% set route_param=app.request.get('_route_params') %} {# renvois les variables de url#}
+
+{# locales est la variable defini dans config.yml#}
+
+{{ dump(route, route_param, locales) }}
+<ul>
+    {% for locale in locales %}
+
+        {% set route_merge= route_param | merge( {'_locale': locale } )%}
+
+        <li><a href="{{ url(route, route_merge) }}">{{ locale }}</a></li>
+
+    {% endfor %}
+</ul>

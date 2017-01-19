@@ -19,20 +19,32 @@
             {{ form_start(formproduit,{attr:{novalidate:"novalidate"}}) }}
             <div class="well box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Modifié le produit: <strong>{{ produit.title|capitalize}}</strong></h3>
+                    <h3 class="box-title">Modifié le produit: <strong>{{ produit.titleFR|capitalize }}</strong></h3>
                 </div>
                 <!-- /.box-header -->
 
                 <div class="form-group">
-                    {{ form_errors(formproduit.title) }}
-                    {{ form_label(formproduit.title, "Titre") }}
-                    {{ form_widget(formproduit.title, {attr: {placeholder: "Titre du produit", class: "form-control"} } ) }}
+                    {{ form_errors(formproduit.titleFR) }}
+                    {{ form_label(formproduit.titleFR, "Titre FR") }}
+                    {{ form_widget(formproduit.titleFR, {attr: {placeholder: "Titre du produit FR", class: "form-control"} } ) }}
                 </div>
 
                 <div class="form-group">
-                    {{ form_errors(formproduit.description) }}
-                    {{ form_label(formproduit.description, "Déscription") }}
-                    {{ form_widget(formproduit.description, {attr: {placeholder: "Déscription du protuit", class: "form-control"} } ) }}
+                    {{ form_errors(formproduit.descriptionFR) }}
+                    {{ form_label(formproduit.descriptionFR, "Déscription FR") }}
+                    {{ form_widget(formproduit.descriptionFR, {attr: {placeholder: "Déscription du protuit FR", class: "form-control"} } ) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_errors(formproduit.titleEN) }}
+                    {{ form_label(formproduit.titleEN, "Titre EN") }}
+                    {{ form_widget(formproduit.titleEN, {attr: {placeholder: "Titre du produit EN", class: "form-control"} } ) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_errors(formproduit.descriptionEN) }}
+                    {{ form_label(formproduit.descriptionEN, "Déscription EN") }}
+                    {{ form_widget(formproduit.descriptionEN, {attr: {placeholder: "Déscription du protuit EN", class: "form-control"} } ) }}
                 </div>
 
                 <div class="form-group">

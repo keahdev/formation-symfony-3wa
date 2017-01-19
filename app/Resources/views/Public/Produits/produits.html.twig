@@ -43,9 +43,9 @@
                         <img src="{{ asset('images/'~produit.image) }}" alt="">
                         <div class="caption">
                             <h4 class="pull-right">{{ produit.price }} €</h4>
-                            <h4><a href="#">{{ produit.title }}</a>
+                            <h4><a href="#">{{ produit.titleFR }}</a>
                             </h4>
-                            <p>{{ produit.description }} <a class="btn btn-primary"
+                            <p>{{ produit.descriptionFR }} <a class="btn btn-primary"
                                                             href="{{ path('app.produit',{"id":produit.id}) }}">Voir le
                                     produit</a>.</p>
                         </div>

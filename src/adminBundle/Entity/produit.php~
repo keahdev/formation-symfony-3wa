@@ -49,9 +49,24 @@ class produit
      *
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=100)
+     * @ORM\Column(name="titleFR", type="string", length=100)
      */
-    private $title;
+    private $titleFR;
+
+
+
+
+    /**
+     * @Assert\NotBlank(message="Champ ne doit pas être vide")
+     * @Assert\Length(min = 5, minMessage="Titre doit contenir minimum 5 caractères")
+     * @Assert\Length(max = 100, maxMessage="Titre doit contenir minimum 100 caractères")
+     *
+     * @var string
+     *
+     * @ORM\Column(name="titleEN", type="string", length=100)
+     */
+    private $titleEN;
+
 
 
     /**
@@ -60,9 +75,20 @@ class produit
      *
      * @var string
      *
-     * @ORM\Column(name="description", type="text", nullable=true)
+     * @ORM\Column(name="descriptionFR", type="text", nullable=true)
      */
-    private $description;
+    private $descriptionFR;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="descriptionEN", type="text")
+     * @Assert\NotBlank(message="ce champ ne peux �tre null")
+     */
+    private $descriptionEN;
+
+
 
 
     /**
@@ -101,223 +127,4 @@ class produit
     private $image; 
 
 
-    /**
-     * Get id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set title
-     *
-     * @param string $title
-     *
-     * @return produit
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return produit
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set price
-     *
-     * @param float $price
-     *
-     * @return produit
-     */
-    public function setPrice($price)
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    /**
-     * Get price
-     *
-     * @return float
-     */
-    public function getPrice()
-    {
-        return $this->price;
-    }
-
-    /**
-     * Set quantity
-     *
-     * @param integer $quantity
-     *
-     * @return produit
-     */
-    public function setQuantity($quantity)
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    /**
-     * Get quantity
-     *
-     * @return int
-     */
-    public function getQuantity()
-    {
-        return $this->quantity;
-    }
-
-
-    /**
-     * Set marque
-     *
-     * @param \adminBundle\Entity\Brand $marque
-     *
-     * @return produit
-     */
-    public function setMarque(Brand $marque)
-    {
-        $this->marque = $marque;
-
-        return $this;
-    }
-
-    /**
-     * Get marque
-     *
-     * @return \adminBundle\Entity\Brand
-     */
-    public function getMarque()
-    {
-        return $this->marque;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add category
-     *
-     * @param \adminBundle\Entity\Categorie $category
-     *
-     * @return produit
-     */
-    public function addCategory(\adminBundle\Entity\Categorie $category)
-    {
-        $this->categories[] = $category;
-
-        return $this;
-    }
-
-    /**
-     * Remove category
-     *
-     * @param \adminBundle\Entity\Categorie $category
-     */
-    public function removeCategory(\adminBundle\Entity\Categorie $category)
-    {
-        $this->categories->removeElement($category);
-    }
-
-    /**
-     * Get categories
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCategories()
-    {
-        return $this->categories;
-    }
-
-    /**
-     * Set datecreation
-     *
-     * @param \DateTime $datecreation
-     *
-     * @return produit
-     */
-    public function setDatecreation($datecreation)
-    {
-        $this->datecreation = $datecreation;
-
-        return $this;
-    }
-
-    /**
-     * Get datecreation
-     *
-     * @return \DateTime
-     */
-    public function getDatecreation()
-    {
-        return $this->datecreation;
-    }
-
-    /**
-     * Set datemodification
-     *
-     * @param \DateTime $datemodification
-     *
-     * @return produit
-     */
-    public function setDatemodification($datemodification)
-    {
-        $this->datemodification = $datemodification;
-
-        return $this;
-    }
-
-    /**
-     * Get datemodification
-     *
-     * @return \DateTime
-     */
-    public function getDatemodification()
-    {
-        return $this->datemodification;
-    }
 }

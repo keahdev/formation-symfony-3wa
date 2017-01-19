@@ -55,10 +55,10 @@ class CategorieRepository extends \Doctrine\ORM\EntityRepository
 
 
     // Return tout les produits  d'une categorie
-    public function getProduitByCategorie($id)
+    public function getProduitByCategorie($id, $locale)
     {
         $qb = $this->createQueryBuilder('c');
-        $qb->select('p.id','p.title','p.description','p.price','p.image')
+        $qb->select('p.id',"p.title$locale title","p.description$locale AS description",'p.price','p.image')
             ->join('c.produits', 'p')
             ->where('c.id = :id')
             ->setParameter('id', $id);

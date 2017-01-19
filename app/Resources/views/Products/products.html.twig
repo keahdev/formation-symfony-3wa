@@ -38,12 +38,13 @@
                             <thead>
                             <tr class="well">
                                 <th>Id</th>
-                                <th>Title</th>
+                                <th>TitleFR</th>
+                                <th>TitleEN</th>
                                 {#<th>Description(s)</th>#}
                                 <th>Marque</th>
                                 <th>Categorie</th>
-                                <th>Prix</th>
-                                <th>Quantité</th>
+                                {#<th>Prix</th>
+                                <th>Quantité</th>#}
                                 <th>Date creat</th>
                                 <th>Date Modif</th>
                                 <th>Actions</th>
@@ -53,7 +54,8 @@
                             {% for product in products %}
                                 <tr>
                                     <td>{{ product.id }}</td>
-                                    <td>{{ product.title }}</td>
+                                    <td>{{ product.titleFR }}</td>
+                                    <td>{{ product.titleEN }}</td>
                                     {#<td>{{ product.description }}</td>#}
                                     <td>{{ product.marque.titre }}</td>
                                     <td>
@@ -63,8 +65,8 @@
                                             {% endfor %}
                                         </ul>
                                     </td>
-                                    <td>{{ product.price }}</td>
-                                    <td>{{ product.quantity }}</td>
+                                 {#   <td>{{ product.price }}</td>
+                                    <td>{{ product.quantity }}</td>#}
                                     <td>{{ product.datecreation|date("m - d - Y") }}</td>
                                     <td>{{ product.datemodification|date("m - d - Y") }}</td>
 
@@ -88,8 +90,8 @@
                                 {#<th>Description(s)</th>#}
                                 <th>Marque</th>
                                 <th>Categorie</th>
-                                <th>Prix</th>
-                                <th>Quantité</th>
+                               {# <th>Prix</th>
+                                <th>Quantité</th>#}
                                 <th>Date creat</th>
                                 <th>Date Modif</th>
                                 <th>Actions</th>

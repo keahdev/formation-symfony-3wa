@@ -9,7 +9,7 @@
     {{ parent() }}
 
     <li><a href="{{ path('produitspage') }}"> Produits</a></li>
-    <li class="active"> {{ product.title }}</li>
+    <li class="active"> {{ product.titleFR }}</li>
 {% endblock %}
 
 
@@ -39,8 +39,8 @@
                         <tbody>
                         <tr>
                             <td>{{ product.id }}</td>
-                            <td>{{ product.title }}</td>
-                            <td>{{ product.description }}</td>
+                            <td>{{ product.titleFR }}</td>
+                            <td>{{ product.descriptionFR }}</td>
                             <td>{{ product.price }}</td>
                             <td>{{ product.quantity }}</td>
                             <td><img src="{{ asset('images/'~product.image) }}" alt="{{ product.image }}" width="150" height="150"> </td>

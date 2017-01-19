@@ -10,10 +10,11 @@ imports:
 parameters:
     locale: en
     upload_dir: images/
+    locales: [fr, en]
 
 framework:
     #esi:             ~
-    #translator:      { fallbacks: ["%locale%"] }
+    translator:      { fallbacks: ["%locale%"] }
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -43,6 +44,8 @@ twig:
     strict_variables: "%kernel.debug%"
     form_themes:
       - "form/fields.html.twig"
+    globals:
+        locales: '%locales%' #est la variable defini juste plus haut
 
 # Doctrine Configuration
 doctrine:
