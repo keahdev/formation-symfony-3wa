@@ -41,10 +41,12 @@ class Categorie
      */
     private $title;
 
-    /**
+    /*
      * @Assert\NotBlank(message="Champ ne doit pas être vide")
      * @Assert\Length(max = 300, maxMessage="Déscription doit contenir au plus 300 caractères")
-     *
+     */
+
+     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text")

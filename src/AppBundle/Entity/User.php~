@@ -39,6 +39,19 @@ class User implements UserInterface, \Serializable
 
 
     /**
+     * @ORM\Column(type="date", length=64)
+     */
+    private $birthday;
+
+
+    /**
+     * @ORM\Column(type="string", length=64)
+     */
+    private $avatar;
+
+
+
+    /**
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Role")
      */
 
@@ -70,7 +83,12 @@ class User implements UserInterface, \Serializable
 
     public function getRoles()
     {
-        return array('ROLE_USER');
+        $list=[];
+        foreach ($this->roles as $key=>$value){
+            $list[]=$value->getname();
+        }
+        return $list;
+        //return array('ROLE_USER');
     }
 
     public function eraseCredentials()
@@ -223,5 +241,30 @@ class User implements UserInterface, \Serializable
     public function removeRole(\AppBundle\Entity\Role $role)
     {
         $this->roles->removeElement($role);
+    }
+
+    
+    /**
+     * Set avatar
+     *
+     * @param string $avatar
+     *
+     * @return User
+     */
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * Get avatar
+     *
+     * @return string
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
     }
 }

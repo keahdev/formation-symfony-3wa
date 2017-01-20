@@ -20,11 +20,14 @@
                 <li>
                     <a href="#">Services</a>
                 </li>
-                <li>
 
                     {#ici  le test qui teste si la personne est pleinement connecter#}
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    <a href="#" class="btn-xs btn-danger">Deconnecter</a>
+                     <li><a href="{{ path('security.logout') }}" class="btn-xs btn-danger">Deconnecter</a></li>
+                    {% else %}
+                        <li><a href="{{ path('security.login') }}" class="btn-xs btn-primary">Connecter</a></li>
+                        <li><a href="{{ path('security.signin') }}" class="btn-xs btn-default">Créer un compte</a></li>
+
                     {% endif %}
 
                     {#ici on test si le role de la personne est admin#}

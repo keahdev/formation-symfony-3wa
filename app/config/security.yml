@@ -9,6 +9,8 @@ security:
     access_control:
         # require ROLE_ADMIN for /admin*
         - { path: /admin, roles: ROLE_ADMIN } #l'utilisateur qui a le role ROLE_ADMIN peut se connecter a /admin
+        #- { path: /profile, roles: ROLE_ADMIN } #l'utilisateur qui a le role ROLE_ADMIN peut se connecter a /profile
+        - { path: /profile, roles: ROLE_USER} #l'utilisateur qui a le role ROLE_USER peut se connecter a /profile
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER # le ROLE_ADMIN et supperieur a ROLE_USER car ROLE_ADMIN est la clé et ROLE_USER est la valeur
@@ -38,10 +40,10 @@ security:
             form_login:
                 login_path: security.login
                 check_path: security.login
-                default_target_path: home
+                default_target_path: security.redirect.login #la route ou on veut redireger l'user apres sa connexion
                 csrf_token_generator: security.csrf.token_manager
 
             logout:
                 path:   security.logout
-                target: /
+                target: app.index
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html

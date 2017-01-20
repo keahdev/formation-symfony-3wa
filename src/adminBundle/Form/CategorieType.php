@@ -2,6 +2,8 @@
 
 namespace adminBundle\Form;
 
+use adminBundle\Form\Type\HTMLEditorType;
+use adminBundle\Subscriber\CategorieFormSubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,9 +15,11 @@ class CategorieType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('title')
-            ->add('description')
+        $builder->add('title',HTMLEditorType::class)
+           /* ->add('description')*/
             ->add('position');
+
+        $builder->addEventSubscriber(New CategorieFormSubscriber());
     }
 
     /**

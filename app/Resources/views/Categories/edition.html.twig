@@ -16,17 +16,17 @@
 
     <div class="row">
         <div class="col-md-12">
-            {{ form_start(formcategorie) }}
+            {{ form_start(formcategorie,{attr:{novalidate:'novalidate'}}) }}
             <div class="well box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Modifié la Catégorie : <strong>{{ categorie.title|capitalize}}</strong></h3>
+                    <h3 class="box-title">Modifié la Catégorie : <strong>{{ categorie.title|capitalize }}</strong></h3>
                 </div>
                 <!-- /.box-header -->
 
                 <div class="form-group">
                     {{ form_errors(formcategorie.title) }}
                     {{ form_label(formcategorie.title, "Titre") }}
-                    {{ form_widget(formcategorie.title, {attr: {placeholder: "Titre de la categorie", class: "form-control"} } ) }}
+                    {{ form_widget(formcategorie.title|raw, {attr: {placeholder: "Titre de la categorie", class: "form-control"} } ) }}
                 </div>
 
                 <div class="form-group">
@@ -35,11 +35,14 @@
                     {{ form_widget(formcategorie.description, {attr: {placeholder: "Déscription de la catégorie", class: "form-control"} } ) }}
                 </div>
 
-                <div class="form-group">
-                    {{ form_errors(formcategorie.position) }}
-                    {{ form_label(formcategorie.position, "Position") }}
-                    {{ form_widget(formcategorie.position, {attr: { class: "form-control"} } ) }}
-                </div>
+                {% if formcategorie.position is defined %}{#cette condition et ajouté car on supprimer ce champ dans le souscripteur dans le cas edit#}
+
+                    <div class="form-group">
+                        {{ form_errors(formcategorie.position) }}
+                        {{ form_label(formcategorie.position, "Position") }}
+                        {{ form_widget(formcategorie.position, {attr: { class: "form-control"} } ) }}
+                    </div>
+                {% endif %}
 
             </div><!-- well box box-primary" -->
             <button class="btn btn-primary">Editer</button>
@@ -48,4 +51,14 @@
         </div><!-- col-md-12 -->
     </div><!-- row -->
 
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+
+    <script src="{{ asset('plugins/ckeditor/ckeditor.js')}}"></script>
+    <script>
+        CKEDITOR.replace('adminbundle_categorie_title');
+
+    </script>
 {% endblock %}

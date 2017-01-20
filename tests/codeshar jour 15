@@ -1,0 +1,11 @@
+https://symfony.com/doc/current/form/events.html
+
+
+les tags des service a implementé
+http://symfony.com/doc/current/reference/dic_tags.html
+
+dans la doc il maque juste ce tag "doctrine.orm.entity_listener"
+
+les editeurs de text
+http://ckeditor.com/
+https://www.tinymce.com/

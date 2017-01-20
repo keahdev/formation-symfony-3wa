@@ -1,4 +1,15 @@
-{% extends 'public.layout.html.twig' %}
+{% extends 'layaut.html.twig' %}
+
+{% block titleContent %}
+    Profile
+    <small>Control panel</small>
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ parent() }}
+
+    <li class="active"> Profile</li>
+{% endblock %}
 
 {% block content %}
 
@@ -7,7 +18,7 @@
             {{ form_start(form,{attr:{novalidate:"novalidate"}}) }}
             <div class="well box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Creation d'un compte</h3>
+                    <h3 class="box-title">Ajouter un nouveau produit</h3>
                 </div>
                 <!-- /.box-header -->
 
@@ -49,5 +60,7 @@
             {{ form_end(form) }}
         </div><!-- col-md-12 -->
     </div><!-- row -->
+
+
 
 {% endblock %}
