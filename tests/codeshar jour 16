@@ -1,0 +1,14 @@
+
+//////Symfony2, Gestion utilisateur sans FOSUserBundle///////
+https://www.wanadev.fr/11-kit-de-survie-symfony2-gestion-utilisateur-sans-fosuserbundle/
+
+http://symfony.com/doc/current/components/http_kernel.html
+
+
+
+****** Pour le traitement de Ip
+http://www.webservicex.net/New/Home/ServiceDetail/64
+
+HTTP GET
+
+GET /geoipservice.asmx/GetGeoIP?IPAddress=string

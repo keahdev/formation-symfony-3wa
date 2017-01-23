@@ -24,6 +24,7 @@
                     {#ici  le test qui teste si la personne est pleinement connecter#}
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                      <li><a href="{{ path('security.logout') }}" class="btn-xs btn-danger">Deconnecter</a></li>
+                     <li ><a href="#" class="btn-xs btn-info">Mon Profile</a></li>
                     {% else %}
                         <li><a href="{{ path('security.login') }}" class="btn-xs btn-primary">Connecter</a></li>
                         <li><a href="{{ path('security.signin') }}" class="btn-xs btn-default">Créer un compte</a></li>

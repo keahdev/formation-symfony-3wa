@@ -130,9 +130,9 @@ class SecurityController extends Controller
     {
         //$role= $this->getUser();
         if ($this->isGranted('ROLE_ADMIN')) {
-            return $this->redirectToRoute('home'); // si le ROLE est ADMIN alors il a le doit de se connecter a la partie admin
+            return $this->redirectToRoute('home'); // si le ROLE est ADMIN alors il a le droit de se connecter a la partie admin
         } else {
-            if ($this->isGranted('ROLE_USER')) {// sinon , il est a le ROLE USER alors il sera redireger vers page d'accueil du site
+            if ($this->isGranted('ROLE_USER')) {// sinon , il est a le ROLE USER alors il sera redireger vers page d'accueil
                 return $this->redirectToRoute('app.index');
             }
         }
