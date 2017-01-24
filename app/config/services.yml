@@ -10,7 +10,7 @@ services:
 
     admin.subscriber.karnel.events:
         class: adminBundle\Subscriber\KarnelEventSubscriber
-        arguments: [ '@twig']
+        arguments: [ '@twig','@session']
         tags:
             - { name: kernel.event_subscriber }
 

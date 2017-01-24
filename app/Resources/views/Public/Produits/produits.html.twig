@@ -1,6 +1,10 @@
 {% extends 'public.layout.html.twig' %}
 
 {% block content %}
+
+
+
+
     {{ render( controller('AppBundle:Categories:renderCategories')) }}
 
     <div class="col-md-9">
@@ -33,9 +37,7 @@
                     </a>
                 </div>
             </div>
-
         </div>
-
         <div class="row">
             {% for produit in produits %}
                 <div class="col-sm-4 col-lg-4 col-md-4">
@@ -45,9 +47,13 @@
                             <h4 class="pull-right">{{ produit.price }} €</h4>
                             <h4><a href="#">{{ produit.titleFR }}</a>
                             </h4>
-                            <p>{{ produit.descriptionFR }} <a class="btn btn-primary"
-                                                            href="{{ path('app.produit',{"id":produit.id}) }}">Voir le
-                                    produit</a>.</p>
+                            <p>{{ produit.descriptionFR }}
+                                <a class="btn btn-primary" href="{{ path('app.produit',{"id":produit.id}) }}">Voir
+                                    leproduit</a>
+                                <a class="btn btn-success" href="{{ path('app.produit.panier',{"id":produit.id}) }}">
+                                    Acheter
+                                    </a>
+                            </p>
                         </div>
                         <div class="ratings">
                             <p class="pull-right">15 reviews</p>

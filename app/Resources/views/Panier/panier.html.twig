@@ -1,0 +1,42 @@
+{% extends 'public.layout.html.twig' %}
+
+{% block content %}
+
+    {#{{ dump(app.session.get('panier')) }}#}
+
+<h2>Votre panier</h2>
+
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Titre</th>
+            <th>Déscription</th>
+            <th>Prix</th>
+            <th>Total</th>
+            <th>Prix total</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for produit in produits %}
+            <tr>
+                <td>{{ produit.id }}</td>
+                <td>{{ produit.titleFR }}</td>
+                <td>{{ produit.descriptionFR }}</td>
+                <td>{{ produit.price }}</td>
+                {% for id, qty in app.session.get('panier') %}
+                  {% if id == produit.id %}
+                      <td>{{ qty }}</td>
+                      <th>{{ produit.price * qty }} €</th>
+                  {% endif %}
+                {% endfor %}
+        {% endfor %}
+
+        </tr>
+        </tbody>
+    </table>
+
+{% endblock %}
+

@@ -26,6 +26,7 @@
     {% endif %}
 
 
+
     {% include ':Public/Partials:main-navigation.html.twig' %}
     <div class="container">
         <div class="row">
@@ -52,18 +53,19 @@
 
     function clicBtnCookie($e) {
         $e.preventDefault();
-        //alert ('oki')
+        $btncookies.fadeOut();
         $.ajax({
             methd:'POST',
             url:'http://localhost/FormationW3aSymfony/web/app_dev.php/en/disclaimer-cookies',// url vers la route
             data: 'disclaimer=1',//veut dire disclaimer =true cette information sera récuprer par la route avec $request->get('disclaimer')
+            dataType: 'json',
             success: onSuccess// la methode appeler
         })
     }
 
     function onSuccess(data) {
 
-        console.log(data);
+        //console.log(data);
 
     }
 

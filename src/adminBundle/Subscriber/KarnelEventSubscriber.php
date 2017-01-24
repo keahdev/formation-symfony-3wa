@@ -11,6 +11,7 @@ namespace adminBundle\Subscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -24,10 +25,13 @@ class KarnelEventSubscriber implements EventSubscriberInterface
      */
 
     private $twig;
+    private $session;
 
-    public function __construct(\Twig_Environment $twig)
+
+    public function __construct(\Twig_Environment $twig, Session $session)
     {
         $this->twig = $twig;
+        $this->session=$session;
 
     }
 
@@ -48,7 +52,8 @@ class KarnelEventSubscriber implements EventSubscriberInterface
       public function addCookiBlock(FilterResponseEvent $event){
 
           $content= $event->getResponse()->getContent(); // on recupere que le HTML de la page
-          $content=str_replace('<body class="hold-transition skin-blue sidebar-mini">','<body class="hold-transition skin-blue sidebar-mini"><div class=" cookies alert alert-info text-center">Ce site utilise les cookies <a href="" class="btn btn-warning"> Ok</a></div>', $content);
+          if (!$this->session->has('disclaimer')){
+          $content=str_replace('<body class="hold-transition skin-blue sidebar-mini">','<body class="hold-transition skin-blue sidebar-mini"><div class=" cookies alert alert-info text-center">Ce site utilise les cookies <a href="" class="btn btn-warning"> Ok</a></div>', $content);}
 
           //dump($content); exit;
 

@@ -38,12 +38,13 @@ security:
             # http://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
 
             form_login:
-                login_path: security.login
-                check_path: security.login
+                login_path: security.login #la route vers la page de connexion
+                check_path: security.login #la route vers la page de connexion
                 default_target_path: security.redirect.login #la route ou on veut redireger l'user apres sa connexion
-                csrf_token_generator: security.csrf.token_manager
+                csrf_token_generator: security.csrf.token_manager #génerer la un tocken csrf
 
             logout:
-                path:   security.logout
-                target: app.index
+                path:   security.logout #la route vers la page de déconnexion
+                target: app.index #la page de redirection apres la déconnexion
+                invalidate_session: false #cette ligne empeche de supprimer toute les sessions lorsque on se déconnecte
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
