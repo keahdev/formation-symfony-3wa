@@ -14,6 +14,16 @@ class produitRepository extends \Doctrine\ORM\EntityRepository
 {
 
 
+    public function findarray($array){
+        $qb=$this->createQueryBuilder('p');
+        $qb->select('p')
+            ->where('p.id IN (:array)')
+            ->setParameter('array',$array);
+        return $qb->getQuery()->getResult();
+
+    }
+
+
     /**
      * Partie page produits dans le Public
      * Afficher les 6 derniers produits les plus chers par ordre décroissant de prix

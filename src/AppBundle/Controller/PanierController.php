@@ -17,18 +17,11 @@ use Symfony\Component\HttpFoundation\Request;
 class PanierController extends Controller
 {
 
-    /*public function createCart(Request $request){
-        $session = $request->getSession();
-        if(!$session->has('panier')){
-            $session->set('panier', [
-                'id' => [],
-                'qty' => [],
-            ]);
-        }
-        //dump($request->getSession()); die;
-    }*/
 
-
+    /**
+     * Initialisation du panier ' a mettre comme service'
+     * @param Request $request
+     */
     public function createCart(Request $request)
     {
         $session = $request->getSession();
@@ -40,7 +33,8 @@ class PanierController extends Controller
 
 
     /**
-     * @Route("/produit/panier/{id}", name="app.produit.panier")
+     * Ajoute de produits dans la session panier
+     * @Route("/produit/panier/{id}", name="app.produit.panier", requirements={"id":"\d+"})
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
@@ -52,41 +46,95 @@ class PanierController extends Controller
         $session = $request->getSession();
         $panier = $session->get('panier');
 
-         // $id=> $quantité
+
+
+
+        // $id=> $quantité
         if (array_key_exists($id, $panier)) {
             $panier[$id] += 1;
-       } else {
-           $panier[$id] = 1;
-       }
+        } else {
+            $panier[$id] = 1;
+        }
 
         $session->set('panier', $panier);
 
-        $prevURL = preg_split('/app_dev.php/', $request->server->get('HTTP_REFERER'));
+
+        // ici on retourne a la page précédent mais ne fonctionne pas lors de la pagination
+        /*$prevURL = preg_split('/app_dev.php/', $request->server->get('HTTP_REFERER'));
         $router = $this->get('router');
 
         $prevURL = $router->match($prevURL[1])['_route'];
-        return $this->redirectToRoute($prevURL);
+        return $this->redirectToRoute($prevURL);*/
 
+        return $this->redirectToRoute('app.produits');
     }
 
+
     /**
+     * Affiche  les produits dans le panier
      * @Route("panier/show", name="app.panier.show")
      */
-    public function showpanierAction(Request $request){
+    public function showpanierAction(Request $request)
+    {
 
-         $doctrine= $this->getDoctrine();
+        $doctrine = $this->getDoctrine();
 
-        $panierid= $request->getSession()->get('panier');
+        $panier = $request->getSession()->get('panier');
 
-        // le mieux est de créer  une requete personnalisée avec in qui tape dans le tableua des id
+        $produits = $doctrine->getRepository('adminBundle:produit')->findarray(array_keys($panier));
 
-        foreach ($panierid as $id=> $qty){
-            $produit= $doctrine->getRepository('adminBundle:produit')->find($id);
-            $produits[]=$produit;
+        //dump($produits); die();
+
+        return $this->render('Panier/panier.html.twig', ['produits' => $produits]);
+    }
+
+
+
+
+    /**
+     * @Route("/panier/update", name="app.panier.update")
+     */
+    public function updatepanierAction(Request $request){
+
+        $session = $request->getSession();
+        $panier = [];
+
+        for($i = 0; $i < count($request->get('id')); $i++){
+            $panier[$request->get('id')[$i]] = $request->get('qty')[$i];
         }
 
+        $session->set('panier', $panier);
 
-        return $this->render('Panier/panier.html.twig', ['produits'=>$produits]);
+        return $this->redirectToRoute('app.panier.show');
+    }
+
+
+
+
+
+
+    /**
+     * Supprimer un produit du panier
+     * @Route("panier/delete/{id}", name="app.panier.delete", requirements={"id":"\d+"})
+     */
+    public function deletepanierAction(Request $request, $id)
+    {
+
+
+        $this->createCart($request);
+        $session = $request->getSession();
+        $panier = $session->get('panier');
+
+
+
+        if (array_key_exists($id, $panier)) {
+           unset($panier[$id]);
+
+            $this->addFlash('success','Produit supprimé de votre panier !');
+            $session->set('panier', $panier);
+        }
+        return $this->redirectToRoute("app.panier.show");
+
     }
 
 

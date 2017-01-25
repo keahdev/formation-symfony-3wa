@@ -1,3 +1,13 @@
+{% set panier=app.session.get('panier') %}
+{% set count=0 %}
+
+{# Calcule le nombre de produit dans le panier avec prise en compte de la quantité#}
+{% for k, v in panier %}
+    {% set count=count+v %}
+{% endfor %}
+
+
+
 <!-- Navigation -->
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -28,7 +38,7 @@
                     {% else %}
                         <li><a href="{{ path('security.login') }}" class="btn-xs btn-primary">Connecter</a></li>
                         <li><a href="{{ path('security.signin') }}" class="btn-xs btn-default">Créer un compte</a></li>
-                        <li class="col-md-push-12"><a href="{{ path('app.panier.show') }}" class="glyphicon glyphicon-shopping-cart"> Panier</a></li>
+                        <li class="col-md-push-12"><a href="{{ path('app.panier.show') }}" class="glyphicon glyphicon-shopping-cart"> Panier {{ count }} Article(s) </a></li>
 
                     {% endif %}
 
