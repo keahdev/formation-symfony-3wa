@@ -51,6 +51,12 @@ class KarnelEventSubscriber implements EventSubscriberInterface
     /** evenement de la reponse ***/
       public function addCookiBlock(FilterResponseEvent $event){
 
+         /*$route = $event->getRequest()->get('_route');//  ici si on veut un evenement uniquement sur une route
+          if ($route=='ma_route '){
+             //.. executer les instructions ......
+          }*/
+
+
           $content= $event->getResponse()->getContent(); // on recupere que le HTML de la page
           if (!$this->session->has('disclaimer')){
           $content=str_replace('<body class="hold-transition skin-blue sidebar-mini">','<body class="hold-transition skin-blue sidebar-mini"><div class=" cookies alert alert-info text-center">Ce site utilise les cookies <a href="" class="btn btn-warning"> Ok</a></div>', $content);}

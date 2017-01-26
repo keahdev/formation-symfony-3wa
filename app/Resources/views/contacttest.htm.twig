@@ -1,0 +1,21 @@
+{% extends 'public.layout.html.twig' %}
+
+{% block content %}
+    <table class="table ">
+
+
+
+
+        {% for data in fileCSV %}
+
+            {% set line= data|split(';') %}
+
+            <tr>
+                <td>{{ line[0] }}</td>
+                <td>{{ line[1] }}</td>
+            </tr>
+        {% endfor %}
+
+    </table>
+
+{% endblock %}

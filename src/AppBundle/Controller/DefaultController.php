@@ -23,9 +23,9 @@ class DefaultController extends Controller
     }
 
 
-
+/*
     /**
-     * @Route("/contact", name="contact")
+     * @Route("/contact22", name="contact22")
      */
     public function contactAction(Request $request)
     {
