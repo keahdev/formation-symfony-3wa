@@ -85,8 +85,6 @@ class ProductsController extends Controller
         $formproduit = $this->createForm(produitType::class, $produit);
         $formproduit->handleRequest($request);
 
-
-
         if ($formproduit->isSubmitted() && $formproduit->isValid()) {
 
             $em = $this->getDoctrine()->getManager();

@@ -1,0 +1,81 @@
+***** A mettre dans le fichier de la commande crée : *****************
+
+
+        // Désactivation de l'écouteur de "preUpdate" pour pouvoir utiliser la commande
+        $em->getClassMetaData('AppBundle:User')->entityListeners; // récupération des écouteurs (pour les visualiser grâce au dump)
+        unset($em->getClassMetaData('AppBundle:User')->entityListeners['preUpdate']); // suppression de l'écouteur qui pose pb
+        //dump($em->getClassMetaData('AppBundle:User')->entityListeners); exit;
+
+
+
+
+
+*********** Ecran dans la console ***************
+
+
+  [Symfony\Component\Debug\Exception\FatalErrorException]
+  Error: Call to a member function guessExtension() on a non-object
+
+
+
+
+wamobi11@wamobi11 ~/sites/symfo3wa [master] $ php bin/console app:user:role:add user2 admin
+array:5 [
+  "prePersist" => array:1 [
+    0 => array:2 [
+      "class" => "AppBundle\Listener\UserListener"
+      "method" => "prePersist"
+    ]
+  ]
+  "postPersist" => array:1 [
+    0 => array:2 [
+      "class" => "AppBundle\Listener\UserListener"
+      "method" => "postPersist"
+    ]
+  ]
+  "preUpdate" => array:1 [
+    0 => array:2 [
+      "class" => "AppBundle\Listener\UserListener"
+      "method" => "preUpdate"
+    ]
+  ]
+  "postLoad" => array:1 [
+    0 => array:2 [
+      "class" => "AppBundle\Listener\UserListener"
+      "method" => "postLoad"
+    ]
+  ]
+  "postRemove" => array:1 [
+    0 => array:2 [
+      "class" => "AppBundle\Listener\UserListener"
+      "method" => "postRemove"
+    ]
+  ]
+]
+wamobi11@wamobi11 ~/sites/symfo3wa [master] $ php bin/console app:user:role:add user2 admin
+array:4 [
+  "prePersist" => array:1 [
+    0 => array:2 [
+      "class" => "AppBundle\Listener\UserListener"
+      "method" => "prePersist"
+    ]
+  ]
+  "postPersist" => array:1 [
+    0 => array:2 [
+      "class" => "AppBundle\Listener\UserListener"
+      "method" => "postPersist"
+    ]
+  ]
+  "postLoad" => array:1 [
+    0 => array:2 [
+      "class" => "AppBundle\Listener\UserListener"
+      "method" => "postLoad"
+    ]
+  ]
+  "postRemove" => array:1 [
+    0 => array:2 [
+      "class" => "AppBundle\Listener\UserListener"
+      "method" => "postRemove"
+    ]
+  ]
+]

@@ -1,0 +1,626 @@
+mon panier en AJAX !
+
+****************************
+style.css
+****************************
+
+.champ_modifie{
+    background-color: yellow;
+}
+
+.champ_modifiable{
+    background-color: lightblue;
+}
+
+.champ_focus{
+    background-color: lightsalmon;
+}
+
+.champ_enregistre{
+    background-color: lightgreen;
+}
+
+
+
+********************************
+main.js
+*******************************
+
+$(document).ready(function() {
+
+
+    $(".table").on("click",".btn-supprimer",function(event) {
+
+        //affiche le message demandant la confirmation
+        event.preventDefault();
+        if (confirm("Êtes-vous sûr ?")) {
+            var elementA = $(this);
+            var elementParentTable = elementA.closest('.table');
+            var linkUrl = elementA.attr('href');
+
+            //les élément récupéré sur le clic :
+            $.ajax({
+                url : linkUrl,
+                method: "GET",
+                dataType: 'json',
+            }).done(function(data){
+                //700 est la délai de visualisation de la suppression
+                elementA.closest('tr').fadeOut(700, function(){
+                    $(this).remove();
+
+                    // Suppression des éventuels messages existants
+                    $('.alert-success').remove();
+
+                    //RECUPÉRATION DES DONNÉES
+                    //console.log(data);
+                    //alert(data.message.id);
+                    //console.log(data.message.price[0]);
+                    //liste contenue dans data.message.id
+                    $liste_element=data.message.id;
+                    //nb d'élément contenue dans data.message.id
+                    $nb_element=$liste_element.length;
+                    //initialisation de notre total
+                    $total=0;
+                    //console.log(message.price);
+                    //boucle pour faire le total du contenus du panier
+                    for (var i = 0; i < $nb_element; i++) {
+                        $total = $total + ((data.message.price[i])*(data.message.qte[i]));
+                    }
+
+                    //console.log($total);
+
+                    //modification du contenus de panier_total
+                    $('.panier_total').html($total);
+
+                    //$i=size(data.message);
+
+                    // Suppression des éventuels messages existants
+                    $('.alert-success').remove();
+
+                    // Ajout du message
+                    var message = $('<p class="alert alert-danger">Article supprimé</p>');
+                    elementParentTable.before(message);
+                    message.delay(3000).fadeOut()
+                })
+
+
+            });
+        }
+    });
+
+
+    $(".table").on("change",".qte_modif",function(event) {
+
+        var tempoid = $(this).data('id');
+        //console.log(tempoid);
+        var tempoprice = $(this).data('price');
+        //console.log(tempoprice);
+        var tempoqte = $(this).val();
+        //console.log(tempoqte);
+        //var elementA = $(this);
+
+
+        $.ajax({
+            //{{ path("cart_edit_qte",{ 'id' : app.session.get('cart')['id'][key] } ) }}
+            url : "/symfony/web/app_dev.php/fr/cart_edit_qte/"+tempoid,
+            method: "GET",
+            dataType: 'json',
+            data:'qte='+tempoqte,
+
+        }).done(function(data){
+
+            //RECUPÉRATION DES DONNÉES
+            //console.log(data.cart);
+            //alert(data.message.id);
+            //console.log(data.message.price[0]);
+            //liste contenue dans data.message.id
+            $liste_element=data.cart.id;
+            //nb d'élément contenue dans data.message.id
+            $nb_element=$liste_element.length;
+            //initialisation de notre total
+            $total=0;
+            //console.log(message.price);
+            //boucle pour faire le total du contenus du panier
+            for (var i = 0; i < $nb_element; i++) {
+                $total = $total + ((data.cart.price[i])*(data.cart.qte[i]));
+            }
+
+            //modification du contenus de panier_total
+            $('.panier_total').html($total);
+
+            //console.log(data.cart.id);
+
+            var a = data.cart.id;
+            var b = tempoid;
+            var b = b.toString();
+            $idValue = a.indexOf(b);
+
+
+            //calcul du total de l'article ayant eu la qte modifiée
+            $total_article = ((data.cart.price[$idValue])*(data.cart.qte[$idValue]));
+
+            //modification du total pour l'article
+            $('.total_article_'+ tempoid).html($total_article+"€");
+
+            // Suppression des éventuels messages existants pour éviter qu'ils se supperposent !
+            $('.alert-success').remove();
+
+            //gestion de la couleur du champ modifié
+            document.getElementById('id_article_'+ tempoid).classList.add("champ_enregistre");
+            var champ_modifiable = function(){
+                //attention à l'ordre des couleurs de champs dans le css
+                document.getElementById('id_article_'+ tempoid).classList.remove("champ_modifiable");
+                document.getElementById('id_article_'+ tempoid).classList.remove("champ_enregistre");
+            }
+            setTimeout(champ_modifiable, 2000);
+
+
+            //mettre un message ok après la modification d'une quantitée
+            // on place la modification en variable pour lui donner une durée
+            // on trouve la balise ici : .total_article_'+ tempoid
+            // on y ajoute le span en fin de balise grace à .append
+
+            //var chekQteModif = $('.total_article_'+ tempoid).append("<span class='btn btn-success'>ok</spanclass>");
+            //chekQteModif.find('span').delay(600).fadeOut()
+            // Ajout du message
+            /*var message = $('<p class="alert alert-success">').append("ok");
+            elementParentTable.before(message);
+            message.delay(3000).fadeOut()*/
+
+        })
+        });
+
+
+
+    $(".table").on("focus",".qte_modif",function(event) {
+
+        var tempoid = $(this).data('id');
+        //attention à l'ordre des couleurs de champs dans le css
+        document.getElementById('id_article_'+ tempoid).classList.add("champ_focus");
+        document.getElementById('id_article_'+ tempoid).classList.add("champ_modifie");
+        //tuto sur la modification des classes d'un champ : http://www.trucsweb.com/tutoriels/javascript/css-classname/
+
+    });
+
+    $(".table").on("focusout",".qte_modif",function(event) {
+
+        var tempoid = $(this).data('id');
+        var champ_modifiable = function(){
+            document.getElementById('id_article_'+ tempoid).classList.remove("champ_focus");
+        }
+        setTimeout(champ_modifiable, 250);
+
+        //tuto sur la modification des classes d'un champ : http://www.trucsweb.com/tutoriels/javascript/css-classname/
+
+    });
+
+});
+
+******************************************
+CartController.php
+****************************************
+
+<?php
+
+namespace AppBundle\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+
+
+class CartController extends Controller
+
+{
+    public function createCart(Request $request){
+        //dump('coucou2');die;
+        if(!$request->getSession()->has('cart')){
+            $request->getSession()->set('cart', [
+                'id' => [],
+                'qte' => [],
+                'title' => [],
+                'price' => [],
+                'image' => [],
+            ]);
+            $request->getSession()->set('total_panier', null);
+            //dump('tempo5');die;
+        }else{
+            //dump('tempo6');die;
+        }
+    }
+
+    /**
+     * @Route("/cart_add/{id}", name="cart_add", requirements={"id" = "\d+"})
+     */
+    public function addAction($id, Request $request)
+    {
+        //initialisation de cart (pendant les tests)
+        /*$request->getSession()->set('cart', [
+            'id' => [],
+            'qte' => [],
+            'title' => [],
+            'price' => [],
+            'img' => [],
+        ]);
+        $request->getSession()->set('total_panier', null);/*
+        //dump('coucou');die;
+        //$cart = $this->get('cart');
+
+        //***********************************/
+
+        if (count( $request->getSession()->get('cart')) < 1){
+            $request->getSession()->set('cart', [
+                'id' => [],
+                'qte' => [],
+                'title' => [],
+                'price' => [],
+                'image' => [],
+            ]);
+            $cart=$request->getSession()->get('cart');
+            $total=0;
+        }else{
+            $cart =  $request->getSession()->get('cart');
+            $total =  $request->getSession()->get('total_panier');
+            //dump($cart, $total);die;
+        }
+
+
+
+        //on donne à la variable cart la valeur du tableau de session cart
+
+        //dump($cart);die;
+        if ($total >0 ){}
+        else{$total = 0;}
+        //dump($id);die;
+        //dump($cart);die;
+        //dump(count($cart[0]));die;
+        //$cart = json_decode($cart,true);
+        //on vérifie si l'id de l'élément à rajouter dans la panier existe déja
+        /*if (count($cart['id']) > 0) {*/
+
+        if (in_array($id, $cart['id'])) {
+            //dump("id existe");die;
+            //dump($cart);die;
+            //on veux la position du produit dans le tableau $cart
+            $idValue = array_search($id,$cart['id']);
+            //on modifie la qte du produit (en position +1 par rapport au produit) en lui rajoutant la qte voulue
+            $cart['qte'][$idValue] += $request->get('qte');
+            //dump($idValue);die;
+            $em = $this->getDoctrine()->getManager();
+            //$total = 0;
+            $product_infos = [];
+            $product_infos = $em->getRepository('AdminBundle:Product')->findProductById($id);
+            //dump($total);
+            //dump($product_infos['price']);
+            //dump($request->get('qte'));
+            $total = $total + ($product_infos['price']*$request->get('qte'));
+            //dump($total);die;
+
+
+        }else{
+            // si l'id n'éxiste pas on rajoute l'élément et sa qte
+            //dump("id non existe");
+            //dump($cart);
+            //$cart=[['id'],['qte'],['title']];
+            //dump($id);die;
+            array_push($cart['id'], $id);
+            array_push($cart['qte'], $request->get('qte'));
+
+            $em = $this->getDoctrine()->getManager();
+            //$total = 0;
+            $product_infos = [];
+            $product_infos = $em->getRepository('AdminBundle:Product')->findProductById($id);
+
+            //dump($product_infos['titleFR'],$product_infos['price'] );die;
+
+            array_push($cart['title'], $product_infos['titleFR']);
+            array_push($cart['price'], $product_infos['price']);
+            array_push($cart['image'], $product_infos['image']);
+            $total = $total + ($product_infos['price']*$request->get('qte'));
+
+            //dump($cart);die;
+        }
+
+        // pour ajouter le produit dans le panier
+        //dump($cart);die;
+        $request->getSession()->set('cart', $cart);
+        $request->getSession()->set('total_panier', $total);
+
+        /**************************************/
+
+        // pour ajouter le produit dans le panier (mais réinitilisation , donc utilisation du push ci-dessus
+        /*$request->getSession()->set('cart', [
+            'id' => [$id],
+            'qte' => [$request->get('qte')],
+        ]);*/
+
+        //contenus du panier
+        //dump($request->getSession()->get('cart'));
+        //dump($request->getSession()->get('cart'));die;
+        //die($request->get("qte"));
+
+        //*****redirection vers la page précédente*****
+        //source : https://openclassrooms.com/forum/sujet/symfony3-retour-vers-a-page-precedente-apres-updat
+        // version sur serveur : dump($request->getSession()->set('referer', $request->headers->get('referer'))); die;
+        //version en local :
+        //dump($request->headers->get('referer')); die;
+
+
+//************ code de Nicolas ********
+
+        //$session = $request->getSession();
+        //$cart = $session->get('cart');
+
+
+//********************
+
+        return $this->redirect($request->headers->get('referer'));
+    }
+
+    /**
+     * @Route("/cart_supp/{id}", name="cart_supp", requirements={"id" = "\d+"})
+     */
+    public function suppAction($id, Request $request)
+    {
+       //on donne à la variable cart la valeur du tableau de session cart
+        //dump('coucou');die;
+        $cart =  $request->getSession()->get('cart');
+        $total =  $request->getSession()->get('total_panier');
+
+        $idValue = array_search($id,$cart['id']);
+
+        $em = $this->getDoctrine()->getManager();
+        $product_infos = $em->getRepository('AdminBundle:Product')->findProductById($id);
+        $total = $total - ($product_infos['price']*$cart['qte'][$idValue]);
+
+        array_splice($cart['qte'], $idValue, 1); //supprimer la ligne
+        array_splice($cart['id'], $idValue, 1); //supprimer la ligne
+        array_splice($cart['title'], $idValue, 1); //supprimer la ligne
+        array_splice($cart['price'], $idValue, 1); //supprimer la ligne
+        array_splice($cart['image'], $idValue, 1); //supprimer la ligne
+
+        $request->getSession()->set('cart', $cart);
+        $request->getSession()->set('total_panier', $total);
+
+            //dump($cart); exit;
+
+        //$this->addFlash('success', 'votre produit à bien été supprimé');
+
+
+        return new JsonResponse(['message' => $cart]);
+
+
+
+        //$this->addFlash('success', 'votre produit à été supprimé');
+
+        //return $this->redirectToRoute('product');
+
+        //return $this->redirect($request->headers->get('referer'));
+    }
+
+    /**
+     * @Route("/cart_valid", name="cart_valid")
+     */
+    public function validAction(Request $request)
+    {
+        //on donne à la variable cart la valeur du tableau de session cart
+        //dump('coucou');die;
+
+        return $this->render('Public/cart/valid.html.twig');
+    }
+
+    /**
+     * @Route("/cart_remove", name="cart_remove")
+     */
+    public function removeAction(Request $request)
+    {
+        //on donne à la variable cart la valeur du tableau de session cart
+        //dump('coucou');die;
+        $request->getSession()->set('cart', []);
+        $request->getSession()->set('total_panier', null);
+
+        return $this->redirect($request->headers->get('referer'));
+    }
+
+
+
+    /**
+     * @Route("/cart_edit_qte/{id}", name="cart_edit_qte", requirements={"id" = "\d+"})
+     */
+    public function editQteAction($id, Request $request)
+    {
+        //récupération des valeurs en sessions
+        $cart =  $request->getSession()->get('cart');
+        $total =  $request->getSession()->get('total_panier');
+        //recupération de la qte du submit
+        $qte = $request->get('qte');
+        //dump($cart, $total);
+
+        //recherche de la position du produit modifié
+        $idValue = array_search($id,$cart['id']);
+
+        //supression du produit modifié dans le calcul total :
+        $em = $this->getDoctrine()->getManager();
+        $product_infos = $em->getRepository('AdminBundle:Product')->findProductById($id);
+        $total = $total - ($product_infos['price']*$cart['qte'][$idValue]);
+        //dump($total);
+        //rajout du prix total pour le produit modifié
+        $total = $total + ($product_infos['price']*$request->get('qte'));
+
+        //dump($cart, $total);die;
+
+        //modification de la quantité du produit modifié
+        $cart['qte'][$idValue] = $qte;
+
+        $request->getSession()->set('cart', $cart);
+        $request->getSession()->set('total_panier', $total);
+
+        //////////////////////////////////////////
+        //code charlie ajax
+        /*
+        $( ".target" ).change(function(e) {
+            if($('.target').val<0){
+                $('.target').val(0);
+            }
+            e.preventDefault();
+            $.ajax({
+                    method: 'POST',
+                    url: 'http://localhost/symfony/web/app_dev.php/public/cart_valid',
+                    data: 'id=' + $(this).data('id') + '&qte='+$('[data-id="' + $(this).data('id') + '"]').val(),
+                    dataType: 'json',
+                    success: panierUpdate
+                });
+            });
+        */
+        //////////////////////////////////////////
+        //$messageSuccess = 'ok';
+
+        //if ($request->isXmlHttpRequest()) {
+        //    return new JsonResponse(['message' => $messageSuccess]);
+        //}
+
+        //$this->addFlash('success', 'ok');
+
+        //pour ajax, le nouveau return :
+        return new JsonResponse(['cart' => $cart]);
+
+        //return $this->redirect($request->headers->get('referer'));
+    }
+}
+
+*************************************************
+mini panier à include ou vous voulez
+*************************************************
+{% if app.session.get('cart') | length > 0 %}
+
+    <div class="btn btn-danger">
+
+       {# dans mon panier :
+        <ul>
+
+            {% for key,value in  app.session.get('cart')['id']  %}
+             <li><img src="{{ asset('upload/' ~ app.session.get('cart')['image'][key] )}}" width="15px">
+                 {{ app.session.get('cart')['title'][key] }} -
+                 nb : {{ app.session.get('cart')['qte'][key] }} ;
+
+             <a href="{{ path("cart_supp", {'id' : app.session.get('cart')['id'][key]} ) }}">supp</a></li>
+            {% endfor %}
+        </ul>#}
+    total panier : <span class="panier_total">{{ app.session.get('total_panier') }}</span>€<br>
+    <a href="{{ path("cart_valid") }}">voir</a>/<a href="{{ path("cart_remove") }}">vider</a> mon panier
+
+
+    </div>
+
+{% endif %}
+
+************************************************
+public/cart/valid.html.twig   pour afficher/modifier le panier
+***********************************************
+
+{% extends "public.layout.html.twig" %}
+
+{% block head %}
+    {{ parent() }}
+
+{% endblock %}
+
+{% block body %}
+
+    <br><br><br><br><br><br>
+   <h1>Contenue de mon panier</h1>
+
+    {% for flash_message in app.session.flashBag.get('success') %}
+        <div class="alert alert-success flash-notice">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+    {% for flash_message in app.session.flashBag.get('success') %}
+        <div class="alert alert-success flash-notice">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+
+
+<div class="box">
+<div class="box-body">
+    <table id="example1" class="table table-bordered table-striped">
+        <tr>
+            <th>image</th>
+            <th>Libelle</th>
+            <th>tarif</th>
+            <th>quantité</th>
+            <th>total</th>
+            <th>Action</th>
+
+            {#{{ dump(app.session.get('cart')) }}#}
+        </tr>
+
+        {% if app.session.get('cart') | length > 0 %}
+            {% for key,value in  app.session.get('cart')['id']  %}
+                <tr>
+                    <td> <img src="{{ asset('upload/' ~ app.session.get('cart')['image'][key] )}}" width="50px"></td>
+                    <td>{{ app.session.get('cart')['title'][key] }}</td>
+                    <td>{{ app.session.get('cart')['price'][key] }}€</td>
+                    <td>
+
+                        <form action=
+                              "{{ path("cart_edit_qte",{ 'id' : app.session.get('cart')['id'][key] }
+                              ) }}">
+                            <input id="id_article_{{ app.session.get('cart')['id'][key] }}" class="qte_modif champ_modifiable" type="number" data-id="{{ app.session.get('cart')['id'][key] }}" name="qte" value="{{ app.session.get('cart')['qte'][key] }}" data-price="{{ app.session.get('cart')['price'][key] }}" min="1" max="10">
+
+                        </form>
+
+                    </td>
+                    <td class="total_article_{{ app.session.get('cart')['id'][key] }}"> {{ (app.session.get('cart')['price'][key])*app.session.get('cart')['qte'][key] }}€</td>
+                    <td><a href="{{ path("cart_supp", {'id' : app.session.get('cart')['id'][key]} ) }}" class="btn btn-supprimer">supprimer</a></td>
+                </tr>
+            {% endfor %}
+            <tr  class="info ">
+                <td colspan="6" > total de votre panier : <span class="panier_total">{{ app.session.get('total_panier') }}</span>€
+                    <a href="#" class="btn btn-warning">racker !</a>
+                </td>
+            </tr>
+
+        {%  else %}
+            <tr  class="info right">
+            <td colspan="6"> panier vide</td></tr>
+
+        {% endif %}
+
+    </table>
+</div>
+</div>
+
+{% endblock %}
+
+{% block javascriptScript %}
+    {{ parent() }}
+
+    <script src="{{ asset("js/main.js") }}"></script>
+
+
+{% endblock %}
+
+
+
+
+
+
+Autin Philippe ~ FyLoU ~ / philippe.agm@gmail.com / rue XXXXX ville : oui sur présentation d'une CB :D / pays / 07.60.75.62.37
+Belier Charlie ~ (le PDG) / cbelier2@gmail.com / SDF / pays / 0631946398 (à donner aux filles de 18-20 ans :D Ps: je fais la cuisine)
+Besnard Cécile / @ / rue XXXXX ville / pays / XX.XX.XX.XX.XX
+Bounoure Patrice / @ / rue XXXXX ville / pays / XX.XX.XX.XX.XX
+Deckner Nicolas / nicolas.deckner@gmail.com / 75013 Paris / pays / XX.XX.XX.XX.XX
+Estiveau Audrey / audrey.estiveau@me.com / 92270 Bois-Colombes / pays / 06 21 21 82 81
+Kelali Ahcène / ke_ahcene@yahoo.fr / 89 avenue de Villers 75017 paris/ 06 24 99 15 06
+Le Henaff Vincent / @ / rue XXXXX ville / pays / XX.XX.XX.XX.XX
+Liegard Pierre / pierre.liegard@gmail.com / rue XXXXX ville / pays / 0635314988
+Nevot Cyril ~ Arphenn  -Oo'- / contact@ornement.fr / Elsanor ponsal 56450 Surzur / BZH / 06.82.14.01.63
+Persinette-Gautrez Alexis / alexispersinettegautrez@gmail.com / rue XXXXX ville / pays / 06 62 21 26 43
+Pitard Johnny / johnny.pitard@gmail.com / rue allée de la fresnerie 78330 fontenay le fleury / pays / 06.99.95.51.52
+Serin Audrey / @ / rue XXXXX ville / pays / XX.XX.XX.XX.XX
+
+formateur : ludo -> ludo.troiswa@gmail.com
+formateur : Laurent -> lkhouri@club.fr

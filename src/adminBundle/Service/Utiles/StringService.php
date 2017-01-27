@@ -12,10 +12,10 @@ namespace adminBundle\Service\Utiles;
 class StringService
 {
 
-public function generateUniqId(){
-$resultat= bin2hex(openssl_random_pseudo_bytes(16));// generer une chaine aléatoire
-    return $resultat;
-}
+    public function generateUniqId(){
+        $resultat= bin2hex(openssl_random_pseudo_bytes(16));// generer une chaine aléatoire
+        return $resultat;
+    }
 
 
 }
